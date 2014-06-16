@@ -1,13 +1,4 @@
 <?php
-function forWindows($path)
-{
-	$bWindows=false;
-	if ($bWindows) 
-		return str_replace("/", "\\", $path);
-	else
-		return $path;
-}
-
 $modeWIndow=true;
 $GLOBALS["Config"]["DATABASE"]["DBSERVER"]		=	"localhost";
 $GLOBALS["Config"]["DATABASE"]["DBUSER"]		=	"usertarot";
@@ -20,12 +11,11 @@ $GLOBALS["Config"]["URL"]["KIT"]			=	$GLOBALS["Config"]["URL"]["IMG"]."kits/0/";
 $GLOBALS["Config"]["URL"]["LOGO"]			=	$GLOBALS["Config"]["URL"]["KIT"]."kits/0/logos/";
 $GLOBALS["Config"]["URL"]["PORTRAIT"]		=	$GLOBALS["Config"]["URL"]["IMG"]."portraits/";
 
-$GLOBALS["Config"]["PATH"]["ROOT"]			=	forWindows(realpath("./"));
-$GLOBALS["Config"]["PATH"]["IMG"]			=	forWindows(realpath("./")."/images/");
-$GLOBALS["Config"]["PATH"]["PORTRAIT"]		=	forWindows($GLOBALS["Config"]["PATH"]["IMG"]."/portraits/");
-$GLOBALS["Config"]["PATH"]["PAGE"]			=	forWindows(realpath(".")."/pages/");
+$GLOBALS["Config"]["PATH"]["ROOT"]			=	tools::forWindows(realpath("./"));
+$GLOBALS["Config"]["PATH"]["IMG"]			=	tools::forWindows(realpath("./")."/images/");
+$GLOBALS["Config"]["PATH"]["PORTRAIT"]		=	tools::forWindows($GLOBALS["Config"]["PATH"]["IMG"]."/portraits/");
+$GLOBALS["Config"]["PATH"]["PAGE"]			=	tools::forWindows(realpath(".")."/pages/");
 
 $GLOBALS["Config"]["SITE"]["DEBUG"]			=	TRUE;
 
 setlocale (LC_TIME, "fr");
-?>

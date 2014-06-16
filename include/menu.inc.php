@@ -59,5 +59,4 @@ $GLOBALS["Config"]["MENU"] = array(
 					"description"	=>	"Supprimer un joueur",
 					"pere"			=>	"joueurs.php"
 					),
-	);	
-?>
+	);

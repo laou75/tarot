@@ -29,21 +29,17 @@ class Formulaire
 
 	function getValeur($key)
 	{
-		if	(!is_array($this->valeurs)) return;
+		if	(!is_array($this->valeurs))
+            return '';
 		if	(array_key_exists($key, $this->valeurs)) 
 			return $this->valeurs[$key];
 		else
-			return "";
+			return '';
 	}
 
-//	function openForm($titre="", $action=null, $enctype="application/x-www-form-urlencoded", $width=null, $labelColW=null, $dataColW=null)
 	function openForm($titre="", $action=null, $enctype="application/x-www-form-urlencoded", $width=null)
 	{
 		$width=(isset($width))?" width='$width'":" width='75%'";
-/*
-		$labelColW=(isset($labelColW))?" width='$labelColW'":" width='25%'";
-		$dataColW=(isset($dataColW))?" width='$dataColW'":" width='75%'";
-*/
 
 		if (!isset($action) || strlen($action)<1)
 			$action = (array_key_exists("REQUEST_URI", $_SERVER))?"action=\"".$_SERVER["REQUEST_URI"]."\"":"action=\"".$_SERVER["PHP_SELF"]."\"";
@@ -93,17 +89,12 @@ class Formulaire
 				"</tr>\n";
 	}
 
-//	function makeMulti($name, $id, $label="", $champs, $options="")
 	function makeMulti($name, $id, $label="", $champs)
 	{
 		$ret=	"<tr id='tr".$id."'>\n".
 				"	<td".$this->widthLabel."><label for='$id'><nobr>$label</nobr></label></td>\n".
 				"	<td".$this->widthData.">";
-/*
-		echo "<pre>";
-		print_r($champs);
-		echo "</pre>";
-*/
+
 		foreach($champs as $k => $det)
 		{
 			$id		= array_key_exists("id", $det)?$det["id"]:$det["name"];
@@ -159,7 +150,7 @@ class Formulaire
 				"</tr>\n";
 	}
 
-	// Début d'un Fieldset
+	// Dï¿½but d'un Fieldset
 	function openFieldset($label)
 	{
 		return	"<tr>\n".
@@ -204,8 +195,8 @@ class Formulaire
 			if ($rowInfos->Field==$colonne)
 			{
 				$type = $rowInfos->Type;
-				$type = substr($type, 5, strlen($type));		// virer 'enum(' au début
-				$type = substr($type, 0, strlen($type)-1);		// virer ')' à la fin
+				$type = substr($type, 5, strlen($type));		// virer 'enum(' au dï¿½but
+				$type = substr($type, 0, strlen($type)-1);		// virer ')' ï¿½ la fin
 				$aTmp = explode(",", $type );
 				while (list ($key, $val) = each ($aTmp)) 
 				{
@@ -320,8 +311,8 @@ class Formulaire
 			if ($rowInfos->Field==$colonne)
 			{
 				$type = $rowInfos->Type;
-				$type = substr($type, 5, strlen($type));		// virer 'enum(' au début
-				$type = substr($type, 0, strlen($type)-1);		// virer ')' à la fin
+				$type = substr($type, 5, strlen($type));		// virer 'enum(' au dï¿½but
+				$type = substr($type, 0, strlen($type)-1);		// virer ')' ï¿½ la fin
 				$aTmp = explode(",", $type );
 				while (list ($key, $val) = each ($aTmp)) 
 				{
@@ -433,12 +424,8 @@ class Formulaire
 			$t=time();
 			$time=strftime("%d", $t)."/".strftime("%m", $t)."/".strftime("%Y", $t);
 		}
-		$date=split(" ", $time);
-/*
-		echo "<pre>";
-		print_r($date);
-		echo "</pre>";
-*/
+		$date=explode(" ", $time);
+
 		list($j,$m,$a) = explode("/",$date[0]);
 		list($h,$mn,$s) = explode(":",$date[1]);
 
