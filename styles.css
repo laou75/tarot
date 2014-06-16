@@ -1,0 +1,285 @@
+body, td, div, th
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color: black;
+/*	font-size: .75em;*/
+	font-size: 12px;
+}
+img
+{
+	border:none;
+}
+hr
+{
+	border: 1px dashed black;
+}
+h1
+{
+	color: #B22222;
+}
+h1:first-letter
+{
+font-size: 200%;
+border: 3px outset Gray;
+color: white;
+background-color: #B44E4D;
+margin: 2px 2px 2px 2px;
+padding: 2px 2px 2px 2px;
+}
+a, a:visited
+{
+	color: #B22222;
+	text-decoration: none;
+}
+a:hover
+{
+	color: #E26666;
+	text-decoration: underline;
+}
+table
+{
+/*
+	padding: 2px 2px 2px 2px;
+	margin: 2px 2px 2px 2px;
+	width: 100%;
+	border: 1px solid black;
+*/
+}
+tr
+{
+	text-align: left;
+	vertical-align: top;
+}
+th
+{
+	background-color: #E26666;
+	border: 2px outset Black;
+	text-align: center;
+}
+fieldset
+{
+	background-color: #FFF8DC;
+	border: 3px ridge #B22222;
+}
+legend
+{
+	background-color: #E26666;
+	border: 2px outset #B22222;
+	font-weight: bold;
+}
+label
+{
+	color: #B22222;
+	font-weight: bold;
+}
+input, textarea
+{
+color : black;
+/*border: 1px inset #B22222;*/
+/*
+font-size : 80%;
+font-family : "Verdana", sans-serif;
+*/
+}
+
+
+div.page
+{
+	width: 100%;
+	border: 1px solid Black;
+	text-align: center;
+}
+table.page
+{
+	background-color: #DCDCDC;
+/*	margin: 10px 10px 10px 10px;*/
+/*	padding: 20px 20px 20px 20px;*/
+}
+
+td.bandeau
+{
+	border: 1px solid Black;
+	text-align: center;
+	background-color: white;
+	vertical-align: middle;
+}
+
+td.menu
+{
+	width: 15%;
+	border: 1px solid Black;
+	background-color: white;
+}
+
+td.corps
+{
+	width: 85%;
+	border: 1px solid Black;
+	background-color: white;
+}
+
+/*
+td.menu
+{
+	width: 30%;
+	border-top: 1px solid Black;
+}
+
+td.corps
+{
+	width: 70%;
+	border-top: 1px solid Black;
+	border-left: 1px solid Black;
+}
+*/
+td.liste
+{
+	border: 1px solid black;
+	background: #FFF8DC;
+}
+td.liste-joueur
+{
+	border: 1px solid black;
+	background: white;
+}
+td.liste-joueur-preneur
+{
+	border: 1px solid black;
+/*	background: #008B8B;*/
+	background: #B9FFB9;
+}
+td.liste-joueur-appele
+{
+	border: 1px solid black;
+/*	background: #20B2AA;*/
+	background: #DBFFDB;
+}
+td.liste-joueur-defense
+{
+	border: 1px solid black;
+/*	background: #20B2AA;*/
+	background: #F5DEB3;
+}
+td.liste-joueur-mort
+{
+	border: 1px solid black;
+/*	background: #20B2AA;*/
+	background: #DCDCDC;
+	text-decoration: line-through;
+}
+td.fauxinput
+{
+	border: 1px outset #B22222;
+	background-color: #F4F4F4;
+}
+span.filAriane
+{
+	color: #B22222;
+	font-style: italic;
+	font-size: 9px;
+}
+/*a.bouton, a.bouton:visited, a.bouton:hover*/
+a.bouton, a.bouton:visited, a.bouton:hover
+{
+	border: 2px outset silver;
+	background-color: #F4F4F4;
+	vertical-align: middle;
+}
+a.bouton:hover
+{
+	border: 2px inset silver;
+	background-color: #F4F4F4;
+	vertical-align: middle;
+}
+a.explorer-sel, a.explorer-sel:visited
+{
+color: White; 
+background-color: #808080;
+}
+a.explorer-sel, a.explorer-sel:visited
+{
+color: White; 
+background-color: #808080;
+}
+div.pop-portrait
+{
+	position:absolute; 
+	/*border:3px outset #B22222;*/
+	border:none;
+	background-color: transparent;
+}
+table.resume-partie
+{
+	border:1px solid black;
+	background-color: #DCDCDC;
+}
+td.resume-partie, td.border
+{
+	border:1px solid black;
+	background-color: white;
+}
+
+td.tl
+{
+	background-image: url(images/kits/0/cadre_tl.gif);
+	background-repeat: no-repeat;
+	width: 8px;
+	height: 8px;
+}
+td.t
+{
+	background-image: url(images/kits/0/cadre_t.gif);
+	background-repeat: repeat-x;
+	height: 8px;
+}
+td.tr
+{
+	background-image: url(images/kits/0/cadre_tr.gif);
+	background-repeat: no-repeat;
+	width: 8px;
+	height: 8px;
+}
+
+
+td.cl
+{
+	background-image: url(images/kits/0/cadre_cl.gif);
+	background-repeat: repeat-y;
+	width: 8px;
+}
+td.c
+{
+	background-image: url(images/kits/0/cadre_c.gif);
+}
+td.cr
+{
+	background-image: url(images/kits/0/cadre_cr.gif);
+	background-repeat: repeat-y;
+	width: 8px;
+}
+
+td.bl
+{
+	background-image: url(images/kits/0/cadre_bl.gif);
+	background-repeat: no-repeat;
+	width: 8px;
+	height: 8px;
+}
+td.b
+{
+	background-image: url(images/kits/0/cadre_b.gif);
+	background-repeat: repeat-x;
+	height: 8px;
+}
+td.br
+{
+	background-image: url(images/kits/0/cadre_br.gif);
+	background-repeat: no-repeat;
+	width: 8px;
+	height: 8px;
+}
+
+.za
+{
+	width: 10px;
+}
