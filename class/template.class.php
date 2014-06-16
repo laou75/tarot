@@ -19,10 +19,7 @@ class template
 	{
 		setlocale(LC_TIME, "fr");
 
-//		$_SERVER["HTTP_USER_AGENT"]
-//		PalmSource/Palm-D050; Blazer/4.3
 		$this->modeMini = strpos($_SERVER["HTTP_USER_AGENT"], "Palm");
-//		$this->modeMini = true;	
 		$this->zoomMini = 2;	// divisé par 2	
 		$this->cellSpacing=$this->modeMini?12:20;	
 		
@@ -52,7 +49,7 @@ class template
 		<title><?=$this->titre;?></title>
 		<link rel="stylesheet" href="<?=$this->nameCSS;?>" type='text/css' media="screen">
 		<script type='text/javascript' src='<?=$GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
-<?
+<?php
 		//	Inclure le js spécifique si y'en a
 		if	(file_exists("js/".$this->id.".js"))
 			echo "		<script type='text/javascript' src='".$GLOBALS["Config"]["URL"]["ROOT"]."js/".$this->id.".js'></script>\n";
@@ -71,8 +68,7 @@ class template
 				<tr><td align="center"><?=$logo." ";?></td><td class="bandeau"><h1><?=$this->titre.$libCtxt;?></h1></td></tr>
 				<tr>
 					<td class="menu">
-<?
-//		$this->getChemin($chemin, $this->id);
+<?php
 		$this->getChemin($this->id);
 		echo "<table cellpadding='0' cellspacing='0' border='0' width='100%'>";
 		echo $this->drawMenu($this->id, 0, "");
@@ -81,8 +77,7 @@ class template
 ?>
 					</td>
 					<td class="corps">
-<?
-//$retour = (array_key_exists("HTTP_REFERER", $_SERVER))?$this->makeBouton($_SERVER["HTTP_REFERER"], $this->makeImg("retour.gif")."&nbsp;"."Retour"):"";
+<?php
 $filAriane="";
 if (is_array($this->cheminMenu))
 {
@@ -95,7 +90,6 @@ if (is_array($this->cheminMenu))
 echo"<table width='100%'>\n".
 	"	<tr>\n".
 	"		<td align='left' width='80%'>".$filAriane."</td>\n".
-//	"		<td align='right' width='20%'>".$retour."</td>\n".
 	"	</tr>\n".
 	"</table>\n".
 	"<hr>";
@@ -103,11 +97,6 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php"))
 	include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php");
 else
 	echo $GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php";
-/*
-echo "<pre>";
-print_r($this->cheminMenu);
-echo "</pre>";
-*/
 ?>
 					</td>
 				</tr>
@@ -116,8 +105,7 @@ echo "</pre>";
 		<div id="pop-up" class="pop-portrait" style="display:none;"></div>
 	</body>
 </html>
-<?
-//		<div id="pop-up" name="pop-up" class="pop-portrait" style="display:none;"></div>
+<?php
 	ob_end_flush();
 	}
 
@@ -129,7 +117,6 @@ echo "</pre>";
 	{
 		$ret="";
 		$res=null;
-//		$where = "where 1 ";
 		// On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
 		$req = "select * from menu where id_pere = ".$id_pere." and visible_menu = 1 order by ordre asc";
 		$this->db->sql_open_cur($res, $req);
@@ -140,10 +127,8 @@ echo "</pre>";
 			$class_explorer = ($row->id==$id)?"explorer-sel":"explorer";
 			$class="";
 
-//			$icone = ($row->id==$this->id)?$this->makeImg("moins.gif"):$this->makeImg("plus.gif");	
 			$icone = (is_array($this->cheminMenu) && array_key_exists($row->id, $this->cheminMenu))?$this->makeImg("moins.gif"):$this->makeImg("plus.gif");	
 			
-//			$label=(isset($row->icone)&&strlen($row->icone)>0)?$this->makeImg($row->icone)."&nbsp;".$row->label:$row->label;
 			$label=(isset($row->icone)&&strlen($row->icone)>0)?$this->makeImg($row->icone)."&nbsp;".($this->modeMini?$row->labelCourt:$row->label):($this->modeMini?$row->labelCourt:$row->label);
 			$ret .="<tr>\n".
 					"	<td>\n".
@@ -169,25 +154,6 @@ echo "</pre>";
 	/*
 	 * 
 	 */
-/*
-	function getChemin($id)
-	{
-		$row = $this->getInfosMenu($id);
-		if	(is_array($this->cheminMenu))
-			$i=count($this->cheminMenu);
-		else
-			$i=0;
-		if	($row)
-		{
-			$i++;
-			$this->cheminMenu[$i]["id"] = $row->id;
-			$this->cheminMenu[$i]["label"] = $row->label;
-			$this->cheminMenu[$i]["description"] = $row->description;
-			if	($row->id_pere!=0) 
-				$this->getChemin($row->id_pere);
-		}
-	}
-*/
 	function getChemin($id)
 	{
 		$row = $this->getInfosMenu($id);
@@ -212,23 +178,16 @@ echo "</pre>";
 		return $row;
 	}
 
-
 	/*
 	 * 
 	 */
 	function makeLink($url, $label, $title="", $css="", $options="")
 	{
-		/*
-		$aRpl = array('&', '&amp;');
-		$url = strtr($url, $aRpl);
-		*/
 		if (isset($title) && strlen($title)>0) $title=" title=\"$title\"";
 		if (isset($css) && strlen($css)>0) $css=" class=\"$css\"";
 		if (substr(strtolower($url), 0, 5) == "http:") {
-			//exit("tagada");
 			$ret = "<a href=\"".$url."\"$title$css$options>$label</a>";
 		} else {
-			//echo 'pouet .:'.$url.':.<br>'.$GLOBALS["Config"]["URL"]["ROOT"].$url.'<br>';
 			$ret = '<a href="'.$GLOBALS["Config"]["URL"]["ROOT"].$url.'"'.$title.$css.$options.'>'.$label.'</a>';
 		}
 		return $ret;
@@ -241,7 +200,6 @@ echo "</pre>";
 	{
 		$row=$this->getInfosMenu($id);
 
-//		$label=(isset($row->icone))?$this->makeImg($row->icone)."&nbsp;".$row->label:$row->label;
 		$label=($this->modeMini)?"":$row->label;
 
 		$label=(isset($row->icone))?$this->makeImg($row->icone)."&nbsp;".$label:$label;
@@ -250,7 +208,6 @@ echo "</pre>";
 			$url=(isset($parm))?"index.php?id=".$id."&amp;".$parm:"index.php?id=".$id;
 		else
 			$url=$id;
-//		return "<nobr>".$this->makeLink($url, $label, (isset($row->description))?$row->description:$row->label, "bouton", $options)."</nobr>";
 		return $this->makeLink($url, $label, (isset($row->description))?$row->description:$row->label, "bouton", $options);
 	}
 
@@ -266,7 +223,6 @@ echo "</pre>";
 			$url=(isset($parm))?"index.php?id=".$id."&amp;".$parm:"index.php?id=".$id;
 		else
 			$url=$id;
-//		return "<nobr>".$this->makeLink($url, $label, (isset($row->description))?"Retour à ".$row->description:"Retour à ".$row->label, "bouton")."</nobr>";
 		return $this->makeLink($url, $label, (isset($row->description))?"Retour à ".$row->description:"Retour à ".$row->label, "bouton");
 	}
 
@@ -284,15 +240,6 @@ echo "</pre>";
 	 */
 	function makeImg($img, $alt="", $options="")
 	{
-/*
-		$Mini="";
-		if ($this->modeMini)
-		{
-			$size = getimagesize($GLOBALS["Config"]["URL"]["KIT"].$img);
-			$Mini=$this->modeMini?" width=\"".($size[0]/$this->zoomMini)."px\" height=\"".($size[1]/$this->zoomMini)."px\"":"";
-		}
-*/
-//		if (file_exists($GLOBALS["Config"]["PATH"]["IMG"].$img))
 		{
 			if (isset($alt) && strlen($alt)>0) 
 				$alt=" alt=\"$alt\"";
@@ -300,8 +247,6 @@ echo "</pre>";
 				$alt=" alt=\"\"";
 			return "<img src=\"".$GLOBALS["Config"]["URL"]["KIT"].$img."\" border=0$alt$options>";
 		}
-//		elseif ($GLOBALS["Config"]["SITE"]["DEBUG"]=="TRUE")
-//			return "<span class=\"error\">Image '".$GLOBALS["Config"]["PATH"]["IMG"].$img."' introuvable</span>";
 	}
 
 	/*
@@ -309,14 +254,6 @@ echo "</pre>";
 	 */
 	function makeIllustration($img, $alt="", $options="")
 	{
-/*
-		$Mini="";
-		if ($this->modeMini)
-		{
-			$size = getimagesize($GLOBALS["Config"]["URL"]["IMG"].$img);
-			$Mini=$this->modeMini?" width=\"".($size[0]/$this->zoomMini)."px\" height=\"".($size[1]/$this->zoomMini)."px\"":"";
-		}
-*/
 		if (isset($alt) && strlen($alt)>0) 
 			$alt=" alt=\"$alt\"";
 		else
@@ -329,25 +266,13 @@ echo "</pre>";
 	 */
 	function makePortrait($img, $alt="", $options="")
 	{
-/*
-		$Mini="";
-		if ($this->modeMini)
-		{
-			$size = getimagesize($GLOBALS["Config"]["URL"]["PORTRAIT"].$img);
-			$Mini=$this->modeMini?" width=\"".($size[0]/$this->zoomMini)."px\" height=\"".($size[1]/$this->zoomMini)."px\"":"";
-		}
-*/
-//		if (file_exists($GLOBALS["Config"]["PATH"]["IMG"].$img))
 		{
 			if (isset($alt) && strlen($alt)>0) 
 				$alt=" alt=\"$alt\"";
 			else
 				$alt=" alt=\"\"";
-//			return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" border=0$alt$options>";
 			return "<img src=\"".$GLOBALS["Config"]["URL"]["PORTRAIT"].$img."\" border=0$alt$options>";
 		}
-//		elseif ($GLOBALS["Config"]["SITE"]["DEBUG"]=="TRUE")
-//			return "<span class=\"error\">Image '".$GLOBALS["Config"]["PATH"]["IMG"].$img."' introuvable</span>";
 	}
 
 	/*
@@ -369,50 +294,10 @@ echo "</pre>";
 	 */
 	function makeLinkMenu($script)
 	{
-		/*
-  		echo "<pre>";
-		print_r($script);
-		echo "</pre>";
-		*/
-
 		$ret="<a href=\"".$script["url"]."\">".$script["titre"]."</a>";
 		return $ret;
 	}
 
-	/*
-	 * 
-	 */
-/*
-	function drawBarreBouton($colonnes=null, $retour=null)
-	{
-		if (isset($retour) && isset($colonnes))
-		{
-			$ret=	"<table width='100%'>\n".
-					"	<tr>\n".
-					"		<td>\n".
-					"			<table>\n".
-					"				<tr>\n";
-		}
-		else
-			$ret=	"<table width='100%'>\n".
-					"	<tr>\n";
-		if (isset($colonnes))
-			foreach($colonnes as $id => $detail)
-			{
-				$ret.=	"					<td>".$detail."</td>\n";
-			}
-		if (isset($retour) && isset($colonnes))
-			$ret.=	"				</tr>\n".
-					"			</table>\n".
-					"		</td>";
-		if (isset($retour))
-			$ret.=	"		<td align='right'>".$retour."</td>\n";
-		$ret.=	"	</tr>\n".
-				"</table\n>".
-				"<hr>\n";
-		return $ret;
-	}
-*/
 	/*
 	 * 
 	 */
@@ -481,13 +366,11 @@ echo "</pre>";
 		$ret="<tr>\n";
 		if (isset($actions))
 		{
-//			$ret.=	"		<td style='vertical-align: middle;text-align:center;'><nobr>";
 			$ret.=	"		<td style='vertical-align: middle;text-align:center;'>";
 			foreach($actions as $id => $detail)
 			{
 				$ret.=$detail." ";
 			}
-//			$ret.=	"</nobr></td>\n";
 			$ret.=	"</td>\n";
 		}
 		$options=isset($options)?" ".$options:"";
@@ -498,6 +381,7 @@ echo "</pre>";
 		}
 		return $ret."</tr>";
 	}
+
 	/*
 	 * 
 	 */
@@ -525,10 +409,7 @@ echo "</pre>";
 	{
 		$tmp =str_replace("'", "#QUOT#", $html);
 		$tmp =str_replace('"', "#DBLQUOT#", $tmp);
-/*
-		$tmp =str_replace('>', "#GT#", $tmp);
-		$tmp =str_replace('<', "#LT#", $tmp);
-*/
+
 		$tmp =str_replace("\n", "", $tmp);
 		$ret=	"<a href=\"#\" onMouseOver=\"openPopup('".$tmp."');\" onMouseOut=\"closePopup();\">".$label."</a>";
 		return $ret;
@@ -550,6 +431,7 @@ echo "</pre>";
 				"		<td class=\"c\">".$this->makeImg("vide.gif");
 		return $ret;
 	}
+
 	/*
 	 * 
 	 */
@@ -566,11 +448,6 @@ echo "</pre>";
 				"</table>\n";
 		return $ret;
 	}
-
 }
-/*
-session_name("tarot_session");
-session_start();
-*/
+
 $tpl= new template($db);
-?>
