@@ -119,9 +119,8 @@ else
 		$ret="";
 		$res=null;
 		// On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
-		$req = "select * from menu where id_pere = ".$id_pere." and visible_menu = 1 order by ordre asc";
+		$req = "select * from menu where id_pere = ".mysql_escape_string($id_pere)." and visible_menu = 1 order by ordre asc";
 		$this->db->sql_open_cur($res, $req);
-		//$i=0;
 		while	($row=$this->db->sql_fetch_cur($res))
 		{
 			$class_explorer = ($row->id==$id)?"explorer-sel":"explorer";
