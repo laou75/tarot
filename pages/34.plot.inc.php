@@ -16,7 +16,7 @@ $graph->legend->Pos(0.05,0.9,"left","bottom");
 $graph->SetBackgroundGradient('blue','cyan',GRAD_HOR,BGRAD_MARGIN);
 $graph->SetMargin(50,50,30,5);
 
-//	Récupération des joueurs
+//	Rï¿½cupï¿½ration des joueurs
 $req =	"select A.id_joueur, B.nom, B.prenom ".
 		"from	r_sessions_joueurs A, joueurs B ".
 		"where	A.id_tournoi=$id_tournoi ".
@@ -32,7 +32,7 @@ while	($row=$db->sql_fetch_cur($res))
 $db->sql_free_result($res);
 
 
-//	Récupération des parties
+//	Rï¿½cupï¿½ration des parties
 $req0 =	"select id ".
 		"from	parties ".
 		"where	id_tournoi=$id_tournoi ".
@@ -64,11 +64,6 @@ foreach($aTabJ as $idJ => $detJ)
 				"and	id_partie= $idP ".
 				"and	id_joueur = $idJ ".
 				"group by id_tournoi, id_session, id_partie";
-/*
-		$db->sql_select($row2, $req2);
- 		$old	=	$old + $row2->CUMUL;
-		$ydata[]=	$old;
-*/
 		if	($db->sql_select($row2, $req2)==-100)
 			$truc=0;
 		else
@@ -91,4 +86,3 @@ foreach($aTabJ as $idJ => $detJ)
 
 // Display the graph
 $graph->Stroke();
-?> 

@@ -18,10 +18,9 @@ else
 echo $form->openForm("Ajouter un tournoi", "", "multipart/form-data");
 if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
-echo $form->makeInput("datedeb", "datedeb", "Date de début (*)", $form->getValeur("datedeb"));
+echo $form->makeInput("datedeb", "datedeb", "Date de dï¿½but (*)", $form->getValeur("datedeb"));
 echo $form->makeInput("datefin", "datefin", "Date de fin", $form->getValeur("datefin"));
 echo $form->makeTexteRiche("commentaires", "commentaires", $form->getValeur("commentaires"));
 echo $form->makeNoteObligatoire();
 echo $form->makeButton("Enregistrer");
 echo $form->closeForm();
-?>

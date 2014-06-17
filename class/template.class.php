@@ -48,18 +48,19 @@ class template
 	<head>
 		<title><?=$this->titre;?></title>
 		<link rel="stylesheet" href="<?=$this->nameCSS;?>" type='text/css' media="screen">
+        <link rel="SHORTCUT ICON" href="http://www.guig.net/favicon.ico"/>
 		<script type='text/javascript' src='<?=$GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
 <?php
-		//	Inclure le js sp�cifique si y'en a
+		//	Inclure le js spécifique si y'en a
 		if	(file_exists("js/".$this->id.".js"))
 			echo "		<script type='text/javascript' src='".$GLOBALS["Config"]["URL"]["ROOT"]."js/".$this->id.".js'></script>\n";
 		$libCtxt="";
 		if	(isset($_GET["id_tournoi"]))
-			$libCtxt .= ", tournoi n�".$_GET["id_tournoi"]; 
+			$libCtxt .= ", tournoi n°".$_GET["id_tournoi"];
 		if	(isset($_GET["id_session"]))
-			$libCtxt .= ", session n�".$_GET["id_session"]; 
+			$libCtxt .= ", session n°".$_GET["id_session"];
 		if	(isset($_GET["id_partie"]))
-			$libCtxt .= ", partie n�".$_GET["id_partie"]; 
+			$libCtxt .= ", partie n°".$_GET["id_partie"];
 ?>
 	</head>
 	<body>
@@ -117,11 +118,10 @@ else
 	{
 		$ret="";
 		$res=null;
-		// On part de la racine et on affiche tous les dossiers jusqu'au dossier � afficher
+		// On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
 		$req = "select * from menu where id_pere = ".$id_pere." and visible_menu = 1 order by ordre asc";
 		$this->db->sql_open_cur($res, $req);
-		$nb = $this->db->sql_count_cur($res);
-		$i=0;
+		//$i=0;
 		while	($row=$this->db->sql_fetch_cur($res))
 		{
 			$class_explorer = ($row->id==$id)?"explorer-sel":"explorer";
@@ -223,7 +223,7 @@ else
 			$url=(isset($parm))?"index.php?id=".$id."&amp;".$parm:"index.php?id=".$id;
 		else
 			$url=$id;
-		return $this->makeLink($url, $label, (isset($row->description))?"Retour � ".$row->description:"Retour � ".$row->label, "bouton");
+		return $this->makeLink($url, $label, (isset($row->description))?"Retour : ".$row->description:"Retour : ".$row->label, "bouton");
 	}
 
 	/*

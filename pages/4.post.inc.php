@@ -2,16 +2,11 @@
 include_once ("class/formulaire.class.php");
 
 $form = new Formulaire();
-/*
-echo "<pre>";
-print_r($_FILES);
-echo "</pre>";
-*/
 $form->setValeurs($_POST);
 
 $err="";
 if (strlen($form->getValeur("datedeb"))==0)
-	$err .= "Le champ 'Date de début' est obligatoire !<br>";
+	$err .= "Le champ 'Date de dÃ©but' est obligatoire !<br>";
 if ($err=="")
 {
 	$d = substr($form->getValeur("datedeb"), 0, 2);
@@ -28,4 +23,3 @@ if ($err=="")
 	$this->db->sql_update("tournois", array("id"=>$form->getValeur("id")), $form->getValeurs());
 	Header("Location: ".$form->getValeur("from"));
 }
-?>

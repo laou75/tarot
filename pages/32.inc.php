@@ -39,12 +39,11 @@ if	(isset($err) && strlen($err)>0)
 //	strftime ( string   format , int   timestamp ) 
 echo $form->makeHidden("id", "id", $form->getValeur("id"));
 echo $form->makeHidden("id_tournoi", "id_tournoi", $form->getValeur("id_tournoi"));
-echo $form->makeInput("datedeb", "datedeb", "Commencée le (*)", strftime ("%x", $form->getValeur("datedeb")));
+echo $form->makeInput("datedeb", "datedeb", "CommencÃ©e le (*)", strftime ("%x", $form->getValeur("datedeb")));
 $datefin = (strlen($form->getValeur("datefin"))>0)?strftime ("%x", $form->getValeur("datefin")):"";
-echo $form->makeInput("datefin", "datefin", "Terminée le", $datefin);
+echo $form->makeInput("datefin", "datefin", "TerminÃ©e le", $datefin);
 echo $form->makeComboMultiple("liste_joueurs[]", "liste_joueurs", "Joueurs (*)", $form->getValeur("liste_joueurs"), $alisteJoueurs);
 echo $form->makeTexteRiche("commentaires", "commentaires", $form->getValeur("commentaires"));
 echo $form->makeNoteObligatoire();
 echo $form->makeButton("Enregistrer");
 echo $form->closeForm();
-?>

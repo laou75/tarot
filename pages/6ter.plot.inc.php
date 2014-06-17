@@ -10,7 +10,7 @@ $id_tournoi=$_GET["id_tournoi"];
 // Create the graph. These two calls are always required
 $graph  = new PieGraph(700, 500,"auto");
 $graph->SetShadow();
-$graph->title->Set("Répartition des pertes");
+$graph->title->Set("Rï¿½partition des pertes");
 $graph->title->SetFont(FF_FONT1,FS_BOLD);
 $graph->SetBackgroundGradient('blue','cyan',GRAD_HOR,BGRAD_MARGIN);
 
@@ -88,4 +88,3 @@ $graph->Add($p1);
 
 // Display the graph
 $graph->Stroke();
-?> 

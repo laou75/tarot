@@ -3,7 +3,6 @@ include_once ("class/formulaire.class.php");
 
 $form = new Formulaire();
 
-
 if	(count($_POST)>0)
 	$form->setValeurs($_POST);
 else
@@ -25,10 +24,9 @@ if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
 if	(isset($warn) && strlen($warn)>0)
 	echo $form->makeMsgWarning($warn);
-echo $form->makeTexte("Commencée le", strftime ("%x", $form->getValeur("datedeb")));
+echo $form->makeTexte("CommencÃ©e le", strftime ("%x", $form->getValeur("datedeb")));
 $datefin = (strlen($form->getValeur("datefin"))>0)?strftime ("%x", $form->getValeur("datefin")):"";
-echo $form->makeTexte("Terminée le", strftime ("%x", $datefin));
+echo $form->makeTexte("TerminÃ©e le", strftime ("%x", $datefin));
 echo $form->makeTexte("Commentaire", $form->getValeur("commentaires"));
 echo $form->makeButton("Supprimer");
 echo $form->closeForm();
-?>

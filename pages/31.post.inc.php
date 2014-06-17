@@ -10,19 +10,15 @@ $form = new Formulaire();
 $form->setValeurs($_POST);
 $err="";
 if	(strlen($form->getValeur("datedeb"))==0)
-	$err .= "Le champ 'Date de dÈbut' est obligatoire !<br>";
+	$err .= "Le champ 'Date de d√©but' est obligatoire !<br>";
 if	(count($form->getValeur("liste_joueurs"))<4)
-	$err .= "Il faut sÈlectionner au moins 4 joueurs !<br>";
+	$err .= "Il faut s√©lectionner au moins 4 joueurs !<br>";
 if	($err=="")
 {
 	$d = substr($form->getValeur("datedeb"), 0, 2);
 	$m = substr($form->getValeur("datedeb"), 3, 2);
 	$y = substr($form->getValeur("datedeb"), 6, 4);
-/*
-	echo ($d."-".$m."-".$y."<br>".mktime ( 0, 0, 0, $m, $d, $y)."<br>");
-	exit (strftime("%d-%m-%y", mktime ( 0, 0, 0, $m, $d, $y))."<br>");
-	exit (strftime("%x", mktime ( 0, 0, 0, $m, $d, $y))."<br>");
-*/
+
 	$form->setValeur("datedeb", mktime ( 0, 0, 0, $m, $d, $y)); 
 	if	(strlen($form->getValeur("datefin"))>0)
 	{
@@ -49,4 +45,3 @@ if	($err=="")
 
 	Header("Location: ".$form->getValeur("from"));
 }
-?>

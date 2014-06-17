@@ -3,7 +3,6 @@ include_once ("class/formulaire.class.php");
 
 $form = new Formulaire();
 
-
 if (count($_POST)>0)
 {
 	$form->setValeurs($_POST);
@@ -31,8 +30,7 @@ if	(isset($warn) && strlen($warn)>0)
 echo $form->makeTexte("Du", strftime ("%x", $form->getValeur("date")));
 echo $form->makeTexte("Prise par", $this->getJoueur($form->getValeur("id_preneur")));
 if	(strlen($form->getValeur("id_second"))>0)
-	echo $form->makeTexte("Appelé", $this->getJoueur($form->getValeur("id_second")));
+	echo $form->makeTexte("AppelÃ©", $this->getJoueur($form->getValeur("id_second")));
 echo $form->makeTexte("Commentaire", $form->getValeur("commentaires"));
 echo $form->makeButton("Supprimer");
 echo $form->closeForm();
-?>

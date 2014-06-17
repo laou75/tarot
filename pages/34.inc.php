@@ -1,4 +1,4 @@
-<?
+<?php
 echo $this->drawBarreBouton(
 	null,
 	$this->makeBouton($_SERVER["HTTP_REFERER"], $this->makeImg("retour.gif")."&nbsp;Retour", "Retour"));
@@ -6,7 +6,7 @@ echo $this->drawBarreBouton(
 $id_session=$_GET["id_session"];
 $id_tournoi=$_GET["id_tournoi"];
 
-//	Récupération des joueurs
+//	Rï¿½cupï¿½ration des joueurs
 $req =	"select A.id_joueur, B.nom, B.prenom, B.nickname, B.portrait ".
 		"from	r_sessions_joueurs A, joueurs B ".
 		"where	A.id_tournoi=".$id_tournoi." ".
@@ -21,13 +21,11 @@ else
 	while	($row=$db->sql_fetch_cur($res))
 	{
 		$aTabJ[$row->id_joueur] = $row;
-//		$entete[] = $this->lienPortrait($row->portrait, substr($row->prenom,0,1).". ".substr($row->nom,0,1).".", $row->prenom." ".$row->nom);
 		$nick=isset($row->nickname)?$row->nickname:$row->prenom." ".substr($row->nom,0,1).".";
 		$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 	}
 	$db->sql_free_result($res);
 
-	//	Récupération des parties
 	$req0 =	"select id ".
 			"from	parties ".
 			"where	id_tournoi=$id_tournoi ".
@@ -50,7 +48,7 @@ else
 		<tr><th>Statistiques</th></tr>
 		<tr>
 			<td align='center'>
-<?
+<?php
 		echo $this->openListe($entete);
 		$cumul=array();
 		foreach($aTabPar as $idP => $detP)
@@ -73,15 +71,12 @@ else
 					$cumul[$idJ]=$cumul[$idJ]+$truc;
 				else
 					$cumul[$idJ]=$truc;
-					
-//				$data[]=sprintf("%+d", $cumul[$idJ]);
+
 				$data[]=sprintf("%01.1f", $cumul[$idJ]);
-				
 			}
 			echo $this->ligneListe(	$data , null, "align='right'");
 		}
 		echo $this->closeListe();
-		
 ?>
 			</td>
 		</tr>
@@ -90,6 +85,6 @@ else
 		</tr>
 	</table>
 </center>
-<?
+<?php
 	}
 }

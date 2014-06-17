@@ -189,7 +189,7 @@ class Formulaire
 		if	($addLigneVide==TRUE)
 			$aValuesLabels[NULL]="";
 
-		$ret = $db->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
+		$db->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
 		while ($rowInfos=$db->sql_fetch_cur($resInfos)) 
 		{	
 			if ($rowInfos->Field==$colonne)
@@ -305,7 +305,7 @@ class Formulaire
 		if	($addLigneVide==TRUE)
 			$aValuesLabels[NULL]="";
 
-		$ret = $db->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
+		$db->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
 		while ($rowInfos=$db->sql_fetch_cur($resInfos)) 
 		{	
 			if ($rowInfos->Field==$colonne)

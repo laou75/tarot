@@ -40,7 +40,7 @@ $this->db->sql_close_cur($resJ);
 
 echo $form->makeCombo("id_preneur", "id_preneur", "Preneur (*)", $form->getValeur("id_preneur"), $aTableau, " onChange=\"checkSelectJoueur('id_preneur')\"");
 if ($nbJ>=5)
-	echo $form->makeCombo("id_second", "id_second", "Appelé", $form->getValeur("id_second"), $aTableau, " onChange=\"checkSelectJoueur('id_second'); change_appele();\"");
+	echo $form->makeCombo("id_second", "id_second", "Appelï¿½", $form->getValeur("id_second"), $aTableau, " onChange=\"checkSelectJoueur('id_second'); change_appele();\"");
 
 $i=1;
 while($i<$nbJ) {
@@ -51,7 +51,7 @@ while($i<$nbJ) {
 	$der=$i;
 	$i++;
 }
-echo $form->makeMulti("defense", "defense", "Défense", $champs);
+echo $form->makeMulti("defense", "defense", "Dï¿½fense", $champs);
 ?>
 <script type="text/javascript">
 function change_appele() {
@@ -64,34 +64,23 @@ function change_appele() {
 	}
 }
 </script>
-<?
+<?php
 echo $form->closeFieldset();
 
 echo $form->openFieldset("Contrat");
-//echo $form->makeComboEnum("annonce", "annonce", "Annonce (*)", $form->getValeur("annonce"), "parties", "annonce", false, $this->db);
 echo $form->makeRadioEnum("annonce", "annonce", "Annonce (*)", $form->getValeur("annonce"), "parties", "annonce", false, $this->db, "onclick=\"calcule_points()\"");
-echo $form->makeInput("points", "points", "Points réalisés (*)", $form->getValeur("points"), "onchange=\"calcule_points()\"");
+echo $form->makeInput("points", "points", "Points rï¿½alisï¿½s (*)", $form->getValeur("points"), "onchange=\"calcule_points()\"");
 echo $form->makeRadio("nombre_bouts", "nombre_bouts", "Nombre de bouts", $form->getValeur("nombre_bouts"), array(0=>"0", 1=>"1", 2=>"2", 3=>"3"), "onclick=\"calcule_points()\"");
 echo $form->makeRadio("petitaubout", "petitaubout", "Petit au bout ?", $form->getValeur("petitaubout"), array(0=>"non", 1=>"oui"), "onclick=\"calcule_points()\"");
-/*
-echo $form->makeRadio("chelem", "chelem", "Chelem ?", $form->getValeur("chelem"), array(0=>"non", 1=>"attaque", 2=>"défense"), "onclick=\"change_chelem()\"");
-echo $form->makeRadio("chelem_annonce", "chelem_annonce", "Chelem annoncé ?", $form->getValeur("chelem_annonce"), array(0=>"non", 1=>"oui"), "onclick=\"change_chelem_annonce()\"");
-echo $form->makeRadio("chelem_reussi", "chelem_reussi", "Chelem réussi ?", $form->getValeur("chelem_reussi"), array(0=>"non", 1=>"oui"), "onclick=\"calcule_points()\"");
-*/
-//echo $form->makeComboEnum("poignee", "poignee", "Poignée ", $form->getValeur("poignee"), "parties", "poignee", false, $this->db);
-echo $form->makeRadioEnum("poignee", "poignee", "Poignée ?", $form->getValeur("poignee"), "parties", "poignee", false, $this->db, "onclick=\"calcule_points()\"");
+
+echo $form->makeRadioEnum("poignee", "poignee", "Poignï¿½e ?", $form->getValeur("poignee"), "parties", "poignee", false, $this->db, "onclick=\"calcule_points()\"");
 echo $form->makeInput("total", "total", "Total", $form->getValeur("total"), " READONLY");
 echo $form->closeFieldset();
-/*
-echo $form->openFieldset("Commentaires");
-echo $form->makeTexteRiche("commentaires", "commentaires", $form->getValeur("commentaires"));
-echo $form->closeFieldset();
-*/
+
 echo $form->makeNoteObligatoire();
 echo $form->makeButton("Enregistrer", " onclick=\"return controleFormulaire();\"");
 echo $form->closeForm();
 ?>
 <script>
-//change_chelem();
 change_appele();
 </script>

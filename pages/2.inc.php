@@ -4,7 +4,7 @@ echo $this->drawBarreBouton(
 	$this->makeLinkBoutonRetour(1)
 	);
 
-echo $this->openListe(array("Commencé le", "Fini le", "Commentaires"), true);
+echo $this->openListe(array("Commencï¿½ le", "Fini le", "Commentaires"), true);
 $req = "select * from tournois order by datedeb desc";
 $this->db->sql_open_cur($res, $req);
 $nb = $this->db->sql_count_cur($res);
@@ -25,4 +25,3 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 		);
 }
 echo $this->closeListe();
-?>

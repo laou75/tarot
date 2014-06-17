@@ -1,12 +1,10 @@
 <?php
-global    $num_session;
-
 if (!isset($session_id))
 	$_SESSION['session_id']=0;
 
-if (!isset($num_session))
+if (!isset($GLOBALS['num_session']))
 {
-	$num_session = uniqid(rand());
+    $GLOBALS['num_session'] = uniqid(rand());
 	session_register("numSession");
 }
 

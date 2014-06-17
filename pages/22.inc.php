@@ -3,7 +3,6 @@ include_once ("class/formulaire.class.php");
 
 $form = new Formulaire();
 
-
 if (count($_POST)>0)
 {
 	$form->setValeurs($_POST);
@@ -24,7 +23,7 @@ if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
 echo $form->makeHidden("id", "id", $form->getValeur("id"));
 echo $form->makeInput("nom", "nom", "Nom (*)", $form->getValeur("nom"));
-echo $form->makeInput("prenom", "prenom", "Prénom (*)", $form->getValeur("prenom"));
+echo $form->makeInput("prenom", "prenom", "PrÃ©nom (*)", $form->getValeur("prenom"));
 $image=(strlen($form->getValeur("portrait"))>0)?$this->makePortrait("mini/".$form->getValeur("portrait")):"";
 echo $form->makeFileInput(	"portrait", 
 							"portrait", 
@@ -34,9 +33,3 @@ echo $form->makeFileInput(	"portrait",
 echo $form->makeNoteObligatoire();
 echo $form->makeButton("Enregistrer");
 echo $form->closeForm();
-/*
-echo "<pre>";
-print_r($GLOBALS["Config"]);
-echo "</pre>";
-*/
-?>

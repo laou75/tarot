@@ -19,12 +19,10 @@ else
 echo $form->openForm("Modifier un tournoi", "", "multipart/form-data");
 if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
-//	strftime ( string   format , int   timestamp ) 
 echo $form->makeHidden("id", "id", $form->getValeur("id"));
-echo $form->makeInput("datedeb", "datedeb", "Date de début (*)", strftime ("%x", $form->getValeur("datedeb")));
+echo $form->makeInput("datedeb", "datedeb", "Date de dï¿½but (*)", strftime ("%x", $form->getValeur("datedeb")));
 echo $form->makeInput("datefin", "datefin", "Date de fin", strftime ("%x", $form->getValeur("datefin")));
 echo $form->makeTexteRiche("commentaires", "commentaires", $form->getValeur("commentaires"));
 echo $form->makeNoteObligatoire();
 echo $form->makeButton("Enregistrer");
 echo $form->closeForm();
-?>

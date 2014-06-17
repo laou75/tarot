@@ -43,12 +43,6 @@ while	($row=$this->db->sql_fetch_cur($res))
 	$joueurs.="</table>";
 	$this->db->sql_free_result($res2);
 	echo $this->ligneListe(
-/*
-							array(	strftime("%x", $row->datedeb), 
-									$joueurs,
-									$row->commentaires
-									),
-*/
 							array(	strftime("%d", $row->datedeb)."/".strftime("%m", $row->datedeb)."/".strftime("%Y", $row->datedeb), 
 									$joueurs,
 									$row->commentaires
@@ -62,4 +56,3 @@ while	($row=$this->db->sql_fetch_cur($res))
 }
 echo $this->closeListe();
 $this->db->sql_free_result($res);
-?>

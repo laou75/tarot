@@ -37,4 +37,3 @@ echo $form->closeFieldset();
 
 echo $form->makeButton("Enregistrer");
 echo $form->closeForm();
-?>

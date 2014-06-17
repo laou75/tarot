@@ -3,7 +3,6 @@ include_once ("class/formulaire.class.php");
 
 $form = new Formulaire();
 
-
 if (count($_POST)>0)
 {
 	$form->setValeurs($_POST);
@@ -28,10 +27,9 @@ if (isset($err) && strlen($err)>0)
 if (isset($warn) && strlen($warn)>0)
 	echo $form->makeMsgWarning($warn);
 echo $form->makeTexte("Nom", $form->getValeur("nom"));
-echo $form->makeTexte("Prénom", $form->getValeur("prenom"));
+echo $form->makeTexte("PrÃ©nom", $form->getValeur("prenom"));
 $image=(strlen($form->getValeur("portrait"))>0)?$this->makePortrait("mini/".$form->getValeur("portrait")):"";
 if ($image!="")
 	echo $form->makeTexte("Portrait", $image);
 echo $form->makeButton("Supprimer");
 echo $form->closeForm();
-?>

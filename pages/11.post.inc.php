@@ -5,9 +5,9 @@ $form = new Formulaire();
 $form->setValeurs($_POST);
 $err="";
 if	(strlen($form->getValeur("id_preneur"))==0)
-	$err .= "Sélectionner le preneur<br>";
+	$err .= "SÃ©lectionner le preneur<br>";
 if	(strlen($form->getValeur("annonce"))==0)
-	$err .= "Sélectionner l'annonce<br>";
+	$err .= "SÃ©lectionner l'annonce<br>";
 if	(strlen($form->getValeur("points"))==0)
 	$err .= "Renseigner les points<br>";
 
@@ -28,23 +28,9 @@ if	($err=="")
 	{
 		if	(strlen($form->getValeur("def".$i))>0)
 			$nbDef++;
-//		echo "$i ($nbDef): ".$form->getValeur("def".$i)."<br>";
 	}
 
 	if	($nbAttaquant==1) $nbDef++;
-
-/*
-	echo "<pre>";
-	print_r($_POST);
-	echo "</pre>";
-	echo "nbDef= ".$nbDef."<br>";
-	echo "points = ".$form->getValeur("total")."<br>";
-	echo "preneur = ".$form->getValeur("total")*($nbDef)."<br>";
-	if	($nbAttaquant == 2)
-		echo "second = ".$form->getValeur("total")."<br>";
-	echo "défense = ".$form->getValeur("total")*(-1)."<br>";
-	exit();
-*/
 
 	$form->setValeur("annonce_reussie", ($form->getValeur("total")>0)?1:0);
 	$this->db->sql_insert("parties", $form->getValeurs());
@@ -72,12 +58,12 @@ if	($err=="")
 		}
 		elseif	($form->getValeur("id_second")==$rowJ->id_joueur)
 		{
-			$valJPar["type"]= "appelé";
+			$valJPar["type"]= "appelÃ©";
 			$valJPar["points"]= $form->getValeur("total");
 		}
 		elseif	($form->getValeur("def1")==$rowJ->id_joueur || $form->getValeur("def2")==$rowJ->id_joueur || $form->getValeur("def3")==$rowJ->id_joueur || $form->getValeur("def4")==$rowJ->id_joueur || $form->getValeur("def5")==$rowJ->id_joueur || $form->getValeur("def6")==$rowJ->id_joueur)
 		{
-			$valJPar["type"]= "défense";
+			$valJPar["type"]= "dÃ©fense";
 			$valJPar["points"]= $form->getValeur("total")*(-1);
 		}
 		else
@@ -92,4 +78,3 @@ if	($err=="")
 	Header("Location: ".$form->getValeur("from"));
 	exit();
 }
-?>

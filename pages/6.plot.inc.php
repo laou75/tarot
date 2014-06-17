@@ -57,10 +57,7 @@ foreach($aTab as $idJ => $det)
 				"and	id_session= $idS ".
 				"and	id_joueur = $idJ ".
 				"group by id_tournoi, id_session";
-/*
- 		$db->sql_select($row2, $req2);
-		$ydata[]=	$row2->CUMUL;
-*/
+
 		if	($db->sql_select($row2, $req2)==-100)
 			$truc=0;
 		else
@@ -70,7 +67,8 @@ foreach($aTab as $idJ => $det)
 	// Create the linear plot
 	$lineplot[$i]=new LinePlot($ydata);
 	$lineplot[$i]->value->Show();
-	$lineplot[$i]->SetColor($couleur[$i]);
+	$lineplot[$i]->SetColor($couleur[$i]);
+
 	$lineplot[$i]->SetLegend($det->prenom." ".$det->nom);
 	$lineplot[$i]->mark->SetType(MARK_FILLEDCIRCLE);
 	$lineplot[$i]->mark->SetFillColor($couleur[$i]);
@@ -81,4 +79,3 @@ foreach($aTab as $idJ => $det)
 
 // Display the graph
 $graph->Stroke();
-?> 

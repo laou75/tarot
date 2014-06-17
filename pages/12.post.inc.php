@@ -5,9 +5,9 @@ $form = new Formulaire();
 $form->setValeurs($_POST);
 $err="";
 if	(strlen($form->getValeur("id_preneur"))==0)
-	$err .= "Sélectionner le preneur<br>";
+	$err .= "SÃ©lectionner le preneur<br>";
 if	(strlen($form->getValeur("annonce"))==0)
-	$err .= "Sélectionner l'annonce<br>";
+	$err .= "SÃ©lectionner l'annonce<br>";
 if	(strlen($form->getValeur("points"))==0)
 	$err .= "Renseigner les points<br>";
 
@@ -35,12 +35,9 @@ if	($err=="")
 	$form->setValeur("annonce_reussie", ($form->getValeur("total")>0)?1:0);
 	$this->db->sql_update("parties", array("id"=>$form->getValeur("id_partie"), "id_tournoi"=>$form->getValeur("id_tournoi"), "id_session"=>$form->getValeur("id_session")), $form->getValeurs());
 
-//	$idPar = $this->db->sql_last_insert("parties", "id");
-
 	$valJPar["id_tournoi"] = $form->getValeur("id_tournoi");
 	$valJPar["id_session"] = $form->getValeur("id_session");
 	$valJPar["id_partie"] = $form->getValeur("id_partie");
-
 
 	$reqTMP = "DELETE ".
 			"from	r_parties_joueurs ".
@@ -66,12 +63,12 @@ if	($err=="")
 		}
 		elseif	($form->getValeur("id_second")==$rowJ->id_joueur)
 		{
-			$valJPar["type"]= "appelé";
+			$valJPar["type"]= "appelÃ©";
 			$valJPar["points"]= $form->getValeur("total");
 		}
 		elseif	($form->getValeur("def1")==$rowJ->id_joueur || $form->getValeur("def2")==$rowJ->id_joueur || $form->getValeur("def3")==$rowJ->id_joueur || $form->getValeur("def4")==$rowJ->id_joueur || $form->getValeur("def5")==$rowJ->id_joueur || $form->getValeur("def6")==$rowJ->id_joueur)
 		{
-			$valJPar["type"]= "défense";
+			$valJPar["type"]= "dÃ©fense";
 			$valJPar["points"]= $form->getValeur("total")*(-1);
 		}
 		else
@@ -85,4 +82,3 @@ if	($err=="")
 
 	Header("Location: ".$form->getValeur("from"));
 }
-?>

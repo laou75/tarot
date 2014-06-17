@@ -36,7 +36,7 @@ class db
 	
 	
 	/*
-	 * Connexion à la base
+	 * Connexion ï¿½ la base
 	 */	
 	function sql_connect()
 	{	
@@ -46,7 +46,7 @@ class db
 	
 	
 	/*
-	 * Libérer un RES
+	 * Libï¿½rer un RES
 	 */	
 	function sql_free_result($res)
 	{
@@ -75,7 +75,7 @@ class db
 		}
 		else
 		{	
-			$this->sql_error($req."<br>La requête retourne trop d'occurence");
+			$this->sql_error($req."<br>La requï¿½te retourne trop d'occurence");
 		}
 		mysql_free_result($res);
 		Return 0;
@@ -83,10 +83,10 @@ class db
 	
 	
 	/*
-	 * Faire un select pour récupérer les valeurs dans un tableau (pour les COMBOs !!!!)
-	 * La requête ne doit retourner deux colonnes :
+	 * Faire un select pour rï¿½cupï¿½rer les valeurs dans un tableau (pour les COMBOs !!!!)
+	 * La requï¿½te ne doit retourner deux colonnes :
 	 * - ID			: la 1ere constitue la clef
-	 * - LIBELLE	: la 2nde constitue le libellé
+	 * - LIBELLE	: la 2nde constitue le libellï¿½
 	 */
 	function sql_get_array(&$row, $req)
 	{
@@ -105,7 +105,7 @@ class db
 	
 	
 	/*	
-	 * Faire un select pour récupérer les valeurs dans un tableau associatif
+	 * Faire un select pour rï¿½cupï¿½rer les valeurs dans un tableau associatif
 	 */
 	function sql_select_array(&$row, $req)
 	{	
@@ -125,7 +125,7 @@ class db
 		}
 		else
 		{	
-			$this->sql_error($req."<br>La requête retourne trop d'occurence");
+			$this->sql_error($req."<br>La requï¿½te retourne trop d'occurence");
 		}
 		mysql_free_result($res);
 		Return 0;
@@ -143,7 +143,7 @@ class db
 	
 	
 	/*
-	 * Compte le nb d'occurence trouvée lors d'une requête
+	 * Compte le nb d'occurence trouvï¿½e lors d'une requï¿½te
 	 */
 	function sql_count_cur(&$res)
 	{	
@@ -152,7 +152,7 @@ class db
 	
 	
 	/*
-	 * Exécute un Fetch
+	 * Exï¿½cute un Fetch
 	 */
 	function sql_fetch_cur($res)
 	{
@@ -162,7 +162,7 @@ class db
 	
 	
 	/*
-	 * Exécute un Fetch dans un tableau
+	 * Exï¿½cute un Fetch dans un tableau
 	 */
 	function sql_fetch_array($res)
 	{
@@ -182,11 +182,11 @@ class db
 	
 	
 	/*
-	 * Exécuter une requête (update, insert, ...)
+	 * Exï¿½cuter une requï¿½te (update, insert, ...)
 	 */
 	function sql_execute($req)
 	{
-		$res = mysql_db_query(	$this->name, $req);
+		mysql_db_query(	$this->name, $req);
 		if (mysql_errno()) $this->sql_error($req);
 	}
 	
@@ -200,14 +200,13 @@ class db
 		$resInfos=null;
 		$req = "INSERT INTO $table ";
 		$i=0;
-		$where="";
 		$cols=" (";
 		$values="values (";
 	
-		//	Récupérer les colonnes de la table
-		$ret = $this->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
+		//	Rï¿½cupï¿½rer les colonnes de la table
+		$this->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
 	
-		$count=count($valeurs);
+		//$count=count($valeurs);
 	
 		//	CLAUSE SET
 		while ($rowInfos=$this->sql_fetch_cur($resInfos)) 
@@ -242,17 +241,16 @@ class db
 		$resInfos=null;
 		$req = "REPLACE INTO $table ";
 		$i=0;
-		$where="";
 		$cols=" (";
 		$values="values (";
 	
-		//	Récupérer les colonnes de la table
-		$ret = $this->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
+		//	Rï¿½cupï¿½rer les colonnes de la table
+		$this->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
 	
-		//	Eliminer les 'indésirables'
+		//	Eliminer les 'indï¿½sirables'
 		//	if (array_key_exists("buttonName", $valeurs)) unset ($valeurs["buttonName"]);
 	
-		$count=count($valeurs);
+		//$count=count($valeurs);
 	
 		//	CLAUSE SET
 		while ($rowInfos=$this->sql_fetch_cur($resInfos)) 
@@ -290,13 +288,13 @@ class db
 		$i=0;
 		$where="";
 	
-		//	Récupérer les colonnes de la table
-		$ret = $this->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
+		//	Rï¿½cupï¿½rer les colonnes de la table
+		$this->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
 	
-		//	Eliminer les 'indésirables'
+		//	Eliminer les 'indï¿½sirables'
 		//	if (array_key_exists("buttonName", $valeurs)) unset ($valeurs["buttonName"]);
 	
-		$count=count($valeurs);
+		//$count=count($valeurs);
 	
 		//	CLAUSE SET
 		while ($rowInfos=$this->sql_fetch_cur($resInfos)) 
@@ -340,7 +338,6 @@ class db
 	{	
 		//	Init
 		$req = "DELETE FROM $table ";
-		$i=0;
 		$where="";
 	
 		//	CLAUSE WHERE
@@ -360,7 +357,7 @@ class db
 	
 	
 	/*
-	 * Renvoyer la dernière valeur de la clef insérer dans la table...
+	 * Renvoyer la derniï¿½re valeur de la clef insï¿½rer dans la table...
 	 */	
 	function sql_last_insert($table, $key)
 	{

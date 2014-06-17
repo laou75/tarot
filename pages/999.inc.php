@@ -19,13 +19,3 @@ echo $form->makePassword("password", "password", "Mot de passe (*)" );
 echo $form->makeNoteObligatoire();
 echo $form->makeButton("Se connecter");
 echo $form->closeForm();
-/*
-echo "<pre>SESSION";
-print_r($_SESSION);
-echo "</pre>";
-
-echo "<pre>GLOBALS";
-print_r($GLOBALS);
-echo "</pre>";
-*/
-?>

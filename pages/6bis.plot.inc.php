@@ -56,9 +56,7 @@ foreach($aTabJ as $idJ => $det)
 				"where	id_tournoi= $id_tournoi ".
 				"and	id_session= $idS ".
 				"and	id_joueur = $idJ ".
-//				"and	points < 0 ".
 				"group by id_tournoi, id_session";
-//		$db->sql_select($row2, $req2);
 		if	($db->sql_select($row2, $req2)==-100)
 			$truc=0;
 		elseif ($row2->CUMUL>0)
@@ -82,4 +80,3 @@ foreach($aTabJ as $idJ => $det)
 
 // Display the graph
 $graph->Stroke();
-?> 

@@ -9,7 +9,7 @@ echo $this->drawBarreBouton(
 		$this->makeLinkBoutonRetour(30, "id_tournoi=".$id_tournoi)
 		);
 
-//	Récupérer la liste des joueurs de la session
+//	Rï¿½cupï¿½rer la liste des joueurs de la session
 $req =	"select B.id, B.nom, B.prenom, B.nickname, B.portrait, A.position ".
 		"from	r_sessions_joueurs A, joueurs B ".
 		"where	A.id_tournoi=".$id_tournoi." ".
@@ -20,16 +20,13 @@ $this->db->sql_open_cur($res, $req);
 $nbJSess = $this->db->sql_count_cur($res);
 while	($row=$this->db->sql_fetch_cur($res)) {
 	$aJSess[$row->id]=$row;
-//	$entete[] = $this->lienPortrait($row->portrait, substr($row->prenom,0,1).". ".substr($row->nom,0,1).".", $row->prenom." ".$row->nom);
 	$nick=isset($row->nickname)?$row->nickname:$row->prenom." ".substr($row->nom,0,1).".";
 	$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 }
 $this->db->sql_close_cur($res);
 
 $entete[] = "Contrat";
-//$entete[] = "Commentaires";
 
-//echo $this->openListe(array("Joueurs", "Contrat", "Commentaires"), true);
 echo $this->openListe($entete, true);
 $req =	"select * ".
 		"from	parties ".
@@ -43,9 +40,9 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 	$petitaubout=($row->petitaubout==1)?"oui":"non";
 	$contratreussi=($row->annonce_reussie==1)?$this->makeImg("reussie.gif"):$this->makeImg("ratee.gif");
 	$lContrat="<table cellpadding=0 cellspacing=0 border=0><tr valign='top'><td>".$row->annonce."&nbsp;</td><td>".$contratreussi."</td></tr></table>";
-//	$htmlContrat=	"<table class='resume-partie'>".
 	$htmlContrat="<table>".
-				"	<tr valign=\"top\">".
+				"	<tr valign=\"top\">".
+
 				"		<td class='resume-partie'>Contrat</td>".
 				"		<td class='resume-partie'>".$lContrat."</td>".
 				"	</tr>".
@@ -59,23 +56,17 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 				"	</tr>";
 	if	($row->poignee!="aucune")
 		$htmlContrat.=	"	<tr>".
-					"		<td class='resume-partie'>Poignée</td>".
+					"		<td class='resume-partie'>Poignï¿½e</td>".
 					"		<td class='resume-partie'>".$row->poignee."</td>".
 					"	</tr>";
 	$htmlContrat.=	"	<tr>".
 				"		<td class='resume-partie'>Points</td>".
 				"		<td class='resume-partie'>".$row->points."</td>".
 				"	</tr>".
-/*
- 				"	<tr>".
-				"		<td class='resume-partie'>Commentaires</td>".
-				"		<td class='resume-partie'>".nl2br($row->commentaires)."&nbsp;</td>".
-				"	</tr>".
-*/
 				"</table>";
 	$htmlContrat=$this->openCadre().$htmlContrat.$this->closeCadre();
 
-	//	Récupérer la liste des joueurs de la partie
+	//	Rï¿½cupï¿½rer la liste des joueurs de la partie
 	$req2 = "select id_joueur, type, points ".
 			"from	r_parties_joueurs ".
 			"where	id_tournoi=".$id_tournoi." ".
@@ -95,10 +86,6 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 	}
 	$this->db->sql_close_cur($res2);
 
-/*
-	$this->db->sql_open_cur($res2, $req2);
-	$nb2 = $this->db->sql_count_cur($res2);
-*/
 	$data=array();
 	foreach	($aJSess as $idJ => $detJ) {
 		$infos="";
@@ -107,11 +94,11 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 				$class="liste-joueur-preneur";
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
-			case "appelé":
+			case "appelï¿½":
 				$class="liste-joueur-appele";
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
-			case "défense":
+			case "dï¿½fense":
 				$class="liste-joueur-defense";
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
@@ -155,4 +142,3 @@ if ($nbParties>0)
 	echo $this->ligneListe($data,array());
 }
 echo $this->closeListe();
-?>

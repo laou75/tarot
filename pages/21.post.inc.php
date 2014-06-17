@@ -2,26 +2,21 @@
 include_once ("class/formulaire.class.php");
 
 $form = new Formulaire();
-/*
-echo "<pre>";
-print_r($_FILES);
-echo "</pre>";
-*/
+
 $form->setValeurs($_POST);
 
 $err="";
 if (strlen($form->getValeur("nom"))=="")
 	$err .= "Le champ 'Nom' est obligatoire !<br>";
 if (strlen($form->getValeur("prenom"))=="")
-	$err .= "Le champ 'Prénom' est obligatoire !<br>";
+	$err .= "Le champ 'PrÃ©nom' est obligatoire !<br>";
 if ($err=="")
 {
 	if (count($_FILES)>0 && strlen($_FILES["portrait"]["name"])>0)
 	{
 		$fichier = $_FILES["portrait"]["name"];
-//		$filename = sprintf("%d.".strtolower(substr($_FILES["doc_fichier"]["name"], -3)), $next);
 		if (!move_uploaded_file($_FILES['portrait']['tmp_name'], $GLOBALS["Config"]["PATH"]["PORTRAIT"].$fichier))
-			$err .= "ERREUR : imposssible de télécharger le fichier (UPLOAD) !";
+			$err .= "ERREUR : imposssible de tÃ©lÃ©charger le fichier (UPLOAD) !";
 		else
 		{
 			$form->setValeur("portrait", $fichier);
@@ -42,4 +37,3 @@ if ($err=="")
 	$this->db->sql_insert("joueurs", $form->getValeurs());
 	Header("Location: ".$form->getValeur("from"));
 }
-?>

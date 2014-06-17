@@ -27,4 +27,3 @@ $req=	"delete ".
 		"where	id = ".$form->getValeur("id_tournoi");
 $this->db->sql_execute($req);
 Header("Location: ".$form->getValeur("from"));
-?>

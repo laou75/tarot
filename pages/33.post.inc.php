@@ -25,4 +25,3 @@ $req=	"delete ".
 		"and	id = ".$form->getValeur("id");
 $this->db->sql_execute($req);
 Header("Location: ".$form->getValeur("from"));
-?>

@@ -1,4 +1,4 @@
-<?
+<?php
 echo $this->drawBarreBouton(
 	null,
 	$this->makeBouton($_SERVER["HTTP_REFERER"], $this->makeImg("retour.gif")."&nbsp;Retour", "Retour"));
@@ -17,7 +17,6 @@ $nb = $this->db->sql_count_cur($res);
 while	($row=$this->db->sql_fetch_cur($res))
 {
 	$aTab[$row->id_joueur] = $row;
-//	$entete[] = $this->lienPortrait($row->portrait, substr($row->prenom,0,1).". ".substr($row->nom,0,1).".", $row->prenom." ".$row->nom);
 	$nick=isset($row->nickname)?$row->nickname:$row->prenom." ".substr($row->nom,0,1).".";
 	$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 }
@@ -40,7 +39,7 @@ $this->db->sql_free_result($res0);
 		<tr><th>Statistiques</th></tr>
 		<tr>
 			<td align='center'>
-<?
+<?php
 echo $this->openListe($entete);
 foreach($aTabSess as $idS => $detS)
 {
@@ -53,10 +52,6 @@ foreach($aTabSess as $idS => $detS)
 				"and	id_session= $idS ".
 				"and	id_joueur = $idJ ".
 				"group by id_tournoi, id_session";
-/*
- 		$db->sql_select($row2, $req2);
-		$data[]=$row2->points;
-*/
 		$ret=$db->sql_select($row2, $req2);
 		if ($ret>0)
 			$data[]=sprintf("%01.1f", $row2->points);
@@ -66,11 +61,7 @@ foreach($aTabSess as $idS => $detS)
 	echo $this->ligneListe(	$data , null, "align='right'");
 }
 echo $this->closeListe();
-/*
-echo"<pre>";
-print_r($data);
-echo"</pre>";
-*/
+
 /*
  * 	COURBE
  */
@@ -88,7 +79,7 @@ echo"</pre>";
 		<tr><th>Cumul des pertes</th></tr>
 		<tr>
 			<td align='center'>
-<?
+<?php
 echo $this->openListe($entete);
 
 $cumul=array();
@@ -113,7 +104,6 @@ foreach($aTabSess as $idS => $detS)
 			$cumul[$idJ]=$cumul[$idJ]+$truc;
 		else
 			$cumul[$idJ]=$truc;
-//		$data[]=$cumul[$idJ];
 		$data[]=sprintf("%01.1f", $cumul[$idJ]);
 	}
 	echo $this->ligneListe(	$data , null, "align='right'");
@@ -130,7 +120,7 @@ echo $this->closeListe();
 	</table>
 	<br>
 	<table>
-		<tr><th>Répartition des pertes</th></tr>
+		<tr><th>RÃ©partition des pertes</th></tr>
 		<tr>
 			<td align='center'>
 				<img src="pages/6ter.plot.inc.php?<?=$_SERVER["QUERY_STRING"]; ?>">
