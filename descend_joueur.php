@@ -32,4 +32,3 @@ if	($db->sql_select($row2, $req) == 1)
 //	sql_execute("UPDATE dossiers SET dos_order = ".$row2->dos_order." WHERE dos_id = ".$_GET["dos_id"]);
 }
 Header("Location: ".$_SERVER["HTTP_REFERER"]);
-?>

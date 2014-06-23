@@ -13,12 +13,15 @@ if ($err=="")
 {
 	if (true)
 	{
+        $row="";
 		$login = $_POST["identifiant"];
 		$password = $_POST["password"];
-		//	*** trou de s�curit� *** Revoir le test ***
-		$this->db->sql_select($row, "select nickname, mdp from joueurs where nickname = '$login'");
+		//	*** trou de sécurité *** Revoir le test ***
+        $this->db->sql_select($row, "select nickname, mdp from joueurs where nickname = '$login'");
 
-		if (strtolower($row->mdp) != strtolower($password))
+        echo " - " . strtolower($row->mdp) . " != " . strtolower($password) . "<br>";
+
+        if (strtolower($row->mdp) != strtolower($password))
 			$err .= "Identification incorrecte !";
 		else
 		{
@@ -26,8 +29,8 @@ if ($err=="")
 			$sess = new session();
 			$sess->sessionConnect($login, "admin");
 			$sessionTarot = $sess;
-			session_register("sessionTarot");
-			header("Location: index.php");
+            $_SESSION["sessionTarot"] = $sess;
+            header("Location: index.php");
 			exit();
 		}
 	}

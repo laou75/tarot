@@ -33,7 +33,13 @@ class template
 		else
 			$this->id = $_GET["id"];		
 		$this->rowPage = $this->getInfosMenu($this->id);
-		$this->titre = (isset($this->rowPage->description))?$this->rowPage->description:$this->rowPage->label;
+		$this->titre =
+                (isset($this->rowPage->description))
+                ?   $this->rowPage->description
+                :   (
+                        (isset($this->rowPage->label))
+                        ?   $this->rowPage->label
+                        :   '');
 		
 		$logo = $this->modeMini?"":(isset($this->rowPage->logo))?$this->makeImg("logos/".$this->rowPage->logo):"";
 
@@ -41,15 +47,16 @@ class template
 		if (count($_POST)>0)
 			include("pages/".$this->id.".post.inc.php");
 
-		ob_start("ob_gzhandler");
+//        ob_start("ob_gzhandler");
+        ob_start();
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<title><?=$this->titre;?></title>
-		<link rel="stylesheet" href="<?=$this->nameCSS;?>" type='text/css' media="screen">
+		<title><?php echo $this->titre;?></title>
+		<link rel="stylesheet" href="<?php echo $this->nameCSS;?>" type='text/css' media="screen">
         <link rel="SHORTCUT ICON" href="http://www.guig.net/favicon.ico"/>
-		<script type='text/javascript' src='<?=$GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
+		<script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
 <?php
 		//	Inclure le js spécifique si y'en a
 		if	(file_exists("js/".$this->id.".js"))
@@ -65,8 +72,8 @@ class template
 	</head>
 	<body>
 		<div class="page">
-			<table width="100%" class="page" cellspacing=<?=$this->cellSpacing;?>>
-				<tr><td align="center"><?=$logo." ";?></td><td class="bandeau"><h1><?=$this->titre.$libCtxt;?></h1></td></tr>
+			<table width="100%" class="page" cellspacing=<?php echo $this->cellSpacing;?>>
+				<tr><td align="center"><?php echo $logo." ";?></td><td class="bandeau"><h1><?php echo $this->titre.$libCtxt;?></h1></td></tr>
 				<tr>
 					<td class="menu">
 <?php
@@ -74,7 +81,6 @@ class template
 		echo "<table cellpadding='0' cellspacing='0' border='0' width='100%'>";
 		echo $this->drawMenu($this->id, 0, "");
 		echo "</table>";
-		
 ?>
 					</td>
 					<td class="corps">
@@ -119,16 +125,28 @@ else
 		$ret="";
 		$res=null;
 		// On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
-		$req = "select * from menu where id_pere = ".mysql_escape_string($id_pere)." and visible_menu = 1 order by ordre asc";
+		$req = "select * from menu where id_pere = ".$id_pere." and visible_menu = 1 order by ordre asc";
 		$this->db->sql_open_cur($res, $req);
 		while	($row=$this->db->sql_fetch_cur($res))
 		{
-			$class_explorer = ($row->id==$id)?"explorer-sel":"explorer";
+            //var_dump($row);
+			$class_explorer =
+                (isset($row->id) && $row->id==$id)
+                    ? "explorer-sel"
+                    : "explorer";
 			$class="";
 
 			$icone = (is_array($this->cheminMenu) && array_key_exists($row->id, $this->cheminMenu))?$this->makeImg("moins.gif"):$this->makeImg("plus.gif");	
 			
-			$label=(isset($row->icone)&&strlen($row->icone)>0)?$this->makeImg($row->icone)."&nbsp;".($this->modeMini?$row->labelCourt:$row->label):($this->modeMini?$row->labelCourt:$row->label);
+			$label=(isset($row->icone)&&strlen($row->icone)>0)
+                    ?   $this->makeImg($row->icone)."&nbsp;".
+                        ($this->modeMini
+                            ?   $row->labelCourt
+                            :   $row->label)
+                    :   ($this->modeMini
+                            ?   $row->labelCourt
+                            :   $row->label
+                        );
 			$ret .="<tr>\n".
 					"	<td>\n".
 					"		<table cellpadding='0' cellspacing='0' border='0'>\n".
@@ -174,6 +192,7 @@ else
 		$row=null;
 		$req = "select * from menu where id = ".$id;
 		$this->db->sql_select($row, $req);
+
 		return $row;
 	}
 
@@ -222,7 +241,14 @@ else
 			$url=(isset($parm))?"index.php?id=".$id."&amp;".$parm:"index.php?id=".$id;
 		else
 			$url=$id;
-		return $this->makeLink($url, $label, (isset($row->description))?"Retour : ".$row->description:"Retour : ".$row->label, "bouton");
+		return $this->makeLink( $url,
+                                $label,
+                                (isset($row->description))
+                                    ?   "Retour : ".$row->description
+                                    :   (isset($row->description)
+                                            ?   "Retour : ".$row->label
+                                            :   ''),
+                                "bouton");
 	}
 
 	/*
