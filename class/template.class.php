@@ -53,8 +53,9 @@ class template
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<title><?php echo $this->titre;?></title>
-		<link rel="stylesheet" href="<?php echo $this->nameCSS;?>" type='text/css' media="screen">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title><?php echo $this->titre;?></title>
+        <link rel="stylesheet" href="<?php echo $this->nameCSS;?>" type='text/css' media="screen">
         <link rel="SHORTCUT ICON" href="http://www.guig.net/favicon.ico"/>
 		<script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
 <?php

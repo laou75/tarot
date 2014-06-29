@@ -51,7 +51,7 @@ while($i<$nbJ) {
 	$der=$i;
 	$i++;
 }
-echo $form->makeMulti("defense", "defense", "D�fense", $champs);
+echo $form->makeMulti("defense", "defense", "Défense", $champs);
 ?>
 <script type="text/javascript">
 function change_appele() {
@@ -69,11 +69,11 @@ echo $form->closeFieldset();
 
 echo $form->openFieldset("Contrat");
 echo $form->makeRadioEnum("annonce", "annonce", "Annonce (*)", $form->getValeur("annonce"), "parties", "annonce", false, $this->db, "onclick=\"calcule_points()\"");
-echo $form->makeInput("points", "points", "Points r�alis�s (*)", $form->getValeur("points"), "onchange=\"calcule_points()\"");
+echo $form->makeInput("points", "points", "Points réalisés (*)", $form->getValeur("points"), "onchange=\"calcule_points()\"");
 echo $form->makeRadio("nombre_bouts", "nombre_bouts", "Nombre de bouts", $form->getValeur("nombre_bouts"), array(0=>"0", 1=>"1", 2=>"2", 3=>"3"), "onclick=\"calcule_points()\"");
 echo $form->makeRadio("petitaubout", "petitaubout", "Petit au bout ?", $form->getValeur("petitaubout"), array(0=>"non", 1=>"oui"), "onclick=\"calcule_points()\"");
 
-echo $form->makeRadioEnum("poignee", "poignee", "Poign�e ?", $form->getValeur("poignee"), "parties", "poignee", false, $this->db, "onclick=\"calcule_points()\"");
+echo $form->makeRadioEnum("poignee", "poignee", "Poignée ?", $form->getValeur("poignee"), "parties", "poignee", false, $this->db, "onclick=\"calcule_points()\"");
 echo $form->makeInput("total", "total", "Total", $form->getValeur("total"), " READONLY");
 echo $form->closeFieldset();
 

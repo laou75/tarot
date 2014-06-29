@@ -20,15 +20,11 @@ function mouseMove (evt)
 			y=evt.clientY;
 		}
 	}
-//	window.status = "X="+x + '; Y=' + y;
 }
 
 function openPortrait(portrait, label)
 {
-//	html = "<table><tr><td class='border' align='center'>"+label+"</td></tr><tr><td class='border' align='center'><img src='images/portraits/mini/"+portrait+"'></td></tr></table>";
-//	html = "<table><tr><td class='border' align='center'><img src='images/portraits/mini/"+portrait+"'></td><td class='border' align='center'>"+label+"</td></tr></table>";
-	html = "<table><tr><td class='border' align='center'><img src='images/portraits/mini/"+portrait+"'></td></tr><tr><td class='border' align='center'>"+label+"</td></tr></table>";
-				
+    html = "<table><tr><td class='border' align='center'><img src='images/portraits/mini/"+portrait+"'></td></tr><tr><td class='border' align='center'>"+label+"</td></tr></table>";
 	openPopup(html);
 }
 

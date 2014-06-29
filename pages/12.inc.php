@@ -64,7 +64,7 @@ $this->db->sql_close_cur($resJ);
 
 echo $form->makeCombo("id_preneur", "id_preneur", "Preneur (*)", $form->getValeur("id_preneur"), $aTableau);
 if ($nbJ>=5)
-	echo $form->makeCombo("id_second", "id_second", "Appel�", $form->getValeur("id_second"), $aTableau, " onChange=\"change_appele()\"");
+	echo $form->makeCombo("id_second", "id_second", "Appelé", $form->getValeur("id_second"), $aTableau, " onChange=\"change_appele()\"");
 $i=1;
 foreach($aTableau as $clef => $valeur)
 {

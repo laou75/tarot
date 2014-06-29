@@ -94,11 +94,11 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 				$class="liste-joueur-preneur";
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
-			case "appel�":
+			case "appelé":
 				$class="liste-joueur-appele";
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
-			case "d�fense":
+			case "défense":
 				$class="liste-joueur-defense";
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;

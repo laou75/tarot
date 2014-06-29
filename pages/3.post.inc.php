@@ -6,7 +6,7 @@ $form->setValeurs($_POST);
 
 $err="";
 if (strlen($form->getValeur("datedeb"))==0)
-	$err .= "Le champ 'Date de d�but' est obligatoire !<br>";
+	$err .= "Le champ 'Date de début' est obligatoire !<br>";
 if ($err=="")
 {
 	$d = substr($form->getValeur("datedeb"), 0, 2);

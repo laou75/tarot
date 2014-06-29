@@ -336,6 +336,7 @@ class Formulaire
 
 	function makeTexteRiche($name, $id, $value="", $options="")
 	{
+        /*
 		include_once ("FCKeditor/fckeditor.php") ;
 		$sBasePath = "FCKeditor/" ;
 		$oFCKeditor = new FCKeditor($name) ;
@@ -346,6 +347,8 @@ class Formulaire
 		return	"<tr id='tr".$id."'>\n".
 				"	<td colspan=2 align='center'>\n".$oFCKeditor->CreateHtml()."</td>\n".
 				"</tr>\n";
+        */
+        return	$this->makeTextarea($name, $id, "Description", $value, $options);
 	}
 	
 	function makeTexte($label, $texte)
