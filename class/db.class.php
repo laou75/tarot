@@ -4,7 +4,7 @@
 //	***	DATABASE	***
 //	*******************
 
-class db
+class Db
 {
 	var $server;
 	var $login;
@@ -396,4 +396,4 @@ class db
 	}
 }
 
-$db= new db();
+$db= new Db();

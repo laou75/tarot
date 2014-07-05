@@ -19,8 +19,8 @@ $graph->SetMargin(50,50,30,5);
 //	R�cup�ration des joueurs
 $req =	"select A.id_joueur, B.nom, B.prenom ".
 		"from	r_sessions_joueurs A, joueurs B ".
-		"where	A.id_tournoi=$id_tournoi ".
-		"and	A.id_session= $id_session ".
+		"where	A.id_tournoi=" . intval($id_tournoi) . " ".
+		"and	A.id_session=" . intval($id_session) . " ".
 		"and	B.id=A.id_joueur ".
 		"order by A.id_joueur asc";
 $db->sql_open_cur($res, $req);
@@ -35,8 +35,8 @@ $db->sql_free_result($res);
 //	R�cup�ration des parties
 $req0 =	"select id ".
 		"from	parties ".
-		"where	id_tournoi=$id_tournoi ".
-		"and	id_session= $id_session ".
+		"where	id_tournoi=" . intval($id_tournoi) . " ".
+		"and	id_session=" . intval($id_session) . " ".
 		"order by id asc";
 $db->sql_open_cur($res0, $req0);
 $nb = $db->sql_count_cur($res0);
@@ -59,10 +59,10 @@ foreach($aTabJ as $idJ => $detJ)
 	{
 		$req2 = "select sum(points) as CUMUL, id_tournoi, id_session, id_partie ".
 				"from	r_parties_joueurs ".
-				"where	id_tournoi= $id_tournoi ".
-				"and	id_session= $id_session ".
-				"and	id_partie= $idP ".
-				"and	id_joueur = $idJ ".
+                "where	id_tournoi=" . intval($id_tournoi) . " ".
+                "and	id_session=" . intval($id_session) . " ".
+				"and	id_partie=" . intval($idP) . " ".
+				"and	id_joueur =" . intval($idJ) . " ".
 				"group by id_tournoi, id_session, id_partie";
 		if	($db->sql_select($row2, $req2)==-100)
 			$truc=0;

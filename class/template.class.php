@@ -15,7 +15,7 @@ class template
 	/*
 	 * 
 	 */	
-	function template($db)
+	function Template($db)
 	{
 		setlocale(LC_TIME, "fr");
 
@@ -494,4 +494,4 @@ else
 	}
 }
 
-$tpl= new template($db);
+$tpl= new Template($db);

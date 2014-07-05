@@ -1,6 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
-
 $form = new Formulaire();
 
 if (count($_POST)>0)
@@ -10,7 +8,7 @@ if (count($_POST)>0)
 else
 {
 	$form->setValeur("id", $_GET["id_joueur"]);
-	$this->db->sql_select_array($row, "select * from joueurs where id=".$form->getValeur("id")." ");
+	$this->db->sql_select_array($row, "select * from joueurs where id=" . intval($form->getValeur("id")));
 	$form->setValeurs($row);
 }
 
@@ -24,7 +22,7 @@ if	(isset($err) && strlen($err)>0)
 echo $form->makeHidden("id", "id", $form->getValeur("id"));
 echo $form->makeInput("nom", "nom", "Nom (*)", $form->getValeur("nom"));
 echo $form->makeInput("prenom", "prenom", "Prénom (*)", $form->getValeur("prenom"));
-$image=(strlen($form->getValeur("portrait"))>0)?$this->makePortrait("mini/".$form->getValeur("portrait")):"";
+$image=(strlen($form->getValeur("portrait"))>0) ? $this->makePortrait("mini/".$form->getValeur("portrait")) : "";
 echo $form->makeFileInput(	"portrait", 
 							"portrait", 
 							"Portrait", 

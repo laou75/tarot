@@ -11,7 +11,7 @@ $nb = $this->db->sql_count_cur($res);
 $i=0;
 while	($row=$this->db->sql_fetch_cur($res))
 {
-	$portrait=strlen($row->portrait)>0?$row->portrait:"inconnu.gif";
+	$portrait=strlen($row->portrait)>0 ? $row->portrait : "inconnu.gif";
 	$image=$this->makePortrait("mini/".$portrait);
 	echo $this->ligneListe(
 							array(	"<center>".$image."</center>", 

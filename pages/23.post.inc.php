@@ -1,10 +1,8 @@
 <?php
-include_once ("class/formulaire.class.php");
-
 $form = new Formulaire();
 $form->setValeurs($_POST);
 
-$this->db->sql_execute("delete from joueurs where id = ".$form->getValeur("id"));
+$this->db->sql_execute("delete from joueurs where id = " . intval($form->getValeur("id")));
 if	(strlen($form->getValeur("portrait"))>0)
 {
 	@unlink($GLOBALS["Config"]["PATH"]["PORTRAIT"].$form->getValeur("portrait"));

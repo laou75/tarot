@@ -9,7 +9,7 @@ $id_tournoi=$_GET["id_tournoi"];
  */
 $req =	"select distinct A.id_joueur, B.nom, B.nickname, B.prenom, B.portrait ".
 		"from	r_sessions_joueurs A, joueurs B ".
-		"where	A.id_tournoi=$id_tournoi ".
+		"where	A.id_tournoi=" . intval($id_tournoi) . " " .
 		"and	B.id=A.id_joueur ".
 		"order by A.id_joueur asc";
 $this->db->sql_open_cur($res, $req);
@@ -24,7 +24,7 @@ $this->db->sql_free_result($res);
 
 $req0 =	"select id ".
 		"from	sessions ".
-		"where	id_tournoi=$id_tournoi ".
+		"where	id_tournoi=" . intval($id_tournoi) . " " .
 		"order by id asc";
 $this->db->sql_open_cur($res0, $req0);
 $nb = $this->db->sql_count_cur($res0);
@@ -48,9 +48,9 @@ foreach($aTabSess as $idS => $detS)
 	{
 		$req2 = "select sum(points) as points, id_tournoi, id_session ".
 				"from	r_parties_joueurs ".
-				"where	id_tournoi= $id_tournoi ".
-				"and	id_session= $idS ".
-				"and	id_joueur = $idJ ".
+				"where	id_tournoi=" . intval($id_tournoi) . " ".
+				"and	id_session=" . intval($idS) . " ".
+				"and	id_joueur =" . intval($idJ) . " ".
 				"group by id_tournoi, id_session";
 		$ret=$db->sql_select($row2, $req2);
 		if ($ret>0)
@@ -90,10 +90,10 @@ foreach($aTabSess as $idS => $detS)
 	{
 		$req2 = "select sum(points) as CUMUL, id_tournoi, id_session ".
 				"from	r_parties_joueurs ".
-				"where	id_tournoi= $id_tournoi ".
-				"and	id_session= $idS ".
-				"and	id_joueur = $idJ ".
-				"group by id_tournoi, id_session";
+                "where	id_tournoi=" . intval($id_tournoi) . " ".
+                "and	id_session=" . intval($idS) . " ".
+                "and	id_joueur =" . intval($idJ) . " ".
+                "group by id_tournoi, id_session";
 		if	($db->sql_select($row2, $req2)==-100)
 			$truc=0;
 		elseif ($row2->CUMUL>0)

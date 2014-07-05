@@ -1,6 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
-
 $form = new Formulaire();
 
 $form->setValeurs($_POST);
@@ -21,21 +19,23 @@ if ($err=="")
 		$y = substr($form->getValeur("datefin"), 6, 4);
 		$form->setValeur("datefin", mktime ( 0, 0, 0, $m, $d, $y));
 	} 
-	$this->db->sql_update("sessions", array("id"=>$form->getValeur("id"), "id_tournoi"=>$form->getValeur("id_tournoi")), $form->getValeurs());
+	$this->db->sql_update(  "sessions",
+                            array("id" => intval($form->getValeur("id")),
+                                  "id_tournoi"=> intval($form->getValeur("id_tournoi"))),
+                                  $form->getValeurs());
 
 	//	Traiter les joueurs
-	$this->db->sql_execute("delete from r_sessions_joueurs where id_tournoi=".$form->getValeur("id_tournoi")." and id_session=".$form->getValeur("id") );
+	$this->db->sql_execute("delete from r_sessions_joueurs where id_tournoi=" . intval($form->getValeur("id_tournoi"))." and id_session=" . intval($form->getValeur("id")) );
 	$i=1;
 	foreach($form->getValeur("liste_joueurs") as $ii => $id)
 	{
 		$aTmp = array();
-		$aTmp["id_tournoi"] = $form->getValeur("id_tournoi");
-		$aTmp["id_session"] = $form->getValeur("id");
-		$aTmp["id_joueur"] = $id;
-		$aTmp["position"] = $i;
+		$aTmp["id_tournoi"] = intval($form->getValeur("id_tournoi"));
+		$aTmp["id_session"] = intval($form->getValeur("id"));
+		$aTmp["id_joueur"] = intval($id);
+		$aTmp["position"] = intval($i);
 		$this->db->sql_insert("r_sessions_joueurs", $aTmp);
 		$i++;
 	}
-
-	Header("Location: ".$form->getValeur("from"));
+	header("Location: ".$form->getValeur("from"));
 }

@@ -1,6 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
-
 $form = new Formulaire();
 
 if	(count($_POST)>0)
@@ -8,7 +6,7 @@ if	(count($_POST)>0)
 else
 {
 	$form->setValeurs(array());
-	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
+	$form->setValeur("id_tournoi", intval($_GET["id_tournoi"]));
 	$form->setValeur("liste_joueurs", array());
 	$form->setValeur("datedeb", $form->timeToTextDate(time()));
 }

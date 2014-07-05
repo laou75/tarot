@@ -12,15 +12,15 @@ echo $this->drawBarreBouton(
 //	R�cup�rer la liste des joueurs de la session
 $req =	"select B.id, B.nom, B.prenom, B.nickname, B.portrait, A.position ".
 		"from	r_sessions_joueurs A, joueurs B ".
-		"where	A.id_tournoi=".$id_tournoi." ".
-		"and	A.id_session=".$id_session." ".
+		"where	A.id_tournoi=" . intval($id_tournoi) . " ".
+		"and	A.id_session=" . intval($id_session) . " ".
 		"and	B.id=A.id_joueur ".
 		"order by A.position asc";
 $this->db->sql_open_cur($res, $req);
 $nbJSess = $this->db->sql_count_cur($res);
 while	($row=$this->db->sql_fetch_cur($res)) {
 	$aJSess[$row->id]=$row;
-	$nick=isset($row->nickname)?$row->nickname:$row->prenom." ".substr($row->nom,0,1).".";
+	$nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
 	$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 }
 $this->db->sql_close_cur($res);
@@ -30,15 +30,15 @@ $entete[] = "Contrat";
 echo $this->openListe($entete, true);
 $req =	"select * ".
 		"from	parties ".
-		"where	id_tournoi=".$id_tournoi." ".
-		"and	id_session=".$id_session." ".
+		"where	id_tournoi=" . intval($id_tournoi) . " ".
+		"and	id_session=" . intval($id_session) . " ".
 		"order by id asc";
 $this->db->sql_open_cur($res, $req);
 $nbParties = $this->db->sql_count_cur($res);
 $cumul=array();
 while	($row=$this->db->sql_fetch_cur($res)) {
-	$petitaubout=($row->petitaubout==1)?"oui":"non";
-	$contratreussi=($row->annonce_reussie==1)?$this->makeImg("reussie.gif"):$this->makeImg("ratee.gif");
+	$petitaubout=($row->petitaubout==1) ? "oui" : "non";
+	$contratreussi=($row->annonce_reussie==1) ? $this->makeImg("reussie.gif") : $this->makeImg("ratee.gif");
 	$lContrat="<table cellpadding=0 cellspacing=0 border=0><tr valign='top'><td>".$row->annonce."&nbsp;</td><td>".$contratreussi."</td></tr></table>";
 	$htmlContrat="<table>".
 				"	<tr valign=\"top\">".
@@ -69,9 +69,9 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 	//	R�cup�rer la liste des joueurs de la partie
 	$req2 = "select id_joueur, type, points ".
 			"from	r_parties_joueurs ".
-			"where	id_tournoi=".$id_tournoi." ".
-			"and	id_session=".$id_session." ".
-			"and	id_partie=".$row->id." ". 
+			"where	id_tournoi=" . intval($id_tournoi) . " ".
+			"and	id_session=" . intval($id_session) . " ".
+			"and	id_partie=" . intval($row->id) . " ".
 			"order by id_joueur asc";
 	$this->db->sql_open_cur($res2, $req2);
 	$nbJPar = $this->db->sql_count_cur($res2);

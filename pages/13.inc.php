@@ -1,6 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
-
 $form = new Formulaire();
 
 if (count($_POST)>0)
@@ -11,7 +9,7 @@ else
 {
 	$form->setValeur("id", $_GET["id_partie"]);
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
-	$this->db->sql_select_array($row, "select * from parties where id=".$form->getValeur("id")." and id_tournoi=".$form->getValeur("id_tournoi")." ");
+	$this->db->sql_select_array($row, "select * from parties where id=" . intval($form->getValeur("id")) . " and id_tournoi=" . intval($form->getValeur("id_tournoi")));
 	$form->setValeurs($row);
 }
 

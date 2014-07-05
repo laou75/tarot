@@ -1,5 +1,4 @@
 <?php
-//include_once ("class/formulaire.class.php");
 $form = new Formulaire();
 
 if (count($_POST)>0)
@@ -110,7 +109,6 @@ echo $form->makeNoteObligatoire();
 echo $form->makeButton("Enregistrer");
 echo $form->closeForm();
 ?>
-<script>
-
+<script type="text/javascript">
 calcule_points();
 </script>

@@ -1,6 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
-
 $form = new Formulaire();
 $form->setValeurs($_POST);
 
@@ -21,5 +19,5 @@ if ($err=="")
 		$form->setValeur("datefin", mktime ( 0, 0, 0, $m, $d, $y));
 	} 
 	$this->db->sql_update("tournois", array("id"=>$form->getValeur("id")), $form->getValeurs());
-	Header("Location: ".$form->getValeur("from"));
+	header("Location: ".$form->getValeur("from"));
 }

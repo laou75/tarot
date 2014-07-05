@@ -1,5 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
 $form = new Formulaire();
 
 if	(count($_POST)>0)
@@ -26,8 +25,8 @@ echo $form->openFieldset("Joueurs");
 $reqJ = "SELECT B.id as ID, concat(B.prenom, ' ', B.nom) as LIBELLE ".
 		"from	r_sessions_joueurs A, joueurs B ".
 		"where	B.id = A.id_joueur ".
-		"and	A.id_tournoi = ".$form->getValeur("id_tournoi")." ".
-		"and	A.id_session = ".$form->getValeur("id_session")." ".
+		"and	A.id_tournoi = " . intval($form->getValeur("id_tournoi")) . " ".
+		"and	A.id_session = " . intval($form->getValeur("id_session")) . " ".
 		"order by A.position asc";
 		
 $this->db->sql_open_cur($resJ, $reqJ);

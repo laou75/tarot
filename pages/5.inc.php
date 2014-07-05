@@ -1,6 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
-
 $form = new Formulaire();
 
 echo $this->drawBarreBouton(
@@ -14,7 +12,7 @@ if (count($_POST)>0)
 else
 {
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
-	$this->db->sql_select_array($row, "select * from tournois where id=".$form->getValeur("id_tournoi")." ");
+	$this->db->sql_select_array($row, "select * from tournois where id=" . intval($form->getValeur("id_tournoi")));
 	$form->setValeurs($row);
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
 }

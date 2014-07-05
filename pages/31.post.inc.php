@@ -1,11 +1,6 @@
 <?php
-include_once ("class/formulaire.class.php");
 setlocale(LC_TIME, "fr");
-/*
-echo "<pre>";
-print_r($_POST);
-exit("</pre>");
-*/
+
 $form = new Formulaire();
 $form->setValeurs($_POST);
 $err="";
@@ -35,13 +30,12 @@ if	($err=="")
 	foreach($form->getValeur("liste_joueurs") as $ii => $id)
 	{
 		$aTmp = array();
-		$aTmp["id_tournoi"] = $form->getValeur("id_tournoi");
-		$aTmp["id_session"] = $id_session;
-		$aTmp["id_joueur"] = $id;
-		$aTmp["position"] = $i;
+		$aTmp["id_tournoi"] = intval($form->getValeur("id_tournoi"));
+		$aTmp["id_session"] = intval($id_session);
+		$aTmp["id_joueur"] = intval($id);
+		$aTmp["position"] = intval($i);
 		$this->db->sql_insert("r_sessions_joueurs", $aTmp);
 		$i++;
 	}
-
-	Header("Location: ".$form->getValeur("from"));
+	header("Location: ".$form->getValeur("from"));
 }

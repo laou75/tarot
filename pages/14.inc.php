@@ -1,5 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
 $form = new Formulaire();
 
 if (count($_POST)>0)

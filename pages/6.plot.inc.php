@@ -17,7 +17,7 @@ $graph->SetMargin(50,50,30,5);
 
 $req =	"select distinct A.id_joueur, A.id_session, B.nom, B.prenom ".
 		"from	r_sessions_joueurs A, joueurs B ".
-		"where	A.id_tournoi=$id_tournoi ".
+		"where	A.id_tournoi=" . intval($id_tournoi) . " ".
 		"and	B.id=A.id_joueur ".
 		"order by A.id_joueur asc, A.id_session asc";
 $db->sql_open_cur($res, $req);
@@ -30,7 +30,7 @@ $db->sql_free_result($res);
 
 $req0 =	"select id ".
 		"from	sessions ".
-		"where	id_tournoi=$id_tournoi ".
+		"where	id_tournoi=" . intval($id_tournoi) . " ".
 		"order by id asc";
 $db->sql_open_cur($res0, $req0);
 $nb = $db->sql_count_cur($res0);
@@ -53,9 +53,9 @@ foreach($aTab as $idJ => $det)
 	{
 		$req2 = "select sum(points) as CUMUL, id_tournoi, id_session ".
 				"from	r_parties_joueurs ".
-				"where	id_tournoi= $id_tournoi ".
-				"and	id_session= $idS ".
-				"and	id_joueur = $idJ ".
+				"where	id_tournoi=" . intval($id_tournoi) . " ".
+				"and	id_session=" . intval($idS) . " ".
+				"and	id_joueur =" . intval($idJ) . " ".
 				"group by id_tournoi, id_session";
 
 		if	($db->sql_select($row2, $req2)==-100)

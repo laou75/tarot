@@ -9,9 +9,9 @@ $id_tournoi=$_GET["id_tournoi"];
 //	R�cup�ration des joueurs
 $req =	"select A.id_joueur, B.nom, B.prenom, B.nickname, B.portrait ".
 		"from	r_sessions_joueurs A, joueurs B ".
-		"where	A.id_tournoi=".$id_tournoi." ".
-		"and	A.id_session= $id_session ".
-		"and	B.id=A.id_joueur ".
+        "where	A.id_tournoi=" . intval($id_tournoi) . " ".
+        "and	A.id_session=" . intval($id_session) . " ".
+        "and	B.id=A.id_joueur ".
 		"order by A.id_joueur asc";
 $db->sql_open_cur($res, $req);
 if ($this->db->sql_count_cur($res)<1)
@@ -28,8 +28,8 @@ else
 
 	$req0 =	"select id ".
 			"from	parties ".
-			"where	id_tournoi=$id_tournoi ".
-			"and	id_session=".$id_session." ".
+        "where	id_tournoi=" . intval($id_tournoi) . " ".
+        "and	id_session=" . intval($id_session) . " ".
 			"order by id asc";
 	$db->sql_open_cur($res0, $req0);
 	if ($this->db->sql_count_cur($res0)<1)
@@ -58,8 +58,8 @@ else
 			{
 				$req2 = "select sum(points) as CUMUL, id_tournoi, id_session, id_partie ".
 						"from	r_parties_joueurs ".
-						"where	id_tournoi= $id_tournoi ".
-						"and	id_session= $id_session ".
+                        "where	id_tournoi=" . intval($id_tournoi) . " ".
+                        "and	id_session=" . intval($id_session) . " ".
 						"and	id_partie= $idP ".
 						"and	id_joueur = $idJ ".
 						"group by id_tournoi, id_session, id_partie";

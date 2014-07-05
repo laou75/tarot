@@ -1,6 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
-
 $form = new Formulaire();
 $form->setValeurs($_POST);
 $err="";
@@ -43,8 +41,8 @@ if	($err=="")
 
 	$reqJ = "SELECT id_joueur ".
 			"from	r_sessions_joueurs ".
-			"where	id_tournoi = ".$form->getValeur("id_tournoi")." ".
-			"and	id_session = ".$form->getValeur("id_session");
+			"where	id_tournoi = " . intval($form->getValeur("id_tournoi")) . " ".
+			"and	id_session = " . intval($form->getValeur("id_session"));
 	$this->db->sql_open_cur($resJ, $reqJ);
 	$nbJ=$this->db->sql_count_cur($resJ);
 
@@ -75,6 +73,5 @@ if	($err=="")
 	}
 	$this->db->sql_close_cur($resJ);
 
-	Header("Location: ".$form->getValeur("from"));
-	exit();
+	header("Location: ".$form->getValeur("from"));
 }
