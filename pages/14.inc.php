@@ -14,7 +14,7 @@ else
 	$id = $_GET["id_partie"];
 	$id_tournoi = $_GET["id_tournoi"];
 	$id_session=$_GET["id_session"];
-	$this->db->sql_select_array($row, "select * from parties where id=".$id." and id_tournoi=".$id_tournoi." and id_session=".$id_session." ");
+	$this->db->sql_select_array($row, "select * from parties where id=" . intval($id) . " and id_tournoi=" . intval($id_tournoi) . " and id_session=" . intval($id_session) );
 	$form->setValeur("id_partie", $id);
 	$form->setValeurs($row);
 }

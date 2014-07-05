@@ -1,5 +1,5 @@
 <?php
-include_once ("class/formulaire.class.php");
+//include_once ("class/formulaire.class.php");
 $form = new Formulaire();
 
 if (count($_POST)>0)
@@ -14,7 +14,7 @@ else
 	$id = $_GET["id_partie"];
 	$id_tournoi = $_GET["id_tournoi"];
 	$id_session=$_GET["id_session"];
-	$this->db->sql_select_array($row, "select * from parties where id=".$id." and id_tournoi=".$id_tournoi." and id_session=".$id_session." ");
+	$this->db->sql_select_array($row, "select * from parties where id=" . intval($id) . " and id_tournoi=" . intval($id_tournoi) . " and id_session=" . intval($id_session) );
 	$form->setValeur("id_partie", $id);
 	$form->setValeurs($row);
 }
@@ -34,9 +34,9 @@ if	(isset($err) && strlen($err)>0)
 // liste des morts
 $reqMorts = "SELECT id_joueur, type ".
 			"from	r_parties_joueurs ".
-			"where	id_tournoi = ".$form->getValeur("id_tournoi")." ".
-			"and	id_session = ".$form->getValeur("id_session")." ".
-			"and	id_partie = ".$id." ".
+			"where	id_tournoi = " . intval($form->getValeur("id_tournoi")) . " ".
+			"and	id_session = " . intval($form->getValeur("id_session")) . " ".
+			"and	id_partie = " . intval($id) . " ".
 			"and	type = 'mort' ";
 $this->db->sql_open_cur($resMorts, $reqMorts);
 $aTabMorts= array();
@@ -50,8 +50,8 @@ echo $form->openFieldset("Joueurs");
 $reqJ = "SELECT B.id as ID, concat(B.prenom, ' ', B.nom) as LIBELLE ".
 		"from	r_sessions_joueurs A, joueurs B ".
 		"where	B.id = A.id_joueur ".
-		"and	A.id_tournoi = ".$form->getValeur("id_tournoi")." ".
-		"and	A.id_session = ".$form->getValeur("id_session")." ".
+		"and	A.id_tournoi = " . intval($form->getValeur("id_tournoi")) . " ".
+		"and	A.id_session = " . intval($form->getValeur("id_session")) . " ".
 		"order by A.position asc";
 
 $this->db->sql_open_cur($resJ, $reqJ);

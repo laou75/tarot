@@ -171,7 +171,7 @@ else
 		$ret="";
 		$res=null;
 		// On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
-		$req = "select * from menu where id_pere = ".$idPere." and visible_menu = 1 order by ordre asc";
+		$req = "select * from menu where id_pere = " . intval($idPere) . " and visible_menu = 1 order by ordre asc";
 		$this->db->sql_open_cur($res, $req);
 		while	($row=$this->db->sql_fetch_cur($res))
 		{
@@ -181,58 +181,6 @@ else
 		$this->db->sql_close_cur($res);
 		return $ret;
 	}
-
-    /*
-     *
-     */
-    function drawSousMenu ($id, $idPere, $indent="")
-    {
-        $ret="";
-        $res=null;
-        // On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
-        $req = "select * from menu where id_pere = ".$idPere." and visible_menu = 1 order by ordre asc";
-        $this->db->sql_open_cur($res, $req);
-        while	($row=$this->db->sql_fetch_cur($res))
-        {
-            //var_dump($row);
-            $label=(isset($row->icone)&&strlen($row->icone)>0)
-                ?   $this->makeImg($row->icone)."&nbsp;".
-                ($this->modeMini
-                    ?   $row->labelCourt
-                    :   $row->label)
-                :   ($this->modeMini
-                    ?   $row->labelCourt
-                    :   $row->label
-                );
-            /**/
-            if (is_array($this->cheminMenu) && array_key_exists($row->id, $this->cheminMenu))
-            {
-                $cssA = 'dropdown-toggle"';
-                $cssLI = ' class="dropdown"';
-            }
-            else
-            {
-                $cssA = 'dropdown-toggle"';
-                $cssLI = ' class="dropdown"';
-            }
-            $ret .= "<li$cssLI>".$this->makeLink("index.php?id=".$row->id, $label, $row->description, $cssA)."</li>";
-            echo "row->id : ".$row->id." : ";
-            echo "this->cheminMenu : ".print_r($this->cheminMenu, true)."<br>";
-            /**/
-            $ret .= "<li>".$this->makeLink("index.php?id=".$row->id, $label,  $row->description);
-            // Quand le dossier lu est sur le chemin, on cherche ses sous-dossiers
-            if	(is_array($this->cheminMenu) && array_key_exists($row->id, $this->cheminMenu))
-            {
-                $tmp=$indent;
-                $ret .= '<ul role="menu" class="dropdown-menu">'.
-                    $this->drawMenu ($id, $row->id, $tmp).
-                    '</ul>';
-            }
-            $ret .= "</li>";
-        }
-        $this->db->sql_close_cur($res);
-        return $ret;
-    }
 
 	/*
 	 * 
@@ -256,7 +204,7 @@ else
 	function getInfosMenu ($id)
 	{
 		$row=null;
-		$req = "select * from menu where id = ".$id;
+		$req = "select * from menu where id = " . intval($id);
 		$this->db->sql_select($row, $req);
 
 		return $row;
@@ -387,7 +335,7 @@ else
 	function getJoueur($id)
 	{
 		$row=null;
-		$this->db->sql_select($row, "select * from joueurs where id=".$id." ");
+		$this->db->sql_select($row, "select * from joueurs where id=" . intval($id));
 		if (isset($row->portrait) && strlen($row->portrait)>0) 
 			$portrait="<br>".$this->makePortrait("mini/".$row->portrait, $row->prenom." ".$row->nom);
 		else

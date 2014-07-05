@@ -7,7 +7,7 @@ echo $this->drawBarreBouton(
 		$this->makeLinkBouton(6, "id_tournoi=".$id_tournoi)),
 	$this->makeLinkBoutonRetour(2));
 
-$req = "select * from sessions where id_tournoi=".$id_tournoi." order by datedeb desc, datefin desc";
+$req = "select * from sessions where id_tournoi=" . intval($id_tournoi) . " order by datedeb desc, datefin desc";
 $this->db->sql_open_cur($res, $req);
 $nb = $this->db->sql_count_cur($res);
 $i=0;
@@ -16,8 +16,8 @@ while	($row=$this->db->sql_fetch_cur($res))
 {
 	$req2 = "select	* ".
 			"from	r_sessions_joueurs A, joueurs B ".
-			"where	A.id_tournoi=".$id_tournoi." ".
-			"and	A.id_session=".$row->id." ".
+			"where	A.id_tournoi=" . intval($id_tournoi) . " ".
+			"and	A.id_session=" . intval($row->id) . " ".
 			"and	B.id = A.id_joueur ".
 			"order by A.position asc";
 	$this->db->sql_open_cur($res2, $req2);

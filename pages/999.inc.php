@@ -1,5 +1,4 @@
 <?php
-include_once ("class/formulaire.class.php");
 $form = new Formulaire();
 echo $this->drawBarreBouton(null,$this->makeLinkBoutonRetour(2));
 
