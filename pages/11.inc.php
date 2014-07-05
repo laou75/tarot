@@ -81,6 +81,6 @@ echo $form->makeNoteObligatoire();
 echo $form->makeButton("Enregistrer", " onclick=\"return controleFormulaire();\"");
 echo $form->closeForm();
 ?>
-<script>
+<script type="text/javascript">
 change_appele();
 </script>

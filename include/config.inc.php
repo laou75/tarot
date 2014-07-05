@@ -6,7 +6,7 @@ $GLOBALS["Config"]["DATABASE"]["DBNAME"]		=	"tarot";
 
 //$GLOBALS["Config"]["URL"]["ROOT"] 			=	'http://'.$_SERVER["HTTP_HOST"].'/tarot/';
 $GLOBALS["Config"]["URL"]["ROOT"] 			=	'http://tarot.fr/';
-$GLOBALS["Config"]["URL"]["IMG"]			=	$GLOBALS["Config"]["URL"]["ROOT"]."images/";
+$GLOBALS["Config"]["URL"]["IMG"]			=	$GLOBALS["Config"]["URL"]["ROOT"]."img/";
 $GLOBALS["Config"]["URL"]["KIT"]			=	$GLOBALS["Config"]["URL"]["IMG"]."kits/0/";
 $GLOBALS["Config"]["URL"]["LOGO"]			=	$GLOBALS["Config"]["URL"]["KIT"]."kits/0/logos/";
 $GLOBALS["Config"]["URL"]["PORTRAIT"]		=	$GLOBALS["Config"]["URL"]["IMG"]."portraits/";

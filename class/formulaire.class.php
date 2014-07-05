@@ -189,6 +189,8 @@ class Formulaire
 		if	($addLigneVide==TRUE)
 			$aValuesLabels[NULL]="";
 
+        $resInfos='';
+
 		$db->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
 		while ($rowInfos=$db->sql_fetch_cur($resInfos)) 
 		{	
@@ -208,7 +210,6 @@ class Formulaire
 		}
 		$db->sql_close_cur($resInfos);
 		return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options);
-		//	makeRadio($name, $id, $label="", $value=NULL, $valeurs, $options="")
 	}
 	
 	// La requete est de type SELECT xx as ID, yyy as LIBELLE from zzz
@@ -240,7 +241,6 @@ class Formulaire
 			sql_close_cur($res);
 			$ret.=	"<tr id='tr".$id."'>\n".
 					"	<td".$this->widthLabel.">&nbsp;</td>\n".
-//						"<td><input type='checkbox' name='$name$row->ID' id='$id$row->ID' value='$row->ID'$check$options></td></tr>\n";
 					"	<td".$this->widthData.">".$lstCheck."</td>\n".
 					"</tr>\n";
 			return $ret.$this->closeFieldset();
@@ -304,7 +304,7 @@ class Formulaire
 	{
 		if	($addLigneVide==TRUE)
 			$aValuesLabels[NULL]="";
-
+        $resInfos = '';
 		$db->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
 		while ($rowInfos=$db->sql_fetch_cur($resInfos)) 
 		{	
@@ -336,18 +336,6 @@ class Formulaire
 
 	function makeTexteRiche($name, $id, $value="", $options="")
 	{
-        /*
-		include_once ("FCKeditor/fckeditor.php") ;
-		$sBasePath = "FCKeditor/" ;
-		$oFCKeditor = new FCKeditor($name) ;
-		$oFCKeditor->BasePath	= $sBasePath ;
-		$oFCKeditor->Value		= $value;
-		$oFCKeditor->Width		= '100%' ;
-		$oFCKeditor->Height		= '200' ;
-		return	"<tr id='tr".$id."'>\n".
-				"	<td colspan=2 align='center'>\n".$oFCKeditor->CreateHtml()."</td>\n".
-				"</tr>\n";
-        */
         return	$this->makeTextarea($name, $id, "Description", $value, $options);
 	}
 	
@@ -371,7 +359,7 @@ class Formulaire
 
 	function makeMsgError($texte)
 	{
-		return	"<tr><td colspan=2><span style=\"color:red;\"><b>ERREUR</b> : $texte</span></td></tr>\n";
+		return "<tr><td colspan=2><span style=\"color:#ff0000;\"><b>ERREUR</b> : $texte</span></td></tr>\n";
 	}
 
 	function makeMsgWarning($texte)
@@ -381,7 +369,7 @@ class Formulaire
 
 	function makeMsgInfo($texte)
 	{
-		return	"<tr><td colspan=2><span style=\"color:green;\">$texte</span></td></tr>\n";
+		return	"<tr><td colspan=2><span style=\"color:#008000;\">$texte</span></td></tr>\n";
 	}
 
 	function makeButton($value, $options="")
@@ -453,4 +441,3 @@ class Formulaire
 		return strftime("%H", $time).":".strftime("%M", $time).":".strftime("%S", $time);
 	}
 }
-?>

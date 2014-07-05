@@ -43,7 +43,7 @@ else
 		$db->sql_free_result($res0);
 		
 ?>
-<center>
+<div  class="text-center">
 	<table>
 		<tr><th>Statistiques</th></tr>
 		<tr>
@@ -84,7 +84,7 @@ else
 			<td><img src="pages/34.plot.inc.php?<?=$_SERVER["QUERY_STRING"]; ?>"></td>
 		</tr>
 	</table>
-</center>
+</div>
 <?php
 	}
 }

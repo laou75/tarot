@@ -5,7 +5,8 @@ class Tools
 	 * @param $Image		: Nom de l'image originale 
 	 * @param $Source		: Chemin absolu du r�pertoire de l'image originale 
 	 * @param $Destination: Chemin absolu du r�pertoire de l'image r�duite 
-	 * @param $ratio		: Largeur de l'image r�duite. 
+	 * @param $ratio		: Largeur de l'image r�duite.
+     * @return void
 	 */
 	static function genereVignette($Image , $Source , $Destination , $ratio)
 	{
@@ -31,6 +32,7 @@ class Tools
 		else
 			imagecopyresized($im, $src, 0, 0, 0, 0, $size[0], $size[1] , $size[0], $size[1]); 
 		imagejpeg($im, $Destination.$Image);
+        return '';
 	}
 	
 	static function forWindows($path)

@@ -1,8 +1,7 @@
 <?php
-echo $this->drawBarreBouton(	
-	array($this->makeLinkBouton(3)),
-	$this->makeLinkBoutonRetour(1)
-	);
+echo $this->drawBarreBouton(array(  $this->makeLinkBouton(3)),
+                                    $this->makeLinkBoutonRetour(1)
+                                    );
 
 echo $this->openListe(array("Commencé le", "Fini le", "Commentaires"), true);
 $req = "select * from tournois order by datedeb desc";
@@ -11,9 +10,10 @@ $nb = $this->db->sql_count_cur($res);
 $i=0;
 while	($row=$this->db->sql_fetch_cur($res)) {
 	echo $this->ligneListe(
-		array(	
+		array(
 			strftime("%d", $row->datedeb)."/".strftime("%m", $row->datedeb)."/".strftime("%Y", $row->datedeb), 
-			(isset($row->datefin))?strftime("%d", $row->datefin)."/".strftime("%m", $row->datefin)."/".strftime("%Y", $row->datefin):"en cours", 
+            (isset($row->datefin))  ? strftime("%d", $row->datefin)."/".strftime("%m", $row->datefin)."/".strftime("%Y", $row->datefin)
+                                    : "en cours",
 			nl2br($row->commentaires)
 			),
 		array(	

@@ -212,7 +212,7 @@ class db
 	{	
 		if (!isset($res) || $this->sql_count_cur($res)<1)
             return NULL;
-		return $this->sql_free_result($res);
+		$this->sql_free_result($res);
 	}
 	
 	

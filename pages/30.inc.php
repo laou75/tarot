@@ -22,7 +22,7 @@ while	($row=$this->db->sql_fetch_cur($res))
 			"order by A.position asc";
 	$this->db->sql_open_cur($res2, $req2);
 	$nb2 = $this->db->sql_count_cur($res2);
-	$joueurs="<table width='100%'>";
+	$joueurs="<table>";
 	while	($row2=$this->db->sql_fetch_cur($res2))
 	{
 		$portrait=strlen($row2->portrait)>0?$row2->portrait:"inconnu.gif";

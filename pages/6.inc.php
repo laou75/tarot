@@ -34,7 +34,7 @@ while	($row0=$this->db->sql_fetch_cur($res0))
 }
 $this->db->sql_free_result($res0);
 ?>
-<center>
+<div class="text-center">
 	<table>
 		<tr><th>Statistiques</th></tr>
 		<tr>
@@ -127,4 +127,4 @@ echo $this->closeListe();
 			</td>
 		</tr>
 	</table>
-</center>
+</div>

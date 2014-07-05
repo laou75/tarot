@@ -23,7 +23,6 @@ class template
 		$this->zoomMini = 2;	// divis� par 2	
 		$this->cellSpacing=$this->modeMini?12:20;	
 		
-		$this->nameCSS=($this->modeMini)?"pda_styles.css":"styles.css";
 		$this->titre="Tarot";
 		$this->pageDefaut=1;
 		$this->db=$db;
@@ -55,7 +54,11 @@ class template
 	<head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title><?php echo $this->titre;?></title>
-        <link rel="stylesheet" href="<?php echo $this->nameCSS;?>" type='text/css' media="screen">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <style type="text/css">
+            .lead{margin-top: 50px;}
+        </style>
         <link rel="SHORTCUT ICON" href="http://www.guig.net/favicon.ico"/>
 		<script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
 <?php
@@ -72,20 +75,62 @@ class template
 ?>
 	</head>
 	<body>
-		<div class="page">
-			<table width="100%" class="page" cellspacing=<?php echo $this->cellSpacing;?>>
-				<tr><td align="center"><?php echo $logo." ";?></td><td class="bandeau"><h1><?php echo $this->titre.$libCtxt;?></h1></td></tr>
-				<tr>
-					<td class="menu">
+
+    <div role="navigation" class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">Tarot</a>
+
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <?php
+                    $this->getChemin($this->id);
+                    echo $this->drawMenu();
+                    ?>
+                </ul>
 <?php
-		$this->getChemin($this->id);
-		echo "<table cellpadding='0' cellspacing='0' border='0' width='100%'>";
-		echo $this->drawMenu($this->id, 0, "");
-		echo "</table>";
+                if (!isset($_SESSION['sessionTarot']))
+                {
 ?>
-					</td>
-					<td class="corps">
+                    <form role="form" class="navbar-form navbar-right" action="/identification.php" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Email" name="identifiant" id="identifiant">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+                        </div>
+                        <button class="btn btn-success" type="submit">Connexion</button>
+                    </form>
 <?php
+                }
+                else
+                {
+                    ?>
+                    <form role="form" class="navbar-form navbar-right" action="/logout.php" method="post">
+                        <button class="btn btn-warning" type="submit">Déconnexion</button>
+                    </form>
+                <?php
+                }
+?>
+            </div><!--/.navbar-collapse -->
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 50px;">
+        <?php echo $logo?><h1 style="float: right;"><?php echo $this->titre.$libCtxt;?></h1>
+    </div>
+
+    <div class="container">
+<?php
+
+/*
 $filAriane="";
 if (is_array($this->cheminMenu))
 {
@@ -101,74 +146,94 @@ echo"<table width='100%'>\n".
 	"	</tr>\n".
 	"</table>\n".
 	"<hr>";
+*/
 if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php"))
 	include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php");
 else
 	echo $GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php";
 ?>
-					</td>
-				</tr>
-			</table>
-		</div>
+        </div>
+
 		<div id="pop-up" class="pop-portrait" style="display:none;"></div>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
 	</body>
 </html>
 <?php
 	ob_end_flush();
 	}
 
-
 	/*
 	 * 
 	 */
-	function drawMenu ($id, $id_pere, $indent="")
+	function drawMenu ($idPere=1)
 	{
 		$ret="";
 		$res=null;
 		// On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
-		$req = "select * from menu where id_pere = ".$id_pere." and visible_menu = 1 order by ordre asc";
+		$req = "select * from menu where id_pere = ".$idPere." and visible_menu = 1 order by ordre asc";
 		$this->db->sql_open_cur($res, $req);
 		while	($row=$this->db->sql_fetch_cur($res))
 		{
-            //var_dump($row);
-			$class_explorer =
-                (isset($row->id) && $row->id==$id)
-                    ? "explorer-sel"
-                    : "explorer";
-			$class="";
+            $ret .= "<li>".$this->makeLink("index.php?id=".$row->id, $row->label,  $row->description);
 
-			$icone = (is_array($this->cheminMenu) && array_key_exists($row->id, $this->cheminMenu))?$this->makeImg("moins.gif"):$this->makeImg("plus.gif");	
-			
-			$label=(isset($row->icone)&&strlen($row->icone)>0)
-                    ?   $this->makeImg($row->icone)."&nbsp;".
-                        ($this->modeMini
-                            ?   $row->labelCourt
-                            :   $row->label)
-                    :   ($this->modeMini
-                            ?   $row->labelCourt
-                            :   $row->label
-                        );
-			$ret .="<tr>\n".
-					"	<td>\n".
-					"		<table cellpadding='0' cellspacing='0' border='0'>\n".
-					"			<tr valign='top	'>\n".
-					"				<td>".$indent."</td><td>".$icone."</td>\n".
-					"				<td class=\"".$class."\">".$this->makeLink("index.php?id=".$row->id, $label,  $row->description, $class_explorer)."&nbsp;</td>\n".
-					"			</tr>\n".
-					"		</table>\n".
-					"	</td>\n".
-					"</tr>\n";
-			// Quand le dossier lu est sur le chemin, on cherche ses sous-dossiers
-			if	(is_array($this->cheminMenu) && array_key_exists($row->id, $this->cheminMenu))
-			{	
-				$tmp = $indent.$this->makeImg("vide.gif", null, " width=20");
-				$ret .= $this->drawMenu ($id, $row->id, $tmp);
-			}
 		}
 		$this->db->sql_close_cur($res);
 		return $ret;
 	}
-	
+
+    /*
+     *
+     */
+    function drawSousMenu ($id, $idPere, $indent="")
+    {
+        $ret="";
+        $res=null;
+        // On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
+        $req = "select * from menu where id_pere = ".$idPere." and visible_menu = 1 order by ordre asc";
+        $this->db->sql_open_cur($res, $req);
+        while	($row=$this->db->sql_fetch_cur($res))
+        {
+            //var_dump($row);
+            $label=(isset($row->icone)&&strlen($row->icone)>0)
+                ?   $this->makeImg($row->icone)."&nbsp;".
+                ($this->modeMini
+                    ?   $row->labelCourt
+                    :   $row->label)
+                :   ($this->modeMini
+                    ?   $row->labelCourt
+                    :   $row->label
+                );
+            /**/
+            if (is_array($this->cheminMenu) && array_key_exists($row->id, $this->cheminMenu))
+            {
+                $cssA = 'dropdown-toggle"';
+                $cssLI = ' class="dropdown"';
+            }
+            else
+            {
+                $cssA = 'dropdown-toggle"';
+                $cssLI = ' class="dropdown"';
+            }
+            $ret .= "<li$cssLI>".$this->makeLink("index.php?id=".$row->id, $label, $row->description, $cssA)."</li>";
+            echo "row->id : ".$row->id." : ";
+            echo "this->cheminMenu : ".print_r($this->cheminMenu, true)."<br>";
+            /**/
+            $ret .= "<li>".$this->makeLink("index.php?id=".$row->id, $label,  $row->description);
+            // Quand le dossier lu est sur le chemin, on cherche ses sous-dossiers
+            if	(is_array($this->cheminMenu) && array_key_exists($row->id, $this->cheminMenu))
+            {
+                $tmp=$indent;
+                $ret .= '<ul role="menu" class="dropdown-menu">'.
+                    $this->drawMenu ($id, $row->id, $tmp).
+                    '</ul>';
+            }
+            $ret .= "</li>";
+        }
+        $this->db->sql_close_cur($res);
+        return $ret;
+    }
+
 	/*
 	 * 
 	 */
@@ -221,14 +286,29 @@ else
 
 		$label=($this->modeMini)?"":$row->label;
 
-		$label=(isset($row->icone))?$this->makeImg($row->icone)."&nbsp;".$label:$label;
+		$desc = (isset($row->description))?$row->description:$row->label;
 
 		if	($id==(int)$id)
-			$url=(isset($parm))?"index.php?id=".$id."&amp;".$parm:"index.php?id=".$id;
+			$url=(isset($parm)) ? "index.php?id=".$id."&amp;" . $parm:"index.php?id=".$id;
 		else
 			$url=$id;
-		return $this->makeLink($url, $label, (isset($row->description))?$row->description:$row->label, "bouton", $options);
-	}
+
+        if (isset($row->glyphs))
+        {
+            $url = $GLOBALS["Config"]["URL"]["ROOT"].$url;
+            return '<a class="bouton" title="'.$desc.'" href="'.$url.'">'.
+                   '<span class="'.$row->glyphs.'"></span> '.$label.
+                   '</a>';
+        }
+        else
+        {
+            $label = (isset($row->icone)) ? $this->makeImg($row->icone)."&nbsp;".$label:$label;
+
+            return $this->makeLink($url, $label, $desc, "bouton", $options);
+        }
+
+
+    }
 
 	/*
 	 * 
@@ -237,19 +317,20 @@ else
 	{
 		$row=$this->getInfosMenu($id);
 
-		$label=$this->makeImg("retour.gif")."&nbsp;Retour";
 		if	($id==(int)$id)
 			$url=(isset($parm))?"index.php?id=".$id."&amp;".$parm:"index.php?id=".$id;
 		else
 			$url=$id;
-		return $this->makeLink( $url,
-                                $label,
-                                (isset($row->description))
-                                    ?   "Retour : ".$row->description
-                                    :   (isset($row->description)
-                                            ?   "Retour : ".$row->label
-                                            :   ''),
-                                "bouton");
+        if (isset($row->description))
+            $desc = "Retour : ".$row->description;
+        elseif (isset($row->label))
+            $desc = "Retour : ".$row->label;
+        else
+            $desc = 'Retour';
+
+        return '<a class="bouton" title="'.$desc.'" href="'.$url.'">'.
+                '<span class="glyphicon glyphicon-share-alt"></span> Retour'.
+                '</a>';
 	}
 
 	/*
@@ -257,7 +338,8 @@ else
 	 */
 	function makeBouton($url, $label, $title="")
 	{
-		if (isset($title) && strlen($title)>0) $title=" title=\"$title\"";
+		if (isset($title) && strlen($title)>0)
+            $title=" title=\"$title\"";
 		return	$this->makeLink($url, $label, $title, "bouton"); 
 	}
 
@@ -266,13 +348,11 @@ else
 	 */
 	function makeImg($img, $alt="", $options="")
 	{
-		{
-			if (isset($alt) && strlen($alt)>0) 
-				$alt=" alt=\"$alt\"";
-			else
-				$alt=" alt=\"\"";
-			return "<img src=\"".$GLOBALS["Config"]["URL"]["KIT"].$img."\" border=0$alt$options>";
-		}
+        if (isset($alt) && strlen($alt)>0)
+            $alt=" alt=\"$alt\"";
+        else
+            $alt=" alt=\"\"";
+        return "<img src=\"".$GLOBALS["Config"]["URL"]["KIT"].$img."\" border=0$alt$options>";
 	}
 
 	/*
@@ -284,7 +364,7 @@ else
 			$alt=" alt=\"$alt\"";
 		else
 			$alt=" alt=\"\"";
-		return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" border=0$alt$options>";
+		return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" $alt$options>";
 	}
 
 	/*
@@ -320,8 +400,7 @@ else
 	 */
 	function makeLinkMenu($script)
 	{
-		$ret="<a href=\"".$script["url"]."\">".$script["titre"]."</a>";
-		return $ret;
+        return "<a href=\"".$script["url"]."\">".$script["titre"]."</a>";
 	}
 
 	/*
@@ -351,36 +430,27 @@ else
 			$ret.=	$retour."\n";
 		$ret.=	"		</td>\n".
 				"	</tr>\n".
-				"</table\n>".
-				"<hr>\n";
+				"</table\n>";
 		return $ret;
 	}
 
 	/*
 	 * 
 	 */
-	function openListe($colonnes, $action=false)
+	function openListe($colonnes, $action=false, $id='table_id')
 	{
-		$bMax=false;
-		if ($bMax)
-		{
-			$wT =  " width='100%'";
-			$wA = ($action)?" width='20%'":"";
-		}
-		else
-		{
-			$wT =  "";
-			$wA = "";
-		}
-		$ret=	"<table class='liste'".$wT.">\n".
-				"	<tr>";
+        $wT = '';
+        $wA = '';
+
+		$ret=	'<table class="table table-striped table-bordered table-hover table-condensed" ' . $wT . ' id="' . $id . '">' . PHP_EOL.
+				'	<tr>';
 		if	($action)
-			$ret.=	"		<td".$wA.">&nbsp;</td>\n";
+			$ret.=	'		<th' . $wA . '>&nbsp;</th>' . PHP_EOL;
 		foreach($colonnes as $id => $detail)
 		{
-			$ret.=	"		<th>".$detail."</th>\n";
+			$ret.=	'		<th>' . $detail . '</th>' . PHP_EOL;
 		}
-		$ret.=	"	</tr>\n";
+		$ret.=	'	</tr>' . PHP_EOL;
 		return $ret;
 	}
 
