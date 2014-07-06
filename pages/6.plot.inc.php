@@ -20,25 +20,25 @@ $req =	"select distinct A.id_joueur, A.id_session, B.nom, B.prenom ".
 		"where	A.id_tournoi=" . intval($id_tournoi) . " ".
 		"and	B.id=A.id_joueur ".
 		"order by A.id_joueur asc, A.id_session asc";
-$db->sql_open_cur($res, $req);
-$nb = $db->sql_count_cur($res);
-while	($row=$db->sql_fetch_cur($res))
+$db->sqlOpenCur($res, $req);
+$nb = $db->sqlCountCur($res);
+while	($row=$db->sqlFetchCur($res))
 {
 	$aTab[$row->id_joueur] = $row;
 }
-$db->sql_free_result($res);
+$db->sqlFreeResult($res);
 
 $req0 =	"select id ".
 		"from	sessions ".
 		"where	id_tournoi=" . intval($id_tournoi) . " ".
 		"order by id asc";
-$db->sql_open_cur($res0, $req0);
-$nb = $db->sql_count_cur($res0);
-while	($row0=$db->sql_fetch_cur($res0))
+$db->sqlOpenCur($res0, $req0);
+$nb = $db->sqlCountCur($res0);
+while	($row0=$db->sqlFetchCur($res0))
 {
 	$aTabSess[$row0->id] = $row0;
 }
-$db->sql_free_result($res0);
+$db->sqlFreeResult($res0);
 
 $i=0;
 $couleur=array("blue", "red", "green", "cyan", "orange", "black", "silver", "pink", "purple", "yellow");

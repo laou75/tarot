@@ -191,8 +191,8 @@ class Formulaire
 
         $resInfos='';
 
-		$db->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
-		while ($rowInfos=$db->sql_fetch_cur($resInfos)) 
+		$db->sqlOpenCur($resInfos, "SHOW FULL COLUMNS FROM $table");
+		while ($rowInfos=$db->sqlFetchCur($resInfos))
 		{	
 			if ($rowInfos->Field==$colonne)
 			{
@@ -208,7 +208,7 @@ class Formulaire
 				break;
 			}
 		}
-		$db->sql_close_cur($resInfos);
+		$db->sqlCloseCur($resInfos);
 		return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options);
 	}
 	
@@ -222,8 +222,8 @@ class Formulaire
 			$ret=$this->openFieldset($label);
 			$lstCheck="";
 			$i=0;
-			sql_open_cur($res, $requete);
-			while($row=sql_fetch_cur($res))
+			sqlOpenCur($res, $requete);
+			while($row=sqlFetchCur($res))
 			{
 				$check = "";
 				$i++;
@@ -238,7 +238,7 @@ class Formulaire
  				$lstCheck.="<input type='checkbox' name='$name$i' id='$id$i' value='$row->ID'$check$options><label for='$id$i'>$row->LIBELLE</label><br>\n";
 
 			}
-			sql_close_cur($res);
+			sqlCloseCur($res);
 			$ret.=	"<tr id='tr".$id."'>\n".
 					"	<td".$this->widthLabel.">&nbsp;</td>\n".
 					"	<td".$this->widthData.">".$lstCheck."</td>\n".
@@ -291,12 +291,12 @@ class Formulaire
 	function makeComboSQL($name, $id, $label="", $value="", $requete="", $db, $options="")
 	{
 		$res=null;
-		$db->sql_open_cur($res, $requete);
-		while	($row=$db->sql_fetch_cur($res))
+		$db->sqlOpenCur($res, $requete);
+		while	($row=$db->sqlFetchCur($res))
 		{
 			$aTableau[$row->ID] = $row->LIBELLE;
 		}
-		$db->sql_close_cur($res);
+		$db->sqlCloseCur($res);
 		return	$this->makeCombo($name, $id, $label, $value, $aTableau);
 	}
 
@@ -305,8 +305,8 @@ class Formulaire
 		if	($addLigneVide==TRUE)
 			$aValuesLabels[NULL]="";
         $resInfos = '';
-		$db->sql_open_cur($resInfos, "SHOW FULL COLUMNS FROM $table");
-		while ($rowInfos=$db->sql_fetch_cur($resInfos)) 
+		$db->sqlOpenCur($resInfos, "SHOW FULL COLUMNS FROM $table");
+		while ($rowInfos=$db->sqlFetchCur($resInfos))
 		{	
 			if ($rowInfos->Field==$colonne)
 			{
@@ -322,7 +322,7 @@ class Formulaire
 				break;
 			}
 		}
-		$db->sql_close_cur($resInfos);
+		$db->sqlCloseCur($resInfos);
 		return	$this->makeCombo($name, $id, $label, $value, $aValuesLabels);
 	}
 	

@@ -18,6 +18,6 @@ if ($err=="")
 		$y = substr($form->getValeur("datefin"), 6, 4);
 		$form->setValeur("datefin", mktime ( 0, 0, 0, $m, $d, $y));
 	} 
-	$this->db->sql_insert("tournois", $form->getValeurs());
+	$this->db->sqlInsert("tournois", $form->getValeurs());
 	header("Location: ".$form->getValeur("from"));
 }

@@ -22,13 +22,12 @@ if	($db->sql_select($row2, $req) == 1)
 			"where	id_tournoi=".$_GET["id_tournoi"]." ".
 			"and	id_session=".$_GET["id_session"]." ".
 			"and	id_joueur=".$row2->id_joueur;
-	$db->sql_execute($req);
+	$db->sqlExecute($req);
 	$req =	"UPDATE r_sessions_joueurs ".
 			"SET	position = ".$row2->position." ".
 			"where	id_tournoi=".$_GET["id_tournoi"]." ".
 			"and	id_session=".$_GET["id_session"]." ".
 			"and	id_joueur=".$row->id_joueur;
-	$db->sql_execute($req);
-//	sql_execute("UPDATE dossiers SET dos_order = ".$row2->dos_order." WHERE dos_id = ".$_GET["dos_id"]);
+	$db->sqlExecute($req);
 }
 Header("Location: ".$_SERVER["HTTP_REFERER"]);

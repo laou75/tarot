@@ -7,25 +7,26 @@ else
 {
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
 	$form->setValeur("id", $_GET["id_session"]);
-	$this->db->sql_select_array($row, "select * from sessions where id=" . intval($form->getValeur("id"))." and id_tournoi=" . intval($form->getValeur("id_tournoi")) );
+	$this->db->sqlSelectArray($row, "select * from sessions where id=" . intval($form->getValeur("id"))." and id_tournoi=" . intval($form->getValeur("id_tournoi")) );
 	$form->setValeurs($row);
-	
-	$this->db->sql_open_cur($res, "select * from r_sessions_joueurs where id_tournoi=" . intval($form->getValeur("id_tournoi")) . " and id_session=" . intval($form->getValeur("id")) . " order by position asc" );
-	while	($row2=$this->db->sql_fetch_cur($res))
+
+    $res=null;
+	$this->db->sqlOpenCur($res, "select * from r_sessions_joueurs where id_tournoi=" . intval($form->getValeur("id_tournoi")) . " and id_session=" . intval($form->getValeur("id")) . " order by position asc" );
+	while	($row2=$this->db->sqlFetchCur($res))
 	{
 		$aTmp[$row2->id_joueur] = $row2->id_joueur; 
 	}
-	$this->db->sql_free_result($res);	
+	$this->db->sqlFreeResult($res);
 	$form->setValeur("liste_joueurs", $aTmp);
 }
-
-$this->db->sql_open_cur($res, "select * from joueurs order by nom asc, prenom asc" );
-$nb = $this->db->sql_count_cur($res);
-while	($row=$this->db->sql_fetch_cur($res))
+$res=null;
+$this->db->sqlOpenCur($res, "select * from joueurs order by nom asc, prenom asc" );
+$nb = $this->db->sqlCountCur($res);
+while	($row=$this->db->sqlFetchCur($res))
 {
 	$alisteJoueurs[$row->id] = $row->prenom." ".$row->nom; 
 }
-$this->db->sql_free_result($res);	
+$this->db->sqlFreeResult($res);
 
 echo $this->drawBarreBouton(
 	null,

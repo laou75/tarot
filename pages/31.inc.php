@@ -10,14 +10,14 @@ else
 	$form->setValeur("liste_joueurs", array());
 	$form->setValeur("datedeb", $form->timeToTextDate(time()));
 }
-
-$this->db->sql_open_cur($res, "select * from joueurs order by nom asc, prenom asc" );
-$nb = $this->db->sql_count_cur($res);
-while	($row=$this->db->sql_fetch_cur($res))
+$res=null;
+$this->db->sqlOpenCur($res, "select * from joueurs order by nom asc, prenom asc" );
+$nb = $this->db->sqlCountCur($res);
+while	($row=$this->db->sqlFetchCur($res))
 {
 	$alisteJoueurs[$row->id] = $row->prenom." ".$row->nom; 
 }
-$this->db->sql_free_result($res);	
+$this->db->sqlFreeResult($res);
 
 echo $this->drawBarreBouton(
 	null,

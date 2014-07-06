@@ -32,6 +32,6 @@ if ($err=="")
 }
 if ($err=="")
 {
-	$this->db->sql_update("joueurs", array("id"=>$form->getValeur("id")), $form->getValeurs());
+	$this->db->sqlUpdate("joueurs", array("id"=>$form->getValeur("id")), $form->getValeurs());
 	Header("Location: ".$form->getValeur("from"));
 }

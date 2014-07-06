@@ -19,13 +19,13 @@ if ($err=="")
 		$y = substr($form->getValeur("datefin"), 6, 4);
 		$form->setValeur("datefin", mktime ( 0, 0, 0, $m, $d, $y));
 	} 
-	$this->db->sql_update(  "sessions",
+	$this->db->sqlUpdate(  "sessions",
                             array("id" => intval($form->getValeur("id")),
                                   "id_tournoi"=> intval($form->getValeur("id_tournoi"))),
                                   $form->getValeurs());
 
 	//	Traiter les joueurs
-	$this->db->sql_execute("delete from r_sessions_joueurs where id_tournoi=" . intval($form->getValeur("id_tournoi"))." and id_session=" . intval($form->getValeur("id")) );
+	$this->db->sqlExecute("delete from r_sessions_joueurs where id_tournoi=" . intval($form->getValeur("id_tournoi"))." and id_session=" . intval($form->getValeur("id")) );
 	$i=1;
 	foreach($form->getValeur("liste_joueurs") as $ii => $id)
 	{
@@ -34,7 +34,7 @@ if ($err=="")
 		$aTmp["id_session"] = intval($form->getValeur("id"));
 		$aTmp["id_joueur"] = intval($id);
 		$aTmp["position"] = intval($i);
-		$this->db->sql_insert("r_sessions_joueurs", $aTmp);
+		$this->db->sqlInsert("r_sessions_joueurs", $aTmp);
 		$i++;
 	}
 	header("Location: ".$form->getValeur("from"));

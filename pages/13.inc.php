@@ -9,7 +9,7 @@ else
 {
 	$form->setValeur("id", $_GET["id_partie"]);
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
-	$this->db->sql_select_array($row, "select * from parties where id=" . intval($form->getValeur("id")) . " and id_tournoi=" . intval($form->getValeur("id_tournoi")));
+	$this->db->sqlSelectArray($row, "select * from parties where id=" . intval($form->getValeur("id")) . " and id_tournoi=" . intval($form->getValeur("id_tournoi")));
 	$form->setValeurs($row);
 }
 

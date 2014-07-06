@@ -13,7 +13,7 @@ else
 	$id = $_GET["id_partie"];
 	$id_tournoi = $_GET["id_tournoi"];
 	$id_session=$_GET["id_session"];
-	$this->db->sql_select_array($row, "select * from parties where id=" . intval($id) . " and id_tournoi=" . intval($id_tournoi) . " and id_session=" . intval($id_session) );
+	$this->db->sqlSelectArray($row, "select * from parties where id=" . intval($id) . " and id_tournoi=" . intval($id_tournoi) . " and id_session=" . intval($id_session) );
 	$form->setValeur("id_partie", $id);
 	$form->setValeurs($row);
 }
@@ -37,13 +37,13 @@ $reqMorts = "SELECT id_joueur, type ".
 			"and	id_session = " . intval($form->getValeur("id_session")) . " ".
 			"and	id_partie = " . intval($id) . " ".
 			"and	type = 'mort' ";
-$this->db->sql_open_cur($resMorts, $reqMorts);
+$this->db->sqlOpenCur($resMorts, $reqMorts);
 $aTabMorts= array();
-while	($rowMorts=$this->db->sql_fetch_cur($resMorts))
+while	($rowMorts=$this->db->sqlFetchCur($resMorts))
 {
 	$aTabMorts[$rowMorts->id_joueur] = $rowMorts->id_joueur;
 }
-$this->db->sql_close_cur($resMorts);
+$this->db->sqlCloseCur($resMorts);
 
 echo $form->openFieldset("Joueurs");
 $reqJ = "SELECT B.id as ID, concat(B.prenom, ' ', B.nom) as LIBELLE ".
@@ -53,13 +53,13 @@ $reqJ = "SELECT B.id as ID, concat(B.prenom, ' ', B.nom) as LIBELLE ".
 		"and	A.id_session = " . intval($form->getValeur("id_session")) . " ".
 		"order by A.position asc";
 
-$this->db->sql_open_cur($resJ, $reqJ);
-$nbJ=$this->db->sql_count_cur($resJ);
-while	($rowJ=$this->db->sql_fetch_cur($resJ))
+$this->db->sqlOpenCur($resJ, $reqJ);
+$nbJ=$this->db->sqlCountCur($resJ);
+while	($rowJ=$this->db->sqlFetchCur($resJ))
 {
 	$aTableau[$rowJ->ID] = $rowJ->LIBELLE;
 }
-$this->db->sql_close_cur($resJ);
+$this->db->sqlCloseCur($resJ);
 
 echo $form->makeCombo("id_preneur", "id_preneur", "Preneur (*)", $form->getValeur("id_preneur"), $aTableau);
 if ($nbJ>=5)

@@ -172,13 +172,13 @@ else
 		$res=null;
 		// On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
 		$req = "select * from menu where id_pere = " . intval($idPere) . " and visible_menu = 1 order by ordre asc";
-		$this->db->sql_open_cur($res, $req);
-		while	($row=$this->db->sql_fetch_cur($res))
+		$this->db->sqlOpenCur($res, $req);
+		while	($row=$this->db->sqlFetchCur($res))
 		{
             $ret .= "<li>".$this->makeLink("index.php?id=".$row->id, $row->label,  $row->description);
 
 		}
-		$this->db->sql_close_cur($res);
+		$this->db->sqlCloseCur($res);
 		return $ret;
 	}
 

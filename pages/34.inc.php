@@ -13,34 +13,34 @@ $req =	"select A.id_joueur, B.nom, B.prenom, B.nickname, B.portrait ".
         "and	A.id_session=" . intval($id_session) . " ".
         "and	B.id=A.id_joueur ".
 		"order by A.id_joueur asc";
-$db->sql_open_cur($res, $req);
-if ($this->db->sql_count_cur($res)<1)
+$db->sqlOpenCur($res, $req);
+if ($this->db->sqlCountCur($res)<1)
 	echo("Pas de joueurs !");
 else
 {
-	while	($row=$db->sql_fetch_cur($res))
+	while	($row=$db->sqlFetchCur($res))
 	{
 		$aTabJ[$row->id_joueur] = $row;
 		$nick=isset($row->nickname)?$row->nickname:$row->prenom." ".substr($row->nom,0,1).".";
 		$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 	}
-	$db->sql_free_result($res);
+	$db->sqlFreeResult($res);
 
 	$req0 =	"select id ".
 			"from	parties ".
         "where	id_tournoi=" . intval($id_tournoi) . " ".
         "and	id_session=" . intval($id_session) . " ".
 			"order by id asc";
-	$db->sql_open_cur($res0, $req0);
-	if ($this->db->sql_count_cur($res0)<1)
+	$db->sqlOpenCur($res0, $req0);
+	if ($this->db->sqlCountCur($res0)<1)
 		echo("Pas de parties!");
 	else
 	{
-		while	($row0=$db->sql_fetch_cur($res0))
+		while	($row0=$db->sqlFetchCur($res0))
 		{
 			$aTabPar[$row0->id] = $row0;
 		}
-		$db->sql_free_result($res0);
+		$db->sqlFreeResult($res0);
 		
 ?>
 <div  class="text-center">

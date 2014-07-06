@@ -7,7 +7,7 @@ else
 {
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
 	$form->setValeur("id", $_GET["id_session"]);
-	$this->db->sql_select_array($row, "select * from sessions where id=" . intval($form->getValeur("id"))." and id_tournoi=" . intval($form->getValeur("id_tournoi")));
+	$this->db->sqlSelectArray($row, "select * from sessions where id=" . intval($form->getValeur("id"))." and id_tournoi=" . intval($form->getValeur("id_tournoi")));
 	$form->setValeurs($row);
 }
 

@@ -29,13 +29,13 @@ $reqJ = "SELECT B.id as ID, concat(B.prenom, ' ', B.nom) as LIBELLE ".
 		"and	A.id_session = " . intval($form->getValeur("id_session")) . " ".
 		"order by A.position asc";
 		
-$this->db->sql_open_cur($resJ, $reqJ);
-$nbJ=$this->db->sql_count_cur($resJ);
-while	($rowJ=$this->db->sql_fetch_cur($resJ))
+$this->db->sqlOpenCur($resJ, $reqJ);
+$nbJ=$this->db->sqlCountCur($resJ);
+while	($rowJ=$this->db->sqlFetchCur($resJ))
 {
 	$aTableau[$rowJ->ID] = $rowJ->LIBELLE;
 }
-$this->db->sql_close_cur($resJ);
+$this->db->sqlCloseCur($resJ);
 
 echo $form->makeCombo("id_preneur", "id_preneur", "Preneur (*)", $form->getValeur("id_preneur"), $aTableau, " onChange=\"checkSelectJoueur('id_preneur')\"");
 if ($nbJ>=5)

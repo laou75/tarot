@@ -18,6 +18,6 @@ if ($err=="")
 		$y = substr($form->getValeur("datefin"), 6, 4);
 		$form->setValeur("datefin", mktime ( 0, 0, 0, $m, $d, $y));
 	} 
-	$this->db->sql_update("tournois", array("id"=>$form->getValeur("id")), $form->getValeurs());
+	$this->db->sqlUpdate("tournois", array("id"=>$form->getValeur("id")), $form->getValeurs());
 	header("Location: ".$form->getValeur("from"));
 }

@@ -4,12 +4,12 @@ echo $this->drawBarreBouton(
 	$this->makeLinkBoutonRetour(1)
 	);
 echo $this->openListe(array("Portrait", "Prénom", "Nom"), true);
-
+$res=null;
 $req = "select * from joueurs order by nom asc, prenom asc";
-$this->db->sql_open_cur($res, $req);
-$nb = $this->db->sql_count_cur($res);
+$this->db->sqlOpenCur($res, $req);
+$nb = $this->db->sqlCountCur($res);
 $i=0;
-while	($row=$this->db->sql_fetch_cur($res))
+while	($row=$this->db->sqlFetchCur($res))
 {
 	$portrait=strlen($row->portrait)>0 ? $row->portrait : "inconnu.gif";
 	$image=$this->makePortrait("mini/".$portrait);

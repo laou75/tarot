@@ -6,24 +6,25 @@ echo $this->drawBarreBouton(
 		$this->makeLinkBouton(31, "id_tournoi=".$id_tournoi), 
 		$this->makeLinkBouton(6, "id_tournoi=".$id_tournoi)),
 	$this->makeLinkBoutonRetour(2));
-
+$res=null;
 $req = "select * from sessions where id_tournoi=" . intval($id_tournoi) . " order by datedeb desc, datefin desc";
-$this->db->sql_open_cur($res, $req);
-$nb = $this->db->sql_count_cur($res);
+$this->db->sqlOpenCur($res, $req);
+$nb = $this->db->sqlCountCur($res);
 $i=0;
 echo $this->openListe(array("Date", "joueurs", "Commentaires"), true);
-while	($row=$this->db->sql_fetch_cur($res))
+while	($row=$this->db->sqlFetchCur($res))
 {
+    $res2=null;
 	$req2 = "select	* ".
 			"from	r_sessions_joueurs A, joueurs B ".
 			"where	A.id_tournoi=" . intval($id_tournoi) . " ".
 			"and	A.id_session=" . intval($row->id) . " ".
 			"and	B.id = A.id_joueur ".
 			"order by A.position asc";
-	$this->db->sql_open_cur($res2, $req2);
-	$nb2 = $this->db->sql_count_cur($res2);
+	$this->db->sqlOpenCur($res2, $req2);
+	$nb2 = $this->db->sqlCountCur($res2);
 	$joueurs="<table>";
-	while	($row2=$this->db->sql_fetch_cur($res2))
+	while	($row2=$this->db->sqlFetchCur($res2))
 	{
 		$portrait=strlen($row2->portrait)>0?$row2->portrait:"inconnu.gif";
 		$joueurs .= "<tr valign='middle'>".
@@ -41,7 +42,7 @@ while	($row=$this->db->sql_fetch_cur($res))
 					"</tr>";
 	}
 	$joueurs.="</table>";
-	$this->db->sql_free_result($res2);
+	$this->db->sqlFreeResult($res2);
 	echo $this->ligneListe(
 							array(	strftime("%d", $row->datedeb)."/".strftime("%m", $row->datedeb)."/".strftime("%Y", $row->datedeb), 
 									$joueurs,
@@ -55,4 +56,4 @@ while	($row=$this->db->sql_fetch_cur($res))
 							);
 }
 echo $this->closeListe();
-$this->db->sql_free_result($res);
+$this->db->sqlFreeResult($res);

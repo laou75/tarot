@@ -7,32 +7,33 @@ $id_tournoi=$_GET["id_tournoi"];
 /*
  * 	TABLEAU
  */
+$res=null;
 $req =	"select distinct A.id_joueur, B.nom, B.nickname, B.prenom, B.portrait ".
 		"from	r_sessions_joueurs A, joueurs B ".
 		"where	A.id_tournoi=" . intval($id_tournoi) . " " .
 		"and	B.id=A.id_joueur ".
 		"order by A.id_joueur asc";
-$this->db->sql_open_cur($res, $req);
-$nb = $this->db->sql_count_cur($res);
-while	($row=$this->db->sql_fetch_cur($res))
+$this->db->sqlOpenCur($res, $req);
+$nb = $this->db->sqlCountCur($res);
+while	($row=$this->db->sqlFetchCur($res))
 {
 	$aTab[$row->id_joueur] = $row;
 	$nick=isset($row->nickname)?$row->nickname:$row->prenom." ".substr($row->nom,0,1).".";
 	$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 }
-$this->db->sql_free_result($res);
-
+$this->db->sqlFreeResult($res);
+$res0=null;
 $req0 =	"select id ".
 		"from	sessions ".
 		"where	id_tournoi=" . intval($id_tournoi) . " " .
 		"order by id asc";
-$this->db->sql_open_cur($res0, $req0);
-$nb = $this->db->sql_count_cur($res0);
-while	($row0=$this->db->sql_fetch_cur($res0))
+$this->db->sqlOpenCur($res0, $req0);
+$nb = $this->db->sqlCountCur($res0);
+while	($row0=$this->db->sqlFetchCur($res0))
 {
 	$aTabSess[$row0->id] = $row0;
 }
-$this->db->sql_free_result($res0);
+$this->db->sqlFreeResult($res0);
 ?>
 <div class="text-center">
 	<table>

@@ -4,11 +4,12 @@ echo $this->drawBarreBouton(array(  $this->makeLinkBouton(3)),
                                     );
 
 echo $this->openListe(array("Commencé le", "Fini le", "Commentaires"), true);
+$res=null;
 $req = "select * from tournois order by datedeb desc";
-$this->db->sql_open_cur($res, $req);
-$nb = $this->db->sql_count_cur($res);
+$this->db->sqlOpenCur($res, $req);
+$nb = $this->db->sqlCountCur($res);
 $i=0;
-while	($row=$this->db->sql_fetch_cur($res)) {
+while	($row=$this->db->sqlFetchCur($res)) {
 	echo $this->ligneListe(
 		array(
 			strftime("%d", $row->datedeb)."/".strftime("%m", $row->datedeb)."/".strftime("%Y", $row->datedeb), 

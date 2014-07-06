@@ -8,7 +8,7 @@ if (count($_POST)>0)
 else
 {
 	$form->setValeur("id", $_GET["id_joueur"]);
-	$this->db->sql_select_array($row, "select * from joueurs where id=" . intval($form->getValeur("id")));
+	$this->db->sqlSelectArray($row, "select * from joueurs where id=" . intval($form->getValeur("id")));
 	$form->setValeurs($row);
 }
 

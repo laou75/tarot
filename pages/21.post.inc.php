@@ -32,6 +32,6 @@ if ($err=="")
 }
 if ($err=="")
 {
-	$this->db->sql_insert("joueurs", $form->getValeurs());
+	$this->db->sqlInsert("joueurs", $form->getValeurs());
 	Header("Location: ".$form->getValeur("from"));
 }

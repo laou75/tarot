@@ -31,9 +31,9 @@ if	($err=="")
 	if	($nbAttaquant==1) $nbDef++;
 
 	$form->setValeur("annonce_reussie", ($form->getValeur("total")>0)?1:0);
-	$this->db->sql_insert("parties", $form->getValeurs());
+	$this->db->sqlInsert("parties", $form->getValeurs());
 
-	$idPar = $this->db->sql_last_insert("parties", "id");
+	$idPar = $this->db->sqlLastInsert("parties", "id");
 
 	$valJPar["id_tournoi"] = $form->getValeur("id_tournoi");
 	$valJPar["id_session"] = $form->getValeur("id_session");
@@ -43,10 +43,10 @@ if	($err=="")
 			"from	r_sessions_joueurs ".
 			"where	id_tournoi = " . intval($form->getValeur("id_tournoi")) . " ".
 			"and	id_session = " . intval($form->getValeur("id_session"));
-	$this->db->sql_open_cur($resJ, $reqJ);
-	$nbJ=$this->db->sql_count_cur($resJ);
+	$this->db->sqlOpenCur($resJ, $reqJ);
+	$nbJ=$this->db->sqlCountCur($resJ);
 
-	while	($rowJ=$this->db->sql_fetch_cur($resJ))
+	while	($rowJ=$this->db->sqlFetchCur($resJ))
 	{
 		$valJPar["id_joueur"]= $rowJ->id_joueur;
 		if	($form->getValeur("id_preneur")==$rowJ->id_joueur)
@@ -69,9 +69,9 @@ if	($err=="")
 			$valJPar["type"]= "mort";
 			$valJPar["points"]= 0;
 		}
-		$this->db->sql_insert("r_parties_joueurs", $valJPar);
+		$this->db->sqlInsert("r_parties_joueurs", $valJPar);
 	}
-	$this->db->sql_close_cur($resJ);
+	$this->db->sqlCloseCur($resJ);
 
 	header("Location: ".$form->getValeur("from"));
 }

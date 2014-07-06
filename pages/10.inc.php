@@ -16,14 +16,14 @@ $req =	"select B.id, B.nom, B.prenom, B.nickname, B.portrait, A.position ".
 		"and	A.id_session=" . intval($id_session) . " ".
 		"and	B.id=A.id_joueur ".
 		"order by A.position asc";
-$this->db->sql_open_cur($res, $req);
-$nbJSess = $this->db->sql_count_cur($res);
-while	($row=$this->db->sql_fetch_cur($res)) {
+$this->db->sqlOpenCur($res, $req);
+$nbJSess = $this->db->sqlCountCur($res);
+while	($row=$this->db->sqlFetchCur($res)) {
 	$aJSess[$row->id]=$row;
 	$nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
 	$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 }
-$this->db->sql_close_cur($res);
+$this->db->sqlCloseCur($res);
 
 $entete[] = "Contrat";
 
@@ -33,10 +33,10 @@ $req =	"select * ".
 		"where	id_tournoi=" . intval($id_tournoi) . " ".
 		"and	id_session=" . intval($id_session) . " ".
 		"order by id asc";
-$this->db->sql_open_cur($res, $req);
-$nbParties = $this->db->sql_count_cur($res);
+$this->db->sqlOpenCur($res, $req);
+$nbParties = $this->db->sqlCountCur($res);
 $cumul=array();
-while	($row=$this->db->sql_fetch_cur($res)) {
+while	($row=$this->db->sqlFetchCur($res)) {
 	$petitaubout=($row->petitaubout==1) ? "oui" : "non";
 	$contratreussi=($row->annonce_reussie==1) ? $this->makeImg("reussie.gif") : $this->makeImg("ratee.gif");
 	$lContrat="<table cellpadding=0 cellspacing=0 border=0><tr valign='top'><td>".$row->annonce."&nbsp;</td><td>".$contratreussi."</td></tr></table>";
@@ -73,10 +73,10 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 			"and	id_session=" . intval($id_session) . " ".
 			"and	id_partie=" . intval($row->id) . " ".
 			"order by id_joueur asc";
-	$this->db->sql_open_cur($res2, $req2);
-	$nbJPar = $this->db->sql_count_cur($res2);
+	$this->db->sqlOpenCur($res2, $req2);
+	$nbJPar = $this->db->sqlCountCur($res2);
 	$aJPar=array();
-	while	($row2=$this->db->sql_fetch_cur($res2)) {
+	while	($row2=$this->db->sqlFetchCur($res2)) {
 		$aJPar[$row2->id_joueur]=$row2;
 		if	(array_key_exists($row2->id_joueur, $cumul))
 			$cumul[$row2->id_joueur] = $cumul[$row2->id_joueur] + $row2->points; 
@@ -84,7 +84,7 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 			$cumul[$row2->id_joueur] = $row2->points; 
 		
 	}
-	$this->db->sql_close_cur($res2);
+	$this->db->sqlCloseCur($res2);
 
 	$data=array();
 	foreach	($aJSess as $idJ => $detJ) {
@@ -130,7 +130,7 @@ while	($row=$this->db->sql_fetch_cur($res)) {
 		);
 }
 
-$this->db->sql_close_cur($res);
+$this->db->sqlCloseCur($res);
 
 if ($nbParties>0)
 {

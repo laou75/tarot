@@ -23,13 +23,13 @@ $req =	"select A.id_joueur, B.nom, B.prenom ".
 		"and	A.id_session=" . intval($id_session) . " ".
 		"and	B.id=A.id_joueur ".
 		"order by A.id_joueur asc";
-$db->sql_open_cur($res, $req);
-$nb = $db->sql_count_cur($res);
-while	($row=$db->sql_fetch_cur($res))
+$db->sqlOpenCur($res, $req);
+$nb = $db->sqlCountCur($res);
+while	($row=$db->sqlFetchCur($res))
 {
 	$aTabJ[$row->id_joueur] = $row;
 }
-$db->sql_free_result($res);
+$db->sqlFreeResult($res);
 
 
 //	R�cup�ration des parties
@@ -38,13 +38,13 @@ $req0 =	"select id ".
 		"where	id_tournoi=" . intval($id_tournoi) . " ".
 		"and	id_session=" . intval($id_session) . " ".
 		"order by id asc";
-$db->sql_open_cur($res0, $req0);
-$nb = $db->sql_count_cur($res0);
-while	($row0=$db->sql_fetch_cur($res0))
+$db->sqlOpenCur($res0, $req0);
+$nb = $db->sqlCountCur($res0);
+while	($row0=$db->sqlFetchCur($res0))
 {
 	$aTabPar[$row0->id] = $row0;
 }
-$db->sql_free_result($res0);
+$db->sqlFreeResult($res0);
 
 
 $i=0;
