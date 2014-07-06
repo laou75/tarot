@@ -136,7 +136,8 @@ class Template
         </div>
 
 		<div id="pop-up" class="pop-portrait" style="display:none;"></div>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
 	</body>
 </html>

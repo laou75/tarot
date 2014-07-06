@@ -19,11 +19,6 @@ $GLOBALS["Config"]["SITE"]["DEBUG"]			=	TRUE;
 
 setlocale (LC_TIME, "fr");
 
-function my_autoloader($class) {
-    if (file_exists('class/' . strtolower($class) . '.class.php'))
-    {
-        include_once('class/' . strtolower($class) . '.class.php');
-    }
-}
-
-spl_autoload_register('my_autoloader');
+spl_autoload_register(function ($class) {
+    include_once('class/' . strtolower($class) . '.class.php');
+});
