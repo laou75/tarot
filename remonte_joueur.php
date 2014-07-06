@@ -1,6 +1,5 @@
 <?php
-include("include/config.inc.php");
-include("class/db.class.php");
+include("include/includes.inc.php");
 
 $req =	"SELECT * ".
 		"FROM	r_sessions_joueurs ".
@@ -30,4 +29,4 @@ if	($db->sql_select($row2, $req) == 1)
 			"and	id_joueur=".$row->id_joueur;
 	$db->sqlExecute($req);
 }
-Header("Location: ".$_SERVER["HTTP_REFERER"]);
+header("Location: ".$_SERVER["HTTP_REFERER"]);

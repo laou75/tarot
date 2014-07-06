@@ -1,6 +1,5 @@
 <?php
-include("include/config.inc.php");
-include("class/db.class.php");
+include("include/includes.inc.php");
 
 $req =	"SELECT * ".
 		"FROM	r_sessions_joueurs ".
@@ -29,6 +28,5 @@ if	($db->sql_select($row2, $req) == 1)
 			"and	id_session=".$_GET["id_session"]." ".
 			"and	id_joueur=".$row->id_joueur;
 	$db->sqlExecute($req);
-//	sqlExecute("UPDATE dossiers SET dos_order = ".$row2->dos_order." WHERE dos_id = ".$_GET["dos_id"]);
 }
-Header("Location: ".$_SERVER["HTTP_REFERER"]);
+header("Location: ".$_SERVER["HTTP_REFERER"]);

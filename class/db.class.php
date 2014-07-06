@@ -31,11 +31,12 @@ class Db
      */
     function sqlError($parms="")
     {
-        echo "<div class=\"error\"><u>Erreur SQL</u> (".$this->sql_errno().")<br><i>".mysql_error()."</i><br>";
+        $err='';
+        $err.="<div class=\"error\"><u>Erreur SQL</u> (".$this->sqlErrno().")<br><i>".mysql_error()."</i><br>";
         if ($parms)
-            echo "<i>".$parms."</i>";
-        echo "</div>";
-        exit();
+            $err.="<i>".$parms."</i>";
+        $err.="</div>";
+        header('Location: error.php?err=' . base64_encode($err));
     }
 
 
@@ -63,8 +64,8 @@ class Db
 
         /* check connection */
         if ($this->_db->connect_errno) {
-            printf("Connect failed: %s\n", $this->_db->connect_error);
-            exit();
+            $err = sprintf("Connect failed: %s\n", $this->_db->connect_error);
+            header('Location: error.php?err=' . base64_encode($err));
         }
 	}
 
@@ -249,15 +250,15 @@ class Db
 	/*
 	 * Faire un REPLACE
 	 */
-	function sqlReplace($table, $valeurs, $keys=NULL)
+	function sqlReplace($table, $valeurs)
 	{
-        $this->sqlReplaceInsert("REPLACE", $table, $valeurs, $keys);
+        $this->sqlReplaceInsert("REPLACE", $table, $valeurs);
 	}
 
     /*
      * Factorisation pour sqlInsert() et sqlReplace()
      */
-    private function sqlReplaceInsert($verbeSQL, $table, $valeurs, $keys=NULL)
+    private function sqlReplaceInsert($verbeSQL, $table, $valeurs)
     {
         //	Init
         $resInfos=null;

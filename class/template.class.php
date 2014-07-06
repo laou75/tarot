@@ -46,7 +46,6 @@ class template
 		if (count($_POST)>0)
 			include("pages/".$this->id.".post.inc.php");
 
-//        ob_start("ob_gzhandler");
         ob_start();
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -90,14 +89,14 @@ class template
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <?php
-                    $this->getChemin($this->id);
-                    echo $this->drawMenu();
-                    ?>
+<?php
+        $this->getChemin($this->id);
+        echo $this->drawMenu();
+?>
                 </ul>
 <?php
-                if (!isset($_SESSION['sessionTarot']))
-                {
+        if (!isset($_SESSION['sessionTarot']))
+        {
 ?>
                     <form role="form" class="navbar-form navbar-right" action="/identification.php" method="post">
                         <div class="form-group">
@@ -109,15 +108,15 @@ class template
                         <button class="btn btn-success" type="submit">Connexion</button>
                     </form>
 <?php
-                }
-                else
-                {
-                    ?>
+        }
+        else
+        {
+?>
                     <form role="form" class="navbar-form navbar-right" action="/logout.php" method="post">
                         <button class="btn btn-warning" type="submit">Déconnexion</button>
                     </form>
-                <?php
-                }
+<?php
+        }
 ?>
             </div><!--/.navbar-collapse -->
         </div>
@@ -129,28 +128,10 @@ class template
 
     <div class="container">
 <?php
-
-/*
-$filAriane="";
-if (is_array($this->cheminMenu))
-{
-	$this->cheminMenu = array_reverse($this->cheminMenu, true);
-	foreach($this->cheminMenu as $id => $detail)
-	{
-		$filAriane.="&gt; <span class='filAriane'>".$detail["label"]."</span> ";
-	}
-}
-echo"<table width='100%'>\n".
-	"	<tr>\n".
-	"		<td align='left' width='80%'>".$filAriane."</td>\n".
-	"	</tr>\n".
-	"</table>\n".
-	"<hr>";
-*/
-if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php"))
-	include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php");
-else
-	echo $GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php";
+        if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php"))
+            include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php");
+        else
+            echo $GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php";
 ?>
         </div>
 
@@ -160,7 +141,7 @@ else
 	</body>
 </html>
 <?php
-	ob_end_flush();
+	    ob_end_flush();
 	}
 
 	/*
@@ -449,7 +430,7 @@ else
 	/*
 	 * 
 	 */
-	function lienPopup($label, $html, $titre=null)
+	function lienPopup($label, $html)
 	{
 		$tmp =str_replace("'", "#QUOT#", $html);
 		$tmp =str_replace('"', "#DBLQUOT#", $tmp);

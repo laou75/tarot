@@ -103,7 +103,7 @@ class Formulaire
 			switch($det["type"])
 			{
 				case "input":
-					$ret .= "<input type='text' name='".$det["name"]."' id='".$id."' value='".$value."'".$options.">";
+					$ret .= "<input type='text' name='".$name."' id='".$id."' value='".$value."'".$options.">";
 					break;
 
 				case "combo":
@@ -118,8 +118,7 @@ class Formulaire
 						else
 							$option.="\t<option value=\"".$key."\">".$libelle."\n";
 					}
-//					echo "<br>OPTiON : ".$option."<br>";
-					$ret .= "<select name='".$det["name"]."' id='".$id."'".$options.">\n".$option."</select>\n";
+					$ret .= "<select name='".$name."' id='".$id."'".$options.">\n".$option."</select>\n";
 					break;
 
 				case "texte":
@@ -143,7 +142,7 @@ class Formulaire
 
 	function makeFileInput($name, $id, $label="", $value="", $image=null, $options="")
 	{
-		$image=(isset($image))?"<br>".$image:"";
+		$image = (isset($image)) ? "<br>".$image : "";
 		return	"<tr id='tr".$id."'>\n".
 				"	<td".$this->widthLabel."><label for='$id'>$label</label></td>\n".
 				"	<td".$this->widthData."><input type='file' name='$name' id='$id' $options>".$image."</td>\n".
@@ -175,7 +174,6 @@ class Formulaire
 		while (list ($valeur, $libelle) = each ($valeurs)) 
 		{
 			$check = (isset($value) && $valeur==$value)?" checked":"";
-//			echo "<li>$valeur = $value => ".$check."<br>\n";
 			$lstRadio .= "<input type='radio' name='".$name."' id='".$id."' value='".$valeur."'".$options.$check.">".$libelle."&nbsp;";
 		}
 		return	"<tr id='tr".$id."'>".
