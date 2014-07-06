@@ -1,5 +1,5 @@
 <?php
-class template
+class Template
 {
 	var $titre;
 	var	$pageDefaut;
@@ -186,7 +186,7 @@ class template
 	{
 		$row=null;
 		$req = "select * from menu where id = " . intval($id);
-		$this->db->sql_select($row, $req);
+		$this->db->sqlSelect($row, $req);
 
 		return $row;
 	}
@@ -316,7 +316,7 @@ class template
 	function getJoueur($id)
 	{
 		$row=null;
-		$this->db->sql_select($row, "select * from joueurs where id=" . intval($id));
+		$this->db->sqlSelect($row, "select * from joueurs where id=" . intval($id));
 		if (isset($row->portrait) && strlen($row->portrait)>0) 
 			$portrait="<br>".$this->makePortrait("mini/".$row->portrait, $row->prenom." ".$row->nom);
 		else

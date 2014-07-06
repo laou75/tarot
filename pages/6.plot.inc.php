@@ -58,7 +58,7 @@ foreach($aTab as $idJ => $det)
 				"and	id_joueur =" . intval($idJ) . " ".
 				"group by id_tournoi, id_session";
 
-		if	($db->sql_select($row2, $req2)==-100)
+		if	($db->sqlSelect($row2, $req2)==-100)
 			$truc=0;
 		else
 			$truc=$row2->CUMUL;

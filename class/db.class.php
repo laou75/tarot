@@ -92,7 +92,7 @@ class Db
 	/*
 	 * Faire un select : suppose ne retourner qu'une seule ligne -> sinon KO !!!!
 	 */	
-	function sql_select(&$row, $req)
+	function sqlSelect(&$row, $req)
 	{
         $res = $this->sqlQuery($req);
 
@@ -345,7 +345,7 @@ class Db
 	/*
 	 * Faire un DELETE
 	 */
-	function sql_delete($table, $keys)
+	function sqlDelete($table, $keys)
 	{	
 		//	Init
 		$req = "DELETE FROM $table ";

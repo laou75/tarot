@@ -53,7 +53,7 @@ foreach($aTabSess as $idS => $detS)
 				"and	id_session=" . intval($idS) . " ".
 				"and	id_joueur =" . intval($idJ) . " ".
 				"group by id_tournoi, id_session";
-		$ret=$db->sql_select($row2, $req2);
+		$ret=$db->sqlSelect($row2, $req2);
 		if ($ret>0)
 			$data[]=sprintf("%01.1f", $row2->points);
 		elseif ($ret==-100)
@@ -95,7 +95,7 @@ foreach($aTabSess as $idS => $detS)
                 "and	id_session=" . intval($idS) . " ".
                 "and	id_joueur =" . intval($idJ) . " ".
                 "group by id_tournoi, id_session";
-		if	($db->sql_select($row2, $req2)==-100)
+		if	($db->sqlSelect($row2, $req2)==-100)
 			$truc=0;
 		elseif ($row2->CUMUL>0)
 			$truc=0;
