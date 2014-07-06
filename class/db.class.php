@@ -380,5 +380,3 @@ class Db
 		return $row[$key];
 	}
 }
-
-$db= new Db();

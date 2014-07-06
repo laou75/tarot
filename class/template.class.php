@@ -493,5 +493,3 @@ else
 		return $ret;
 	}
 }
-
-$tpl= new Template($db);

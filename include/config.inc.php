@@ -19,3 +19,13 @@ $GLOBALS["Config"]["PATH"]["PAGE"]			=	realpath(".")."/pages/";
 $GLOBALS["Config"]["SITE"]["DEBUG"]			=	TRUE;
 
 setlocale (LC_TIME, "fr");
+
+function my_autoloader($class) {
+    //include 'classes/' . $class . '.class.php';
+    if (file_exists('class/' . strtolower($class) . '.class.php'))
+    {
+        include_once('class/' . strtolower($class) . '.class.php');
+    }
+}
+
+spl_autoload_register('my_autoloader');
