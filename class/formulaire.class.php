@@ -5,7 +5,7 @@ class Formulaire
 	var $widthLabel;
 	var $widthData;
 	
-	function Formulaire()
+	function __construct()
 	{
 		$this->widthLabel = " width=25%";
 		$this->widthData = " width=75%" ;

@@ -15,7 +15,7 @@ class template
 	/*
 	 * 
 	 */	
-	function Template($db)
+	function __construct($db)
 	{
 		setlocale(LC_TIME, "fr");
 

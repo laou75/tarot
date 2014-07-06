@@ -6,7 +6,7 @@ class Session
 	var	$numSession;
 	var	$role;
 
-    function session() 
+    function __construct()
     {
     }
 
