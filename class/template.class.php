@@ -93,28 +93,27 @@ class Template
 <?php
         }
 ?>
-    <div role="navigation" class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="/" class="navbar-brand">Tarot</a>
+        <div role="navigation" class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/" class="navbar-brand">Tarot</a>
 
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
 <?php
         $this->getChemin($this->id);
         echo $this->drawMenu();
 ?>
-                </ul>
+                    </ul>
 <?php
-        if (!isset($_SESSION['sessionTarot']))
-        {
+        if (!isset($_SESSION['sessionTarot'])) {
 ?>
                     <form role="form" class="navbar-form navbar-right" action="/identification.php" method="post">
                         <div class="form-group">
@@ -126,9 +125,7 @@ class Template
                         <button class="btn btn-success" type="submit">Connexion</button>
                     </form>
 <?php
-        }
-        else
-        {
+        } else {
 ?>
                     <form role="form" class="navbar-form navbar-right" action="/logout.php" method="post">
                         <button class="btn btn-warning" type="submit">Déconnexion</button>
@@ -136,31 +133,32 @@ class Template
 <?php
         }
 ?>
-            </div><!--/.navbar-collapse -->
+                </div><!--/.navbar-collapse -->
+            </div>
         </div>
-    </div>
-
-    <div class="container-fluid" style="margin-top: 55px;">
-        <h2 style="float: left;"><!--<?php echo $logo?>--><?php echo $this->titre.$libCtxt;?></h2>
-    </div>
-
-    <div class="container-fluid">
+        <div class="container-fluid" style="margin-top: 55px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3><?php echo $this->titre.$libCtxt;?></h3>
+                </div>
+                <div class="panel-body">
 <?php
         if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php"))
             include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php");
         else
             echo $GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php";
 ?>
+                </div>
+            </div>
         </div>
 		<div id="pop-up" class="pop-portrait" style="display:none;"></div>
         <script src="js/jquery-1.11.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/highcharts.js"></script>
-    <?php
-    if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php"))
-        include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php");
-    ?>
-
+<?php
+        if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php"))
+            include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php");
+?>
 	</body>
 </html>
 <?php
@@ -275,7 +273,6 @@ class Template
             $desc = "Retour : ".$row->label;
         else
             $desc = 'Retour';
-
         return '<a class="btn btn-primary btn-sm" title="'.$desc.'" href="'.$url.'">'.
                 '<span class="glyphicon glyphicon-share-alt"></span> Retour'.
                 '</a>';
@@ -300,7 +297,7 @@ class Template
             $alt=" alt=\"$alt\"";
         else
             $alt=" alt=\"\"";
-        return "<img src=\"".$GLOBALS["Config"]["URL"]["KIT"].$img."\" border=0$alt$options>";
+        return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" border=0$alt$options>";
 	}
 
 	/*
@@ -320,13 +317,11 @@ class Template
 	 */
 	function makePortrait($img, $alt="", $options="")
 	{
-		{
-			if (isset($alt) && strlen($alt)>0) 
-				$alt=" alt=\"$alt\"";
-			else
-				$alt=" alt=\"\"";
-			return "<img src=\"".$GLOBALS["Config"]["URL"]["PORTRAIT"].$img."\" border=0$alt$options>";
-		}
+        if (isset($alt) && strlen($alt)>0)
+            $alt=" alt=\"$alt\"";
+        else
+            $alt=" alt=\"\"";
+        return "<img src=\"".$GLOBALS["Config"]["URL"]["PORTRAIT"].$img."\" border=0$alt$options>";
 	}
 
 	/*
@@ -371,7 +366,6 @@ class Template
             $ret.=	$retour."\n";
         }
         $ret .='</div></div>';
-
 		return $ret;
 	}
 
@@ -382,7 +376,6 @@ class Template
 	{
         $wT = '';
         $wA = '';
-
 		$ret=	'<table class="table table-striped table-bordered table-hover table-condensed" ' . $wT . ' id="' . $id . '">' . PHP_EOL.
 				'	<tr>';
 		if	($action)
@@ -445,11 +438,10 @@ class Template
 	 */
 	function lienPopup($label, $html)
 	{
-		$tmp =str_replace("'", "#QUOT#", $html);
-		$tmp =str_replace('"', "#DBLQUOT#", $tmp);
-
-		$tmp =str_replace("\n", "", $tmp);
-		$ret=	"<a href=\"#\" onMouseOver=\"openPopup('".$tmp."');\" onMouseOut=\"closePopup();\">".$label."</a>";
+		$tmp =  str_replace("'", "#QUOT#", $html);
+		$tmp =  str_replace('"', "#DBLQUOT#", $tmp);
+		$tmp =  str_replace("\n", "", $tmp);
+		$ret =	"<a href=\"#\" onMouseOver=\"openPopup('".$tmp."');\" onMouseOut=\"closePopup();\">".$label."</a>";
 		return $ret;
 	}
 

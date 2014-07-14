@@ -20,7 +20,7 @@ foreach($aTab as $idJoueur => $row)
 $aTabSess = $session->getSessionByTournoi($id_tournoi);
 ?>
 <div class="row">
-    <h3>Statistiques</h3>
+    <h4>Statistiques</h4>
 	<div class="col-md-6">
 <?php
 echo $this->openListe($entete);
@@ -46,7 +46,7 @@ echo $this->closeListe();
 </div>
 
 <div class="row">
-    <h3>Cumul des pertes</h3>
+    <h4>Cumul des pertes</h4>
     <div class="col-md-6">
 <?php
 echo $this->openListe($entete);
@@ -80,7 +80,7 @@ echo $this->closeListe();
 </div>
 
 <div class="row">
-    <h3>Répartition des pertes</h3>
+    <h4>Répartition des pertes</h4>
     <div class="col-md-12">
         <div id="container3" style="width:100%; height:400px;"></div>
     </div>

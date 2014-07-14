@@ -1,6 +1,6 @@
 <div class="col-md-8 text-center">
 <?php
-echo $this->makeIllustration("tarot.png", ''); //, 'class="img-responsive"');
+echo $this->makeIllustration("tarot.png", '', 'class="img-responsive"');
 ?>
 </div>
 <div class="col-md-4">

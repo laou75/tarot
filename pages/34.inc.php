@@ -46,7 +46,7 @@ else
     {
 ?>
 <div class="row">
-    <h3>Statistiques</h3>
+    <h4>Statistiques</h4>
     <div class="col-md-6">
 <?php
 		echo $this->openListe($entete);
