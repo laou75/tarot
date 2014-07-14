@@ -36,7 +36,7 @@ class Db
         if ($parms)
             $err.="<i>".$parms."</i>";
         $err.="</div>";
-        header('Location: error.php?err=' . base64_encode($err));
+        //header('Location: error.php?err=' . base64_encode($err));
     }
 
 
@@ -66,6 +66,9 @@ class Db
         if ($this->_db->connect_errno) {
             $err = sprintf("Connect failed: %s\n", $this->_db->connect_error);
             header('Location: error.php?err=' . base64_encode($err));
+        }
+        if (!$this->_db->set_charset("utf8")) {
+            printf("Erreur lors du chargement du jeu de caractères utf8 : %s\n", $this->_db->error);
         }
 	}
 
@@ -290,6 +293,8 @@ class Db
         $this->sqlCloseCur($resInfos);
 
         $req .= $cols." ".$values;
+
+        echo($req);
 
         $this->sqlExecute($req);
     }

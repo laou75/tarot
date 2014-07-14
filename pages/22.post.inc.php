@@ -13,7 +13,12 @@ if ($err=="")
 	if (count($_FILES)>0 && strlen($_FILES["portrait"]["name"])>0)
 	{
 		$fichier = $_FILES["portrait"]["name"];
-		if (!move_uploaded_file($_FILES['portrait']['tmp_name'], $GLOBALS["Config"]["PATH"]["PORTRAIT"].$fichier))
+        /*
+        echo '<br><br><br><br><br><pre>'.print_r($_FILES, true).'</pre>';
+        echo '<pre>'.print_r($GLOBALS["Config"], true).'</pre>';
+        */
+		if (!move_uploaded_file($_FILES['portrait']['tmp_name'],
+                                $GLOBALS["Config"]["PATH"]["PORTRAIT"].$fichier))
 			$err .= "ERREUR : imposssible de télécharger le fichier (UPLOAD) !";
 		else
 		{

@@ -1,4 +1,5 @@
 //var der=0;
+var nbErreur=0;
 
 function controleFormulaire()
 {
@@ -121,7 +122,34 @@ function getValRadio(champ)
 	return 0;
 
 }
-function calcule_points()
+
+function testeRadio(champ, nom)
+{
+    if(typeof(champ)  === "undefined")
+    {
+        $("label[for="+nom+"]").addClass("red");
+        nbErreur++;
+    }
+    else
+    {
+        $("label[for="+nom+"]").removeClass("red");
+    }
+}
+
+function testeInput(nom)
+{
+    if($("#"+nom).val()  == "")
+    {
+        $("label[for="+nom+"]").addClass("red");
+        nbErreur++;
+    }
+    else
+    {
+        $("label[for="+nom+"]").removeClass("red");
+    }
+}
+
+function calculePoints()
 {
 	/*
 	Pour gagner son contrat, le Preneur doit r?aliser un nombre de points fonction du nombre de Bouts qu?il poss?de (voir 3.But du Jeu).
@@ -129,14 +157,13 @@ function calcule_points()
 	Tout contrat vaut 25 points auquels on ajoute les points de gain ou de perte. 
 	Le nombre obtenu est multipli? par 2 pour une Garde, par 4 pour une Garde Sans ou par 6 pour une Garde Contre. 
 	Ce nombre est soustrait (ou ajout? en cas de chute) ? chacun des 3 D?fenseurs, et ajout? 3 fois (ou soustrait 3 fois en cas de chute) au Preneur.
-	
 	Exemple: 
 	le Preneur gagne une Garde avec 43 points, 2 Bouts et le Petit au Bout. 
 	Son gain est de 43-41=2 points; (25 + 2 + 10 pour le Petit au Bout) x 2 pour la Garde = 74 points; 
 	r?sultat -74 points pour les 3 D?fenseurs et 74 x 3 = 222 points pour le Preneur.
 	*/
-	
 	var nbBouts=0;
+    var ptFait=0;
 	var ptContrat=0;
 	var ptChelem=0;
 	var ptPrime=0;
@@ -146,35 +173,50 @@ function calcule_points()
 	var ptBase;
 	var	petitAuBout;
 	var typePoignee;
+    var id_preneur;
 
-	d = document.forms[0];
-	for (var i = 0; i < d.nombre_bouts.length; i++) 
-	{
-		if (d.nombre_bouts[i].checked) nbBouts = d.nombre_bouts[i].value;
-	}
-	if (nbBouts==0) ptAFAIRE=56;
+    nbErreur=0;
+
+    id_preneur = $( "#id_preneur option:selected" ).text();
+    testeRadio(id_preneur, "id_preneur");
+
+    ANN = $('input[type=radio][name=annonce]:checked').attr('value');
+    testeRadio(ANN, "annonce");
+
+    nbBouts = $('input[type=radio][name=nombre_bouts]:checked').attr('value');
+    testeRadio(nbBouts, "nombre_bouts");
+
+    ptFait = $("#points").val();
+    testeInput("points");
+
+    typePoignee = $('input[type=radio][name=poignee]:checked').attr('value');
+    testeRadio(typePoignee, "poignee");
+
+    petitAuBout = $('input[type=radio][name=petitaubout]:checked').attr('value');
+    testeRadio(petitAuBout, "petitaubout");
+
+    if(nbErreur>0)
+    {
+        return false;
+    }
+
+    if (nbBouts==0) ptAFAIRE=56;
 	else if (nbBouts==1) ptAFAIRE=51;
 	else if (nbBouts==2) ptAFAIRE=41;
 	else if (nbBouts==3) ptAFAIRE=36;
+    else return false;
 
-	for (var i = 0; i < d.annonce.length; i++) 
-	{
-		if (d.annonce[i].checked) ANN = d.annonce[i].value;
-	}
-	if (ANN=="Petite") multiplie=1;
+    if (ANN=="Petite") multiplie=1;
 	else if (ANN=="Pousse") multiplie=1;
 	else if (ANN=="Garde") multiplie=2;
 	else if (ANN=="Garde sans le Chien") multiplie=4;
-	else if (ANN=="Garde contre le Chien") multiplie=6;
+    else if (ANN=="Garde contre le Chien") multiplie=6;
+    else return false;
 
-	sens=(d.points.value>=ptAFAIRE)?+1:-1;
+	sens = (ptFait>=ptAFAIRE) ? +1 : -1;
 
-	for (var i = 0; i < d.petitaubout.length; i++) 
-	{
-		if (d.petitaubout[i].checked) petitAuBout = d.petitaubout[i].value;
-	}
-	ptBase = (petitAuBout==1)?35:25;
-	ptContrat = (ptBase + Math.abs(ptAFAIRE - d.points.value)) * multiplie * sens;
+    ptBase = (petitAuBout==1) ? 35 : 25;
+    ptContrat = (ptBase + Math.abs(ptAFAIRE - ptFait)) * multiplie * sens;
 
 	/*
 	la Poign?e. Le joueur poss?dant une Poign?e (10, 13 ou 15 Atouts) peut s?il le d?sire l?annoncer et l?exposer avant de jouer sa 1?re carte.
@@ -183,11 +225,7 @@ function calcule_points()
 	Triple Poign?e (15 Atouts): prime de 40 points.
 	Ces primes ne sont pas multipliables (voir Score) et sont acquises au camp vainqueur de la donne. L?excuse dans une poign?e implique que le joueur n?a pas d?autre Atout.
 	*/
-	for (var i = 0; i < d.poignee.length; i++) 
-	{
-		if (d.poignee[i].checked) typePoignee = d.poignee[i].value;
-	}
-	if (typePoignee=="simple") ptPrime+=20;
+    if (typePoignee=="simple") ptPrime+=20;
 	else if (typePoignee=="double") ptPrime+=30;
 	else if (typePoignee=="triple") ptPrime+=40;
 
@@ -204,7 +242,8 @@ Si le joueur tentant le Chelem poss?de l?Excuse, celle-ci peut ?tre jou?e en car
 dans ce cas, le Petit sera consid?r? comme ?tant au bout ? l?avant dernier pli.
 */
 		
-	d.total.value = ptContrat + ptChelem + ptPrime;
+	//d.total.value = ptContrat + ptChelem + ptPrime;
+    $("#total").val( ptContrat + ptChelem + ptPrime );
 }
 
 function change_chelem()
@@ -233,15 +272,15 @@ function change_chelem()
 	}
 	change_chelem_annonce();
 	change_chelem_reussi();
-	calcule_points();
+	calculePoints();
 }
 
 function change_chelem_annonce()
 {
-	calcule_points();
+	calculePoints();
 }
 
 function change_chelem_reussi()
 {
-	calcule_points();
+	calculePoints();
 }

@@ -1,4 +1,9 @@
 <?php
+$partie = new Partie($db);
+$joueur = new Joueur($db);
+
+$aJPar = array();
+
 $id_tournoi = $_GET["id_tournoi"];
 $id_session = $_GET["id_session"];
 
@@ -10,81 +15,68 @@ echo $this->drawBarreBouton(
 		);
 
 //	R�cup�rer la liste des joueurs de la session
-$req =	"select B.id, B.nom, B.prenom, B.nickname, B.portrait, A.position ".
-		"from	r_sessions_joueurs A, joueurs B ".
-		"where	A.id_tournoi=" . intval($id_tournoi) . " ".
-		"and	A.id_session=" . intval($id_session) . " ".
-		"and	B.id=A.id_joueur ".
-		"order by A.position asc";
-$this->db->sqlOpenCur($res, $req);
-$nbJSess = $this->db->sqlCountCur($res);
-while	($row=$this->db->sqlFetchCur($res)) {
-	$aJSess[$row->id]=$row;
-	$nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
-	$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
+$tabJoueursSession = $joueur->getJoueursBySession($id_tournoi, $id_session);
+foreach($tabJoueursSession as $k => $row) {
+    $aJSess[$row->ID] = $row;
+    $nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom, 0, 1).".";
+    $entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 }
-$this->db->sqlCloseCur($res);
 
 $entete[] = "Contrat";
 
 echo $this->openListe($entete, true);
-$req =	"select * ".
-		"from	parties ".
-		"where	id_tournoi=" . intval($id_tournoi) . " ".
-		"and	id_session=" . intval($id_session) . " ".
-		"order by id asc";
-$this->db->sqlOpenCur($res, $req);
-$nbParties = $this->db->sqlCountCur($res);
+$tabParties = $partie->getPartiesBySession($id_tournoi, $id_session);
 $cumul=array();
-while	($row=$this->db->sqlFetchCur($res)) {
+/*
+print_r($tabParties);
+exit();
+*/
+foreach	($tabParties as $k => $row)
+{
 	$petitaubout=($row->petitaubout==1) ? "oui" : "non";
 	$contratreussi=($row->annonce_reussie==1) ? $this->makeImg("reussie.gif") : $this->makeImg("ratee.gif");
 	$lContrat="<table cellpadding=0 cellspacing=0 border=0><tr valign='top'><td>".$row->annonce."&nbsp;</td><td>".$contratreussi."</td></tr></table>";
-	$htmlContrat="<table>".
-				"	<tr valign=\"top\">".
-
-				"		<td class='resume-partie'>Contrat</td>".
-				"		<td class='resume-partie'>".$lContrat."</td>".
-				"	</tr>".
-				"	<tr>".
-				"		<td class='resume-partie'>Bouts</td>".
-				"		<td class='resume-partie'>".$row->nombre_bouts."</td>".
-				"	</tr>".
-				"	<tr>".
-				"		<td class='resume-partie'>Petit au bout</td>".
-				"		<td class='resume-partie'>".$petitaubout."</td>".
-				"	</tr>";
+	$htmlContrat=   "<table>".
+                    "	<tr valign=\"top\">".
+                    "		<td class='resume-partie'>Contrat</td>".
+                    "		<td class='resume-partie'>".$lContrat."</td>".
+                    "	</tr>".
+                    "	<tr>".
+                    "		<td class='resume-partie'>Bouts</td>".
+                    "		<td class='resume-partie'>".$row->nombre_bouts."</td>".
+                    "	</tr>".
+                    "	<tr>".
+                    "		<td class='resume-partie'>Petit au bout</td>".
+                    "		<td class='resume-partie'>".$petitaubout."</td>".
+                    "	</tr>";
 	if	($row->poignee!="aucune")
 		$htmlContrat.=	"	<tr>".
-					"		<td class='resume-partie'>Poign�e</td>".
-					"		<td class='resume-partie'>".$row->poignee."</td>".
-					"	</tr>";
+                        "		<td class='resume-partie'>Poign�e</td>".
+                        "		<td class='resume-partie'>".$row->poignee."</td>".
+                        "	</tr>";
 	$htmlContrat.=	"	<tr>".
-				"		<td class='resume-partie'>Points</td>".
-				"		<td class='resume-partie'>".$row->points."</td>".
-				"	</tr>".
-				"</table>";
+                    "		<td class='resume-partie'>Points</td>".
+                    "		<td class='resume-partie'>".$row->points."</td>".
+                    "	</tr>".
+                    "</table>";
 	$htmlContrat=$this->openCadre().$htmlContrat.$this->closeCadre();
 
 	//	R�cup�rer la liste des joueurs de la partie
-	$req2 = "select id_joueur, type, points ".
-			"from	r_parties_joueurs ".
-			"where	id_tournoi=" . intval($id_tournoi) . " ".
-			"and	id_session=" . intval($id_session) . " ".
-			"and	id_partie=" . intval($row->id) . " ".
-			"order by id_joueur asc";
-	$this->db->sqlOpenCur($res2, $req2);
-	$nbJPar = $this->db->sqlCountCur($res2);
-	$aJPar=array();
-	while	($row2=$this->db->sqlFetchCur($res2)) {
-		$aJPar[$row2->id_joueur]=$row2;
-		if	(array_key_exists($row2->id_joueur, $cumul))
-			$cumul[$row2->id_joueur] = $cumul[$row2->id_joueur] + $row2->points; 
-		else
-			$cumul[$row2->id_joueur] = $row2->points; 
-		
-	}
-	$this->db->sqlCloseCur($res2);
+    //echo "getJoueursByPartie($id_tournoi, $id_session, $row->id) <br>";
+    $tabJoueurs = $joueur->getJoueursByPartie($id_tournoi, $id_session, $row->id);
+    /*
+    print_r($tabJoueurs);
+    exit();
+    */
+
+    foreach($tabJoueurs as $kJ => $row2)
+    {
+        $aJPar[$row2->id_joueur]=$row2;
+        if	(array_key_exists($row2->id_joueur, $cumul))
+            $cumul[$row2->id_joueur] = $cumul[$row2->id_joueur] + $row2->points;
+        else
+            $cumul[$row2->id_joueur] = $row2->points;
+    }
 
 	$data=array();
 	foreach	($aJSess as $idJ => $detJ) {
@@ -94,11 +86,11 @@ while	($row=$this->db->sqlFetchCur($res)) {
 				$class="liste-joueur-preneur";
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
-			case "appelé":
+			case "called":
 				$class="liste-joueur-appele";
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
-			case "défense":
+			case "defense":
 				$class="liste-joueur-defense";
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
@@ -130,9 +122,7 @@ while	($row=$this->db->sqlFetchCur($res)) {
 		);
 }
 
-$this->db->sqlCloseCur($res);
-
-if ($nbParties>0)
+if (count($tabParties)>0)
 {
 	$data=array();
 	foreach	($aJSess as $idJ => $detJ) {

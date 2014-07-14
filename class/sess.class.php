@@ -1,5 +1,5 @@
 <?php
-class Session
+class Sess
 {
 
 	var	$logId;

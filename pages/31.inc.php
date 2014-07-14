@@ -28,7 +28,7 @@ echo $form->makeHidden("id_tournoi", "id_tournoi", $form->getValeur("id_tournoi"
 if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
 echo $form->makeInput("datedeb", "datedeb", "Date de début (*)", $form->getValeur("datedeb"));
-echo $form->makeInput("datefin", "datefin", "Date de fin", $form->getValeur("datefin"));
+//echo $form->makeInput("datefin", "datefin", "Date de fin", $form->getValeur("datefin"));
 echo $form->makeComboMultiple("liste_joueurs[]", "liste_joueurs", "Joueurs (*)", $form->getValeur("liste_joueurs"), $alisteJoueurs);
 echo $form->makeTexteRiche("commentaires", "commentaires", $form->getValeur("commentaires"));
 echo $form->makeNoteObligatoire();

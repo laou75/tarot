@@ -1,45 +1,27 @@
 <?php
-echo $this->drawBarreBouton(
-	null,
-	$this->makeBouton($_SERVER["HTTP_REFERER"], $this->makeImg("retour.gif")."&nbsp;Retour", "Retour"));
+$joueur = new Joueur($db);
+$session = new Session($db);
+
 $id_tournoi=$_GET["id_tournoi"];
 
+echo $this->drawBarreBouton(
+    null,
+    $this->makeLinkBoutonRetour(2, 'id_tournoi='.$id_tournoi));
 /*
  * 	TABLEAU
  */
-$res=null;
-$req =	"select distinct A.id_joueur, B.nom, B.nickname, B.prenom, B.portrait ".
-		"from	r_sessions_joueurs A, joueurs B ".
-		"where	A.id_tournoi=" . intval($id_tournoi) . " " .
-		"and	B.id=A.id_joueur ".
-		"order by A.id_joueur asc";
-$this->db->sqlOpenCur($res, $req);
-$nb = $this->db->sqlCountCur($res);
-while	($row=$this->db->sqlFetchCur($res))
+$entete = array();
+$aTab = $joueur->getJoueursByTournoi($id_tournoi);
+foreach($aTab as $idJoueur => $row)
 {
-	$aTab[$row->id_joueur] = $row;
-	$nick=isset($row->nickname)?$row->nickname:$row->prenom." ".substr($row->nom,0,1).".";
+	$nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
 	$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 }
-$this->db->sqlFreeResult($res);
-$res0=null;
-$req0 =	"select id ".
-		"from	sessions ".
-		"where	id_tournoi=" . intval($id_tournoi) . " " .
-		"order by id asc";
-$this->db->sqlOpenCur($res0, $req0);
-$nb = $this->db->sqlCountCur($res0);
-while	($row0=$this->db->sqlFetchCur($res0))
-{
-	$aTabSess[$row0->id] = $row0;
-}
-$this->db->sqlFreeResult($res0);
+$aTabSess = $session->getSessionByTournoi($id_tournoi);
 ?>
-<div class="text-center">
-	<table>
-		<tr><th>Statistiques</th></tr>
-		<tr>
-			<td align='center'>
+<div class="row">
+    <h3>Statistiques</h3>
+	<div class="col-md-6">
 <?php
 echo $this->openListe($entete);
 foreach($aTabSess as $idS => $detS)
@@ -47,60 +29,40 @@ foreach($aTabSess as $idS => $detS)
 	$data=array();
 	foreach($aTab as $idJ => $detJ)
 	{
-		$req2 = "select sum(points) as points, id_tournoi, id_session ".
-				"from	r_parties_joueurs ".
-				"where	id_tournoi=" . intval($id_tournoi) . " ".
-				"and	id_session=" . intval($idS) . " ".
-				"and	id_joueur =" . intval($idJ) . " ".
-				"group by id_tournoi, id_session";
-		$ret=$db->sqlSelect($row2, $req2);
-		if ($ret>0)
+        $row2 = $session->getStatsSessionByJoueur($id_tournoi, $idS, $idJ);
+		if (isset($row2))
 			$data[]=sprintf("%01.1f", $row2->points);
-		elseif ($ret==-100)
+		else
 			$data[]="---";
 	}
 	echo $this->ligneListe(	$data , null, "align='right'");
 }
 echo $this->closeListe();
-
-/*
- * 	COURBE
- */
 ?>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<img src="pages/6.plot.inc.php?<?=$_SERVER["QUERY_STRING"]; ?>">
-			</td>
-		</tr>
-	</table>
-	<br>
-	<table>
-		<tr><th>Cumul des pertes</th></tr>
-		<tr>
-			<td align='center'>
+    </div>
+    <div class="col-md-6">
+        <div id="container1" style="width:100%; height:400px;"></div>
+    </div>
+</div>
+
+<div class="row">
+    <h3>Cumul des pertes</h3>
+    <div class="col-md-6">
 <?php
 echo $this->openListe($entete);
-
 $cumul=array();
 foreach($aTabSess as $idS => $detS)
 {
 	$data=array();
 	foreach($aTab as $idJ => $detJ)
 	{
-		$req2 = "select sum(points) as CUMUL, id_tournoi, id_session ".
-				"from	r_parties_joueurs ".
-                "where	id_tournoi=" . intval($id_tournoi) . " ".
-                "and	id_session=" . intval($idS) . " ".
-                "and	id_joueur =" . intval($idJ) . " ".
-                "group by id_tournoi, id_session";
-		if	($db->sqlSelect($row2, $req2)==-100)
+        $row2 = $session->getStatsSessionByJoueur($id_tournoi, $idS, $idJ);
+		if	(!isset($row2->points))
 			$truc=0;
-		elseif ($row2->CUMUL>0)
+		elseif ($row2->points > 0)
 			$truc=0;
 		else
-			$truc=$row2->CUMUL;
+			$truc=$row2->points;
 		if	(array_key_exists($idJ, $cumul))
 			$cumul[$idJ]=$cumul[$idJ]+$truc;
 		else
@@ -111,21 +73,15 @@ foreach($aTabSess as $idS => $detS)
 }
 echo $this->closeListe();
 ?>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<img src="pages/6bis.plot.inc.php?<?=$_SERVER["QUERY_STRING"]; ?>">
-			</td>
-		</tr>
-	</table>
-	<br>
-	<table>
-		<tr><th>Répartition des pertes</th></tr>
-		<tr>
-			<td align='center'>
-				<img src="pages/6ter.plot.inc.php?<?=$_SERVER["QUERY_STRING"]; ?>">
-			</td>
-		</tr>
-	</table>
+    </div>
+    <div class="col-md-6">
+        <div id="container2" style="width:100%; height:400px;"></div>
+    </div>
+</div>
+
+<div class="row">
+    <h3>Répartition des pertes</h3>
+    <div class="col-md-12">
+        <div id="container3" style="width:100%; height:400px;"></div>
+    </div>
 </div>

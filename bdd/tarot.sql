@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `r_parties_joueurs` (
   `id_session` int(6) NOT NULL DEFAULT '0',
   `id_partie` int(6) NOT NULL DEFAULT '0',
   `id_joueur` int(3) NOT NULL DEFAULT '0',
-  `type` enum('preneur','appelé','défense','mort') NOT NULL DEFAULT 'mort',
+  `type` enum('preneur','called','defense','mort') NOT NULL DEFAULT 'mort',
   `points` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_tournoi`,`id_session`,`id_partie`,`id_joueur`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des joueurs par parties';

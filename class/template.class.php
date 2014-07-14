@@ -40,7 +40,11 @@ class Template
                         ?   $this->rowPage->label
                         :   '');
 		
-		$logo = $this->modeMini?"":(isset($this->rowPage->logo))?$this->makeImg("logos/".$this->rowPage->logo):"";
+		$logo = $this->modeMini
+                ?   ''
+                :   (isset($this->rowPage->logo))
+                    ?   $this->makeImg("logos/".$this->rowPage->logo, 'logo', ' align="left"')
+                    :   '';
 
 		//	Traiter les donn�es post�es
 		if (count($_POST)>0)
@@ -48,22 +52,27 @@ class Template
 
         ob_start();
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html>
+    <html lang="fr">
 	<head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title><?php echo $this->titre;?></title>
         <!-- Bootstrap -->
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
         <style type="text/css">
-            .lead{margin-top: 50px;}
+            .lead{margin-top: 55px;}
+            input.red,  select.red, {background-color: #ffb79c;}
+            label.red{color: #ff115c;}
         </style>
-        <link rel="SHORTCUT ICON" href="http://www.guig.net/favicon.ico"/>
-		<script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
+        <script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/calcul.js'></script>
 <?php
 		//	Inclure le js spécifique si y'en a
+/*
 		if	(file_exists("js/".$this->id.".js"))
 			echo "		<script type='text/javascript' src='".$GLOBALS["Config"]["URL"]["ROOT"]."js/".$this->id.".js'></script>\n";
+*/
 		$libCtxt="";
 		if	(isset($_GET["id_tournoi"]))
 			$libCtxt .= ", tournoi n°".$_GET["id_tournoi"];
@@ -73,8 +82,17 @@ class Template
 			$libCtxt .= ", partie n°".$_GET["id_partie"];
 ?>
 	</head>
-	<body>
-
+<?php
+        if($this->id==11 || $this->id==12) {
+?>
+	<body onload="calculePoints()">
+<?php
+        } else {
+?>
+    <body>
+<?php
+        }
+?>
     <div role="navigation" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -122,11 +140,11 @@ class Template
         </div>
     </div>
 
-    <div class="container" style="margin-top: 50px;">
-        <?php echo $logo?><h1 style="float: right;"><?php echo $this->titre.$libCtxt;?></h1>
+    <div class="container-fluid" style="margin-top: 55px;">
+        <h2 style="float: left;"><!--<?php echo $logo?>--><?php echo $this->titre.$libCtxt;?></h2>
     </div>
 
-    <div class="container">
+    <div class="container-fluid">
 <?php
         if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php"))
             include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php");
@@ -134,16 +152,20 @@ class Template
             echo $GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php";
 ?>
         </div>
-
 		<div id="pop-up" class="pop-portrait" style="display:none;"></div>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="js/jquery-1.11.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script src="js/highcharts.js"></script>
+    <?php
+    if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php"))
+        include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php");
+    ?>
+
 	</body>
 </html>
 <?php
 	    ob_end_flush();
-	}
+	} // end __construct()
 
 	/*
 	 * 
@@ -158,7 +180,6 @@ class Template
 		while	($row=$this->db->sqlFetchCur($res))
 		{
             $ret .= "<li>".$this->makeLink("index.php?id=".$row->id, $row->label,  $row->description);
-
 		}
 		$this->db->sqlCloseCur($res);
 		return $ret;
@@ -214,30 +235,27 @@ class Template
 	{
 		$row=$this->getInfosMenu($id);
 
-		$label=($this->modeMini)?"":$row->label;
+		$label= ($this->modeMini) ? '' : $row->label;
 
-		$desc = (isset($row->description))?$row->description:$row->label;
+		$desc = (isset($row->description)) ? $row->description : $row->label;
 
 		if	($id==(int)$id)
-			$url=(isset($parm)) ? "index.php?id=".$id."&amp;" . $parm:"index.php?id=".$id;
+			$url=(isset($parm)) ? 'index.php?id='.$id.'&amp;' . $parm : 'index.php?id='.$id;
 		else
 			$url=$id;
 
         if (isset($row->glyphs))
         {
             $url = $GLOBALS["Config"]["URL"]["ROOT"].$url;
-            return '<a class="bouton" title="'.$desc.'" href="'.$url.'">'.
+            return '<a class="btn btn-default btn-sm" title="'.$desc.'" href="'.$url.'">'.
                    '<span class="'.$row->glyphs.'"></span> '.$label.
                    '</a>';
         }
         else
         {
             $label = (isset($row->icone)) ? $this->makeImg($row->icone)."&nbsp;".$label:$label;
-
-            return $this->makeLink($url, $label, $desc, "bouton", $options);
+            return $this->makeLink($url, $label, $desc, "btn btn-default btn-sm", $options);
         }
-
-
     }
 
 	/*
@@ -248,7 +266,7 @@ class Template
 		$row=$this->getInfosMenu($id);
 
 		if	($id==(int)$id)
-			$url=(isset($parm))?"index.php?id=".$id."&amp;".$parm:"index.php?id=".$id;
+			$url=(isset($parm)) ? "index.php?id=".$id."&amp;".$parm : "index.php?id=".$id;
 		else
 			$url=$id;
         if (isset($row->description))
@@ -258,7 +276,7 @@ class Template
         else
             $desc = 'Retour';
 
-        return '<a class="bouton" title="'.$desc.'" href="'.$url.'">'.
+        return '<a class="btn btn-primary btn-sm" title="'.$desc.'" href="'.$url.'">'.
                 '<span class="glyphicon glyphicon-share-alt"></span> Retour'.
                 '</a>';
 	}
@@ -338,29 +356,22 @@ class Template
 	 */
 	function drawBarreBouton($colonnes=null, $retour=null)
 	{
-		if (isset($retour) && !isset($colonnes))
-			$ret=	"<table width='100%'>\n".
-					"	<tr>\n".
-					"		<td align='right'>\n";
-		else
-			$ret=	"<table width='100%'>\n".
-					"	<tr>\n".
-					"		<td align='left'>\n";
-		if (isset($colonnes))
-		{
-			foreach($colonnes as $id => $detail)
-			{
-				$ret.=	$detail." \n";
-			}
-		}
-		if (isset($retour) && isset($colonnes))
-			$ret.=	"		</td>".
-					"		<td align='right'>";
-		if (isset($retour))
-			$ret.=	$retour."\n";
-		$ret.=	"		</td>\n".
-				"	</tr>\n".
-				"</table\n>";
+        $ret = '<div class="row"><div class="col-md-8">';
+        if (isset($colonnes))
+        {
+            foreach($colonnes as $id => $detail)
+            {
+                $ret.=	$detail." \n";
+            }
+        }
+        $ret .= '</div>';
+        $ret .= '<div class="col-md-4 text-right">';
+        if (isset($retour))
+        {
+            $ret.=	$retour."\n";
+        }
+        $ret .='</div></div>';
+
 		return $ret;
 	}
 
@@ -413,7 +424,7 @@ class Template
 	 */
 	function closeListe()
 	{
-		$ret=	"</table>\n";
+		$ret=	"</table>";
 		return $ret;
 	}
 
@@ -422,6 +433,7 @@ class Template
 	 */
 	function lienPortrait($image="", $label, $labelLong=null)
 	{
+        return $label;
 		if ($image=="") $image="inconnu.gif";
 		if (!isset($labelLong)) $labelLong=$label;
 		$ret=	"<a href=\"#\" onMouseOver=\"openPortrait('".$image."','".$labelLong."');\" onMouseOut=\"closePortrait();\">".$label."</a>";

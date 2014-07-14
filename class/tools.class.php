@@ -18,7 +18,7 @@ class Tools
 			$src=imagecreatefrompng($Source.$Image); 
 		else 
 		{
-			return "($Image) : Format d'image non support�. Utilisez des *.gif, des *.png, des *.jpg ou des *.bmp";
+			return "($Image) : Format d'image non supporté. Utilisez des *.gif, des *.png, des *.jpg ou des *.bmp";
 		} 
 		$size = getimagesize($Source.$Image); 
 		if ($ratio<$size[1])

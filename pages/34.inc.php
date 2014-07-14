@@ -1,35 +1,33 @@
 <?php
-echo $this->drawBarreBouton(
-	null,
-	$this->makeBouton($_SERVER["HTTP_REFERER"], $this->makeImg("retour.gif")."&nbsp;Retour", "Retour"));
+$joueurs = new Joueur($db);
+$parties = new Partie($db);
 
 $id_session=$_GET["id_session"];
 $id_tournoi=$_GET["id_tournoi"];
 
-//	R�cup�ration des joueurs
-$req =	"select A.id_joueur, B.nom, B.prenom, B.nickname, B.portrait ".
-		"from	r_sessions_joueurs A, joueurs B ".
-        "where	A.id_tournoi=" . intval($id_tournoi) . " ".
-        "and	A.id_session=" . intval($id_session) . " ".
-        "and	B.id=A.id_joueur ".
-		"order by A.id_joueur asc";
-$db->sqlOpenCur($res, $req);
-if ($this->db->sqlCountCur($res)<1)
+echo $this->drawBarreBouton(
+    null,
+    //$this->makeLinkBoutonRetour(30, 'id_tournoi='.$id_tournoi));
+    $this->makeLinkBoutonRetour(10, 'id_tournoi='.$id_tournoi.'&id_session='.$id_session));
+
+//	Récupération des joueurs
+$tabJoueurs = $joueurs->getJoueursBySession($id_tournoi, $id_session);
+if (count($tabJoueurs)<1)
 	echo("Pas de joueurs !");
 else
 {
-	while	($row=$db->sqlFetchCur($res))
-	{
+    foreach($tabJoueurs as $k => $row)
+    {
 		$aTabJ[$row->id_joueur] = $row;
-		$nick=isset($row->nickname)?$row->nickname:$row->prenom." ".substr($row->nom,0,1).".";
+		$nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
 		$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 	}
-	$db->sqlFreeResult($res);
-
+    $aTabPar = $parties->getPartiesBySession($id_tournoi, $id_session);
+    /*
 	$req0 =	"select id ".
 			"from	parties ".
-        "where	id_tournoi=" . intval($id_tournoi) . " ".
-        "and	id_session=" . intval($id_session) . " ".
+            "where	id_tournoi=" . intval($id_tournoi) . " ".
+            "and	id_session=" . intval($id_session) . " ".
 			"order by id asc";
 	$db->sqlOpenCur($res0, $req0);
 	if ($this->db->sqlCountCur($res0)<1)
@@ -41,13 +39,15 @@ else
 			$aTabPar[$row0->id] = $row0;
 		}
 		$db->sqlFreeResult($res0);
-		
+    */
+    if (count($aTabPar)<1)
+        echo("Pas de parties!");
+    else
+    {
 ?>
-<div  class="text-center">
-	<table>
-		<tr><th>Statistiques</th></tr>
-		<tr>
-			<td align='center'>
+<div class="row">
+    <h3>Statistiques</h3>
+    <div class="col-md-6">
 <?php
 		echo $this->openListe($entete);
 		$cumul=array();
@@ -78,12 +78,10 @@ else
 		}
 		echo $this->closeListe();
 ?>
-			</td>
-		</tr>
-		<tr>
-			<td><img src="pages/34.plot.inc.php?<?=$_SERVER["QUERY_STRING"]; ?>"></td>
-		</tr>
-	</table>
+    </div>
+    <div class="col-md-6">
+        <div id="container1" style="width:100%; height:400px;"></div>
+    </div>
 </div>
 <?php
 	}

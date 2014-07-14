@@ -1,7 +1,10 @@
 <?php
 $form = new Formulaire();
+
 $form->setValeurs($_POST);
+
 $err="";
+
 if	(strlen($form->getValeur("id_preneur"))==0)
 	$err .= "Sélectionner le preneur<br>";
 if	(strlen($form->getValeur("annonce"))==0)
@@ -22,18 +25,23 @@ if	($err=="")
 		$nbDef=0;
 	}
 
-	for($i=1;$i<10;$i++)
-	{
-		if	(strlen($form->getValeur("def".$i))>0)
-			$nbDef++;
-	}
-
+    $defense = $form->getValeur("defense");
+    foreach($defense as $k => $v)
+    {
+        if	(strlen($v)>0)
+            $nbDef++;
+    }
 	if	($nbAttaquant==1) $nbDef++;
 
-	$form->setValeur("annonce_reussie", ($form->getValeur("total")>0)?1:0);
-	$this->db->sqlInsert("parties", $form->getValeurs());
 
-	$idPar = $this->db->sqlLastInsert("parties", "id");
+
+
+	$form->setValeur("annonce_reussie", ($form->getValeur("total")>0) ? 1 : 0);
+	$this->db->sqlInsert("parties", $form->getValeurs());
+    $idPar = $this->db->sqlLastInsert("parties", "id");
+
+
+
 
 	$valJPar["id_tournoi"] = $form->getValeur("id_tournoi");
 	$valJPar["id_session"] = $form->getValeur("id_session");
@@ -46,7 +54,7 @@ if	($err=="")
 	$this->db->sqlOpenCur($resJ, $reqJ);
 	$nbJ=$this->db->sqlCountCur($resJ);
 
-	while	($rowJ=$this->db->sqlFetchCur($resJ))
+	while($rowJ=$this->db->sqlFetchCur($resJ))
 	{
 		$valJPar["id_joueur"]= $rowJ->id_joueur;
 		if	($form->getValeur("id_preneur")==$rowJ->id_joueur)
@@ -56,12 +64,12 @@ if	($err=="")
 		}
 		elseif	($form->getValeur("id_second")==$rowJ->id_joueur)
 		{
-			$valJPar["type"]= "appelé";
+			$valJPar["type"]= "called";
 			$valJPar["points"]= $form->getValeur("total");
 		}
-		elseif	($form->getValeur("def1")==$rowJ->id_joueur || $form->getValeur("def2")==$rowJ->id_joueur || $form->getValeur("def3")==$rowJ->id_joueur || $form->getValeur("def4")==$rowJ->id_joueur || $form->getValeur("def5")==$rowJ->id_joueur || $form->getValeur("def6")==$rowJ->id_joueur)
-		{
-			$valJPar["type"]= "défense";
+        elseif	(in_array($rowJ->id_joueur, $defense))
+        {
+			$valJPar["type"]= "defense";
 			$valJPar["points"]= $form->getValeur("total")*(-1);
 		}
 		else

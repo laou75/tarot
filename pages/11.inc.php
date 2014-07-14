@@ -1,5 +1,6 @@
 <?php
 $form = new Formulaire();
+$joueurs = new Joueur($db);
 
 if	(count($_POST)>0)
 	$form->setValeurs($_POST);
@@ -22,27 +23,12 @@ if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
 
 echo $form->openFieldset("Joueurs");
-$reqJ = "SELECT B.id as ID, concat(B.prenom, ' ', B.nom) as LIBELLE ".
-		"from	r_sessions_joueurs A, joueurs B ".
-		"where	B.id = A.id_joueur ".
-		"and	A.id_tournoi = " . intval($form->getValeur("id_tournoi")) . " ".
-		"and	A.id_session = " . intval($form->getValeur("id_session")) . " ".
-		"order by A.position asc";
-		
-$this->db->sqlOpenCur($resJ, $reqJ);
-$nbJ=$this->db->sqlCountCur($resJ);
-while	($rowJ=$this->db->sqlFetchCur($resJ))
-{
-	$aTableau[$rowJ->ID] = $rowJ->LIBELLE;
-}
-$this->db->sqlCloseCur($resJ);
-
+$aTableau = $joueurs->getArrayJoueursBySession($form->getValeur("id_tournoi"), $form->getValeur("id_session"));
 echo $form->makeCombo("id_preneur", "id_preneur", "Preneur (*)", $form->getValeur("id_preneur"), $aTableau, " onChange=\"checkSelectJoueur('id_preneur')\"");
-if ($nbJ>=5)
-	echo $form->makeCombo("id_second", "id_second", "Appel�", $form->getValeur("id_second"), $aTableau, " onChange=\"checkSelectJoueur('id_second'); change_appele();\"");
-
+if (count($aTableau)>=5)
+	echo $form->makeCombo("id_second", "id_second", "Appelé", $form->getValeur("id_second"), $aTableau, " onChange=\"checkSelectJoueur('id_second'); change_appele();\"");
 $i=1;
-while($i<$nbJ) {
+while($i<count($aTableau)) {
 	if	(count($_POST)>0)
 		$champs[] = array("name"=>"def".$i, "type"=>"combo", "values"=>$aTableau, "value"=>$form->getValeur("def".$i), "options"=>" onChange=\"checkSelectJoueur('def".$i."')\"");
 	else
@@ -50,29 +36,32 @@ while($i<$nbJ) {
 	$der=$i;
 	$i++;
 }
-echo $form->makeMulti("defense", "defense", "Défense", $champs);
+echo $form->makeMulti("defense[]", "defense", "Défense", $champs);
 ?>
 <script type="text/javascript">
 function change_appele() {
-	d = document.forms[0];
-	if	(d.id_second.value!="") {
-		d.def<?=$der;?>.value=0;
-		d.def<?=$der;?>.style.display="none";
-	} else {
-		d.def<?=$der;?>.style.display="block";
-	}
+    if (document.getElementById("id_second") && document.getElementById("id_second").value!="")
+    {
+        document.getElementById("def<?php echo $der;?>").value=0;
+        document.getElementById("def<?php echo $der;?>").style.display="none";
+    }
+<?php if ($der>3) {?>
+    else
+    {
+        document.getElementById("defd.def<?php echo $der;?>").style.display="block";
+    }
+<?php }?>
 }
 </script>
 <?php
 echo $form->closeFieldset();
 
 echo $form->openFieldset("Contrat");
-echo $form->makeRadioEnum("annonce", "annonce", "Annonce (*)", $form->getValeur("annonce"), "parties", "annonce", false, $this->db, "onclick=\"calcule_points()\"");
-echo $form->makeInput("points", "points", "Points réalisés (*)", $form->getValeur("points"), "onchange=\"calcule_points()\"");
-echo $form->makeRadio("nombre_bouts", "nombre_bouts", "Nombre de bouts", $form->getValeur("nombre_bouts"), array(0=>"0", 1=>"1", 2=>"2", 3=>"3"), "onclick=\"calcule_points()\"");
-echo $form->makeRadio("petitaubout", "petitaubout", "Petit au bout ?", $form->getValeur("petitaubout"), array(0=>"non", 1=>"oui"), "onclick=\"calcule_points()\"");
-
-echo $form->makeRadioEnum("poignee", "poignee", "Poignée ?", $form->getValeur("poignee"), "parties", "poignee", false, $this->db, "onclick=\"calcule_points()\"");
+echo $form->makeRadioEnum("annonce", "annonce", "Annonce (*)", $form->getValeur("annonce"), "parties", "annonce", false, $this->db, "onclick=\"calculePoints()\"");
+echo $form->makeInput("points", "points", "Points réalisés (*)", $form->getValeur("points"), "onchange=\"calculePoints()\"");
+echo $form->makeRadio("nombre_bouts", "nombre_bouts", "Nombre de bouts", $form->getValeur("nombre_bouts"), array(0=>"0", 1=>"1", 2=>"2", 3=>"3"), "onclick=\"calculePoints()\"");
+echo $form->makeRadio("petitaubout", "petitaubout", "Petit au bout ?", $form->getValeur("petitaubout"), array(0=>"non", 1=>"oui"), "onclick=\"calculePoints()\"");
+echo $form->makeRadioEnum("poignee", "poignee", "Poignée ?", $form->getValeur("poignee"), "parties", "poignee", false, $this->db, "onclick=\"calculePoints()\"");
 echo $form->makeInput("total", "total", "Total", $form->getValeur("total"), " READONLY");
 echo $form->closeFieldset();
 

@@ -1,88 +1,112 @@
 <?php
-include("../jpgraph/jpgraph.php");
-include("../jpgraph/jpgraph_line.php");
-include("../include/config.inc.php");
-include("../class/db.class.php");
-
 $id_session=$_GET["id_session"];
 $id_tournoi=$_GET["id_tournoi"];
 
-// Create the graph. These two calls are always required
-$graph  = new Graph(700, 500,"auto");
-$graph->SetScale( "textlin");
-$graph->xaxis->title->Set("Partie");
-$graph->yaxis->title->Set("Points");
-$graph->legend->Pos(0.05,0.9,"left","bottom");
-$graph->SetBackgroundGradient('blue','cyan',GRAD_HOR,BGRAD_MARGIN);
-$graph->SetMargin(50,50,30,5);
+$joueurs = new Joueur($db);
+$parties = new Partie($db);
+
+$categories = '';
 
 //	R�cup�ration des joueurs
-$req =	"select A.id_joueur, B.nom, B.prenom ".
-		"from	r_sessions_joueurs A, joueurs B ".
-		"where	A.id_tournoi=" . intval($id_tournoi) . " ".
-		"and	A.id_session=" . intval($id_session) . " ".
-		"and	B.id=A.id_joueur ".
-		"order by A.id_joueur asc";
-$db->sqlOpenCur($res, $req);
-$nb = $db->sqlCountCur($res);
-while	($row=$db->sqlFetchCur($res))
-{
-	$aTabJ[$row->id_joueur] = $row;
-}
-$db->sqlFreeResult($res);
-
+$aTabJ = $joueurs->getJoueursBySession($id_tournoi, $id_session);
 
 //	R�cup�ration des parties
-$req0 =	"select id ".
-		"from	parties ".
-		"where	id_tournoi=" . intval($id_tournoi) . " ".
-		"and	id_session=" . intval($id_session) . " ".
-		"order by id asc";
-$db->sqlOpenCur($res0, $req0);
-$nb = $db->sqlCountCur($res0);
-while	($row0=$db->sqlFetchCur($res0))
-{
-	$aTabPar[$row0->id] = $row0;
-}
-$db->sqlFreeResult($res0);
+$aTabPar = $parties->getPartiesBySession($id_tournoi, $id_session);
 
-
-$i=0;
-$couleur=array("blue", "red", "green", "cyan", "orange", "black", "pink", "purple", "yellow");
-foreach($aTabJ as $idJ => $detJ)
+$listeJoueurs='';
+$totalCumulJoueur=0;
+foreach($aTabJ as $idJ => $det)
 {
 	// Some data
 	$old=0;
 	$ydata=array();
-	$ydata[] = 0;
+    $cumulJoueur=0;
+
 	foreach($aTabPar as $idP => $detP)
 	{
-		$req2 = "select sum(points) as CUMUL, id_tournoi, id_session, id_partie ".
-				"from	r_parties_joueurs ".
-                "where	id_tournoi=" . intval($id_tournoi) . " ".
-                "and	id_session=" . intval($id_session) . " ".
-				"and	id_partie=" . intval($idP) . " ".
-				"and	id_joueur =" . intval($idJ) . " ".
-				"group by id_tournoi, id_session, id_partie";
-		if	($db->sqlSelect($row2, $req2)==-100)
-			$truc=0;
-		else
-			$truc=$row2->CUMUL;
+        $row2 = $parties->getStatsPartie($id_tournoi, $id_session, $idP, $idJ);
+        if	(!isset($row2->CUMUL))
+            $truc=0;
+        else
+            $truc=$row2->CUMUL;
+        if ($truc<0)
+        {
+            $cumulJoueur = $cumulJoueur + $truc;
+            $totalCumulJoueur = $truc;
+        }
 		$old	=	$old + $truc;
 		$ydata[]=	$old;
-	}
-	// Create the linear plot
-	$lineplot[$i]=new LinePlot($ydata);
-	$lineplot[$i]->value->Show();
-	$lineplot[$i]->SetColor($couleur[$i]);
-	$lineplot[$i]->SetLegend($detJ->prenom." ".$detJ->nom);
-	$lineplot[$i]->mark->SetType(MARK_FILLEDCIRCLE);
-	$lineplot[$i]->mark->SetFillColor($couleur[$i]);
-	
-	// Add the plot to the graph
-	$graph->Add($lineplot[$i]);
-	$i++;
-}
 
-// Display the graph
-$graph->Stroke();
+        $series[$idJ] = array(  'name'  => $det->nickname,
+            'cumul' => $cumulJoueur,
+            'data'  => $ydata
+        );
+        $listeJoueurs .= '\'' . $det->nickname . '\', ';
+	}
+?>
+<script type="text/javascript">
+    $(function () {
+        $('#container1').highcharts({
+            title: {
+                text: 'Statistiques tournoi <?php echo $id_tournoi;?>, session <?php echo $id_session;?>',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Source: guig.net',
+                x: -20
+            },
+            xAxis: {
+                title: {
+                    text: 'Parties'
+                },
+                categories: [<?php echo $categories;?>]
+            },
+            yAxis: {
+                title: {
+                    text: 'Points'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ' pts'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+<?php
+$tmp='';
+$tmp2='';
+$tmp3='';
+foreach($series as $k => $v)
+{
+    $tmp .= 'name: \'' . $v['name'] . '\', '.PHP_EOL.'data: [';
+    foreach($v['data'] as $k2 => $v2)
+    {
+        $tmp .= $v2.', ';
+    }
+    $tmp = substr($tmp, 0, strlen($tmp)-2).']';
+    $tmp .= PHP_EOL.'}, {';
+    $tmp2 .= 'name: \'' . $v['name'] . '\', '.PHP_EOL.'data: ['.$v['cumul'].']';
+    $tmp2 .= PHP_EOL.'}, {';
+    $tmp3 .= '[\'' . $v['name'] . '\', ' . $v['cumul']/$totalCumulJoueur*100 .'],'.PHP_EOL;
+}
+$tmp = substr($tmp, 0, strlen($tmp)-4);
+$tmp2 = substr($tmp2, 0, strlen($tmp2)-4);
+$tmp3 = substr($tmp3, 0, strlen($tmp3)-2);
+echo $tmp;
+?>
+}]
+});
+
+    });
+</script>
+<?php
+}

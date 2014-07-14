@@ -9,7 +9,6 @@ class Formulaire
 	{
 		$this->widthLabel = " width=25%";
 		$this->widthData = " width=75%" ;
-		
 	}
 
 	function setValeurs($valeurs)
@@ -142,8 +141,9 @@ class Formulaire
 
 	function makeFileInput($name, $id, $label="", $value="", $image=null, $options="")
 	{
-		$image = (isset($image)) ? "<br>".$image : "";
-		return	"<tr id='tr".$id."'>\n".
+        $image = (isset($image)) ? '<br>' . $image : "";
+        $value = (isset($value)) ? ' value="' . $value . '"' : '';
+        return	"<tr id='tr".$id."'>\n".
 				"	<td".$this->widthLabel."><label for='$id'>$label</label></td>\n".
 				"	<td".$this->widthData."><input type='file' name='$name' id='$id' $options>".$image."</td>\n".
 				"</tr>\n";
@@ -168,6 +168,7 @@ class Formulaire
 				"</tr>\n";
 	}
 
+
 	function makeRadio($name, $id, $label="", $value=NULL, $valeurs, $options="")
 	{
 		$lstRadio="";
@@ -184,29 +185,7 @@ class Formulaire
 
 	function makeRadioEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db, $options="")
 	{
-		if	($addLigneVide==TRUE)
-			$aValuesLabels[NULL]="";
-
-        $resInfos='';
-
-		$db->sqlOpenCur($resInfos, "SHOW FULL COLUMNS FROM $table");
-		while ($rowInfos=$db->sqlFetchCur($resInfos))
-		{	
-			if ($rowInfos->Field==$colonne)
-			{
-				$type = $rowInfos->Type;
-				$type = substr($type, 5, strlen($type));		// virer 'enum(' au d�but
-				$type = substr($type, 0, strlen($type)-1);		// virer ')' � la fin
-				$aTmp = explode(",", $type );
-				while (list ($key, $val) = each ($aTmp)) 
-				{
-					$za = substr($val, 1, strlen($val)-2);
-					$aValuesLabels[$za] = $za;
-				}
-				break;
-			}
-		}
-		$db->sqlCloseCur($resInfos);
+        $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
 		return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options);
 	}
 	
@@ -300,27 +279,7 @@ class Formulaire
 
 	function makeComboEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db, $options)
 	{
-		if	($addLigneVide==TRUE)
-			$aValuesLabels[NULL]="";
-        $resInfos = '';
-		$db->sqlOpenCur($resInfos, "SHOW FULL COLUMNS FROM $table");
-		while ($rowInfos=$db->sqlFetchCur($resInfos))
-		{	
-			if ($rowInfos->Field==$colonne)
-			{
-				$type = $rowInfos->Type;
-				$type = substr($type, 5, strlen($type));		// virer 'enum(' au d�but
-				$type = substr($type, 0, strlen($type)-1);		// virer ')' � la fin
-				$aTmp = explode(",", $type );
-				while (list ($key, $val) = each ($aTmp)) 
-				{
-					$za = substr($val, 1, strlen($val)-2);
-					$aValuesLabels[$za] = $za;
-				}
-				break;
-			}
-		}
-		$db->sqlCloseCur($resInfos);
+        $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
 		return	$this->makeCombo($name, $id, $label, $value, $aValuesLabels);
 	}
 	
@@ -370,7 +329,7 @@ class Formulaire
 		return	"<tr><td colspan=2><span style=\"color:#008000;\">$texte</span></td></tr>\n";
 	}
 
-	function makeButton($value, $options="")
+	function makeButton($value, $options=' class="btn btn-success"')
 	{
 		
 		if (is_array($value))
@@ -400,11 +359,41 @@ class Formulaire
 					"</tr>\n";
 	}
 
-/*
- * ------------------------------------------------
- * --> Fonctions de transformation de date et heure
- * ------------------------------------------------
- */
+    private function getListeValeursEnum($table, $colonne, $addLigneVide, $db)
+    {
+        $aValuesLabels = array();
+        if	($addLigneVide==TRUE)
+            $aValuesLabels[NULL]="";
+
+        $resInfos='';
+
+        $db->sqlOpenCur($resInfos, "SHOW FULL COLUMNS FROM $table");
+        while ($rowInfos=$db->sqlFetchCur($resInfos))
+        {
+            if ($rowInfos->Field==$colonne)
+            {
+                $type = $rowInfos->Type;
+                $type = substr($type, 5, strlen($type));		// virer 'enum(' au d�but
+                $type = substr($type, 0, strlen($type)-1);		// virer ')' � la fin
+                $aTmp = explode(",", $type );
+                while (list ($key, $val) = each ($aTmp))
+                {
+                    $za = substr($val, 1, strlen($val)-2);
+                    $aValuesLabels[$za] = $za;
+                }
+                break;
+            }
+        }
+        $db->sqlCloseCur($resInfos);
+        return $aValuesLabels;
+    }
+
+
+    /*
+     * ------------------------------------------------
+     * --> Fonctions de transformation de date et heure
+     * ------------------------------------------------
+     */
  	
 	function textToTime($time=null)
 	{

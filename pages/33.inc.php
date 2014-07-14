@@ -23,8 +23,8 @@ if	(isset($err) && strlen($err)>0)
 if	(isset($warn) && strlen($warn)>0)
 	echo $form->makeMsgWarning($warn);
 echo $form->makeTexte("Commencée le", strftime ("%x", $form->getValeur("datedeb")));
-$datefin = (strlen($form->getValeur("datefin"))>0)?strftime ("%x", $form->getValeur("datefin")):"";
-echo $form->makeTexte("Terminée le", strftime ("%x", $datefin));
+//$datefin = (strlen($form->getValeur("datefin"))>0) ? strftime ("%x", $form->getValeur("datefin")) : '';
+//echo $form->makeTexte("Terminée le", strftime ("%x", $datefin));
 echo $form->makeTexte("Commentaire", $form->getValeur("commentaires"));
 echo $form->makeButton("Supprimer");
 echo $form->closeForm();

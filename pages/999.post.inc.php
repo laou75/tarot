@@ -22,7 +22,7 @@ if ($err=="")
 		else
 		{
 			//	Creation de la session
-			$sess = new Session();
+			$sess = new Sess();
 			$sess->sessionConnect($login, "admin");
 			$sessionTarot = $sess;
             $_SESSION["sessionTarot"] = $sess;

@@ -1,4 +1,5 @@
 <?php
+define('PATH_ROOT', __DIR__);
 include("include/includes.inc.php");
 
 $req =	"SELECT * ".
