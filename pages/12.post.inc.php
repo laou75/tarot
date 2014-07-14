@@ -35,13 +35,7 @@ if	($err=="")
 	if	($nbAttaquant==1) $nbDef++;
 
 	$form->setValeur("annonce_reussie", ($form->getValeur("total")>0) ? 1 : 0);
-    /*
-    echo '<pre>'.print_r($_POST, true).'</pre>';
-    echo   "id_tournoi : " . intval($form->getValeur("id_tournoi")).
-        " id_session : " . intval($form->getValeur("id_session"));
-    echo '<pre>'.print_r($form->getValeurs(), true).'</pre>';
-    exit();
-    */
+
     $this->db->sqlUpdate(  "parties",
                             array(  "id" => intval($form->getValeur("id_partie")),
                                     "id_tournoi" => intval($form->getValeur("id_tournoi")),
@@ -58,17 +52,7 @@ if	($err=="")
                 "and	id_session = " . intval($form->getValeur("id_session"))." ".
                 "and	id_partie = " . intval($form->getValeur("id_partie"));
 	$this->db->sqlExecute($reqTMP);
-/*
-	$reqJ = "SELECT id_joueur ".
-			"from	r_sessions_joueurs ".
-			"where	id_tournoi = " . intval($form->getValeur("id_tournoi"))." ".
-			"and	id_session = " . intval($form->getValeur("id_session"));
-	$this->db->sqlOpenCur($resJ, $reqJ);
-	$nbJ=$this->db->sqlCountCur($resJ);
 
-	while($rowJ=$this->db->sqlFetchCur($resJ))
-	{
-*/
     $tabJoueurs = $joueurs->getIdJoueursBySession($form->getValeur("id_tournoi"), $form->getValeur("id_session"));
     foreach($tabJoueurs as $kJ => $rowJ)
     {
@@ -95,7 +79,6 @@ if	($err=="")
 		}
 		$this->db->sqlInsert("r_parties_joueurs", $valJPar);
 	}
-//	$this->db->sqlCloseCur($resJ);
 
 	header("Location: ".$form->getValeur("from"));
 }

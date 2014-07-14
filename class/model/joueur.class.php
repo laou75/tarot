@@ -91,7 +91,6 @@ class Joueur
                 "and	id_session=" . intval($id_session) . " ".
                 "and	id_partie=" . intval($id_partie) . " ".
                 "order by id_joueur asc";
-        //var_dump($req);
         $this->db->sqlOpenCur($res, $req);
         while	($row=$this->db->sqlFetchCur($res))
         {

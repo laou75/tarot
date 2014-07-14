@@ -68,11 +68,6 @@ class Template
         <script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
         <script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/calcul.js'></script>
 <?php
-		//	Inclure le js spécifique si y'en a
-/*
-		if	(file_exists("js/".$this->id.".js"))
-			echo "		<script type='text/javascript' src='".$GLOBALS["Config"]["URL"]["ROOT"]."js/".$this->id.".js'></script>\n";
-*/
 		$libCtxt="";
 		if	(isset($_GET["id_tournoi"]))
 			$libCtxt .= ", tournoi n°".$_GET["id_tournoi"];

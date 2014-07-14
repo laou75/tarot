@@ -62,12 +62,7 @@ foreach	($tabParties as $k => $row)
 	$htmlContrat=$this->openCadre().$htmlContrat.$this->closeCadre();
 
 	//	R�cup�rer la liste des joueurs de la partie
-    //echo "getJoueursByPartie($id_tournoi, $id_session, $row->id) <br>";
     $tabJoueurs = $joueur->getJoueursByPartie($id_tournoi, $id_session, $row->id);
-    /*
-    print_r($tabJoueurs);
-    exit();
-    */
 
     foreach($tabJoueurs as $kJ => $row2)
     {

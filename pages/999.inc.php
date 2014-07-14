@@ -6,7 +6,6 @@ echo $this->makeIllustration("tarot.png", '', 'class="img-responsive"');
 <div class="col-md-4">
 <?php
 $form = new Formulaire();
-//echo $this->drawBarreBouton(null,$this->makeLinkBoutonRetour(2));
 
 if (count($_POST)>0)
 	$form->setValeurs($_POST);
