@@ -166,15 +166,12 @@ class Template
 	function drawMenu ($idPere=1)
 	{
 		$ret="";
-		$res=null;
-		// On part de la racine et on affiche tous les dossiers jusqu'au dossier à afficher
-		$req = "select * from menu where id_pere = " . intval($idPere) . " and visible_menu = 1 order by ordre asc";
-		$this->db->sqlOpenCur($res, $req);
-		while	($row=$this->db->sqlFetchCur($res))
+        $menus = new Menu($this->db);
+        $aTab = $menus->getMenusByIdPere($idPere);
+        foreach($aTab as $row)
 		{
             $ret .= "<li>".$this->makeLink("index.php?id=".$row->id, $row->label,  $row->description);
-		}
-		$this->db->sqlCloseCur($res);
+        }
 		return $ret;
 	}
 
@@ -199,11 +196,8 @@ class Template
 	 */
 	function getInfosMenu ($id)
 	{
-		$row=null;
-		$req = "select * from menu where id = " . intval($id);
-		$this->db->sqlSelect($row, $req);
-
-		return $row;
+        $menus = new Menu($this->db);
+        return $menus->getMenuById($id);
 	}
 
 	/*
@@ -324,13 +318,13 @@ class Template
 	 */
 	function getJoueur($id)
 	{
-		$row=null;
-		$this->db->sqlSelect($row, "select * from joueurs where id=" . intval($id));
-		if (isset($row->portrait) && strlen($row->portrait)>0) 
-			$portrait="<br>".$this->makePortrait("mini/".$row->portrait, $row->prenom." ".$row->nom);
-		else
-			$portrait="";
-		return $row->prenom." ".$row->nom.$portrait;
+        $joueurs = new Joueur($this->db);
+        $row = $joueurs->getJoueurById($id);
+        if (isset($row->portrait) && strlen($row->portrait)>0)
+            $portrait="<br>".$this->makePortrait("mini/".$row->portrait, $row->prenom." ".$row->nom);
+        else
+            $portrait="";
+		return $row->prenom . ' ' . $row->nom . $portrait;
 	}
 
 	/*

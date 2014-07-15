@@ -40,4 +40,15 @@ class Partie
         return $row;
     }
 
+    function getPartieById($id_tournoi, $id_session, $id_partie)
+    {
+        $row = null;
+        $req =	"select * ".
+                "from parties ".
+                "where id_tournoi = " . intval($id_tournoi). " ".
+                "and id_session = " . intval($id_session). " ".
+                "and id = " . intval($id_partie);
+        $this->db->sqlSelectArray($row, $req);
+        return $row;
+    }
 }

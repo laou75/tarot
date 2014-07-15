@@ -119,4 +119,29 @@ class Joueur
         return $aTabMorts;
     }
 
-} 
+    function getJoueurById($id)
+    {
+        $row = null;
+        $req =	"select * ".
+                "from joueurs ".
+                "where id = " . intval($id);
+        $this->db->sqlSelect($row, $req);
+        return $row;
+    }
+
+    function getArrayJoueurById($id)
+    {
+        $row = null;
+        $req =	"select * ".
+                "from joueurs ".
+                "where id = " . intval($id);
+        $this->db->sqlSelectArray($row, $req);
+        return $row;
+    }
+
+    function deleteJoueur($id)
+    {
+        return $this->db->sqlExecute("delete from joueurs where id = " . intval($id));
+
+    }
+}

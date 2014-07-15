@@ -8,8 +8,10 @@ if (count($_POST)>0)
 else
 {
 	$form->setValeur("id", $_GET["id_partie"]);
-	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
-	$this->db->sqlSelectArray($row, "select * from parties where id=" . intval($form->getValeur("id")) . " and id_tournoi=" . intval($form->getValeur("id_tournoi")));
+    $form->setValeur("id_session", $_GET["id_session"]);
+    $form->setValeur("id_tournoi", $_GET["id_tournoi"]);
+    $parties = new Partie($this->db);
+    $row = $parties->getPartieById($_GET["id_tournoi"], $_GET["id_session"], $_GET["id_partie"]);
 	$form->setValeurs($row);
 }
 
