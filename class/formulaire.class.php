@@ -265,7 +265,7 @@ class Formulaire
 	}
 
 	// La requete est de type SELECT xx as ID, yyy as LIBELLE from zzz
-	function makeComboSQL($name, $id, $label="", $value="", $requete="", $db, $options="")
+	function makeComboSQL($name, $id, $label="", $value="", $requete="", $db)
 	{
 		$res=null;
 		$db->sqlOpenCur($res, $requete);
@@ -277,7 +277,7 @@ class Formulaire
 		return	$this->makeCombo($name, $id, $label, $value, $aTableau);
 	}
 
-	function makeComboEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db, $options)
+	function makeComboEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db)
 	{
         $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
 		return	$this->makeCombo($name, $id, $label, $value, $aValuesLabels);
@@ -339,7 +339,7 @@ class Formulaire
 					"</tr>\n".
 					"<tr>\n".
 					"	<td colspan=2 align='center'>\n";
-			while (list ($key, $val) = each ($value))
+			while (list ($val) = each ($value))
 			{
 				$ret.="		<input type=\"submit\" value=\"".$val."\"".$options.">\n";
 			}
@@ -376,7 +376,7 @@ class Formulaire
                 $type = substr($type, 5, strlen($type));		// virer 'enum(' au d�but
                 $type = substr($type, 0, strlen($type)-1);		// virer ')' � la fin
                 $aTmp = explode(",", $type );
-                while (list ($key, $val) = each ($aTmp))
+                while (list ($val) = each ($aTmp))
                 {
                     $za = substr($val, 1, strlen($val)-2);
                     $aValuesLabels[$za] = $za;

@@ -27,7 +27,7 @@ class Tournoi
         $row = null;
         $req =	"select * ".
                 "from tournois ".
-                "where id = " . intval($id_session);
+                "where id = " . intval($id_tournoi);
         $this->db->sqlSelectArray($row, $req);
         return $row;
     }
