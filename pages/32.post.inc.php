@@ -25,8 +25,9 @@ if ($err=="")
                                   $form->getValeurs());
 
 	//	Traiter les joueurs
-	$this->db->sqlExecute("delete from r_sessions_joueurs where id_tournoi=" . intval($form->getValeur("id_tournoi"))." and id_session=" . intval($form->getValeur("id")) );
-	$i=1;
+    $this->db->sqlDelete('r_sessions_joueurs', array(   'id_tournoi' => $form->getValeur('id_tournoi'),
+                                                        'id_session' => $form->getValeur('id') ) );
+    $i=1;
 	foreach($form->getValeur("liste_joueurs") as $ii => $id)
 	{
 		$aTmp = array();

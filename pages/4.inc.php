@@ -10,7 +10,8 @@ if (count($_POST)>0)
 else
 {
 	$form->setValeur("id", $_GET["id_tournoi"]);
-	$this->db->sqlSelectArray($row, "select * from tournois where id=" . intval($form->getValeur("id")));
+    $tournois = new Tournoi($this->db);
+    $row = $tournois->getArrayTournoiById($form->getValeur('id'));
 	$form->setValeurs($row);
 }
 

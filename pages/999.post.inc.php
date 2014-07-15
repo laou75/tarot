@@ -14,10 +14,9 @@ if ($err=="")
         $row="";
 		$login = $_POST["identifiant"];
 		$password = $_POST["password"];
-		//	*** trou de sécurité *** Revoir le test ***
-        $this->db->sqlSelect($row, "select nickname, mdp from joueurs where nickname = '" . $this->db->sqlEscStr($login) ."'");
 
-        if (strtolower($row->mdp) != strtolower($password))
+        $joueurs = new Joueur($this->db);
+        if (!$joueurs->checkMDP($login, $password))
 			$err .= "Identification incorrecte !";
 		else
 		{

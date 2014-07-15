@@ -145,6 +145,14 @@ class Joueur
                 "from joueurs ".
                 "where id = " . intval($id);
         return $this->db->sqlExecute($req);
+    }
+
+    function checkMDP($login, $password)
+    {
+        $row = null;
+        $req =  "select nickname, mdp from joueurs where nickname = '" . $this->db->sqlEscStr($login). "'";
+        $this->db->sqlSelect($row, $req);
+        return (strtolower($row->mdp) == strtolower($password));
 
     }
 }

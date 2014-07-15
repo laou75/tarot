@@ -6,7 +6,8 @@ else
 {
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
 	$form->setValeur("id", $_GET["id_session"]);
-	$this->db->sqlSelectArray($row, "select * from sessions where id=" . intval($form->getValeur("id"))." and id_tournoi=" . intval($form->getValeur("id_tournoi")));
+    $session = new Session($this->db);
+    $row = $session->getArraySessionById($_GET["id_tournoi"], $_GET["id_session"]);
 	$form->setValeurs($row);
 }
 echo $this->drawBarreBouton(

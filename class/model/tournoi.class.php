@@ -21,4 +21,14 @@ class Tournoi
         }
         return $liste;
     }
+
+    function getArrayTournoiById($id_tournoi)
+    {
+        $row = null;
+        $req =	"select * ".
+                "from tournois ".
+                "where id = " . intval($id_session);
+        $this->db->sqlSelectArray($row, $req);
+        return $row;
+    }
 }
