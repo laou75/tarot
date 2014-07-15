@@ -7,26 +7,21 @@ else
 {
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
 	$form->setValeur("id", $_GET["id_session"]);
-	$this->db->sqlSelectArray($row, "select * from sessions where id=" . intval($form->getValeur("id"))." and id_tournoi=" . intval($form->getValeur("id_tournoi")) );
+
+    $sessions = new Session($this->db);
+    $row = $sessions->getArraySessionById($_GET["id_tournoi"], $_GET["id_session"]);
 	$form->setValeurs($row);
 
-    $res=null;
-	$this->db->sqlOpenCur($res, "select * from r_sessions_joueurs where id_tournoi=" . intval($form->getValeur("id_tournoi")) . " and id_session=" . intval($form->getValeur("id")) . " order by position asc" );
-	while	($row2=$this->db->sqlFetchCur($res))
-	{
-		$aTmp[$row2->id_joueur] = $row2->id_joueur; 
-	}
-	$this->db->sqlFreeResult($res);
+    $joueurs = new Joueur($this->db);
+    $aTmp = $joueurs->getJoueursBySession($_GET["id_tournoi"], $_GET["id_session"]);
 	$form->setValeur("liste_joueurs", $aTmp);
 }
-$res=null;
-$this->db->sqlOpenCur($res, "select * from joueurs order by nom asc, prenom asc" );
-$nb = $this->db->sqlCountCur($res);
-while	($row=$this->db->sqlFetchCur($res))
+
+$alisteJoueurs = array();
+foreach($aTmp as $k => $row2)
 {
-	$alisteJoueurs[$row->id] = $row->prenom." ".$row->nom; 
+    $alisteJoueurs[$row2->id] = $row2->prenom." ".$row2->nom;
 }
-$this->db->sqlFreeResult($res);
 
 echo $this->drawBarreBouton(
 	null,

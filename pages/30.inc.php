@@ -6,13 +6,12 @@ echo $this->drawBarreBouton(
 		$this->makeLinkBouton(31, "id_tournoi=".$id_tournoi), 
 		$this->makeLinkBouton(6, "id_tournoi=".$id_tournoi)),
 	$this->makeLinkBoutonRetour(2));
-$res=null;
-$req = "select * from sessions where id_tournoi=" . intval($id_tournoi) . " order by datedeb desc, datefin desc";
-$this->db->sqlOpenCur($res, $req);
-$nb = $this->db->sqlCountCur($res);
-$i=0;
+
 echo $this->openListe(array("Date", "joueurs", "Commentaires"), true);
-while	($row=$this->db->sqlFetchCur($res))
+
+$sessions = new Session($this->db);
+$aTabSession = $sessions->getSessionByTournoi($id_tournoi);
+foreach($aTabSession as $kS => $row)
 {
     $res2=null;
 	$req2 = "select	* ".
@@ -56,4 +55,3 @@ while	($row=$this->db->sqlFetchCur($res))
 							);
 }
 echo $this->closeListe();
-$this->db->sqlFreeResult($res);

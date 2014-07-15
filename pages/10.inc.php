@@ -27,10 +27,7 @@ $entete[] = "Contrat";
 echo $this->openListe($entete, true);
 $tabParties = $partie->getPartiesBySession($id_tournoi, $id_session);
 $cumul=array();
-/*
-print_r($tabParties);
-exit();
-*/
+
 foreach	($tabParties as $k => $row)
 {
 	$petitaubout=($row->petitaubout==1) ? "oui" : "non";

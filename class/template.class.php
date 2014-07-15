@@ -416,10 +416,6 @@ class Template
 	function lienPortrait($image="", $label, $labelLong=null)
 	{
         return $label;
-		if ($image=="") $image="inconnu.gif";
-		if (!isset($labelLong)) $labelLong=$label;
-		$ret=	"<a href=\"#\" onMouseOver=\"openPortrait('".$image."','".$labelLong."');\" onMouseOut=\"closePortrait();\">".$label."</a>";
-		return $ret;
 	}
 
 	/*

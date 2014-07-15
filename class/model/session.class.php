@@ -12,10 +12,10 @@ class Session
     {
         $res=null;
         $aTab = array();
-        $req =	"select id, datedeb ".
-                "from	sessions ".
-                "where	id_tournoi=" . intval($id_tournoi) . " " .
-                "order by id asc";
+        $req =	"select * ".
+            "from	sessions ".
+            "where	id_tournoi=" . intval($id_tournoi) . " " .
+            "order by id asc";
         $this->db->sqlOpenCur($res, $req);
         while	($row=$this->db->sqlFetchCur($res))
         {
@@ -35,6 +35,18 @@ class Session
                 "and	id_joueur =" . intval($id_joueur) . " ".
                 "group by id_tournoi, id_session";
         $this->db->sqlSelect($row, $req);
+        return $row;
+    }
+
+
+    function getArraySessionById($id_tournoi, $id_session)
+    {
+        $row = null;
+        $req =	"select * ".
+                "from sessions ".
+                "where id = " . intval($id_session) . " ".
+                "and id_tournoi = " . intval($id_tournoi);
+        $this->db->sqlSelectArray($row, $req);
         return $row;
     }
 }

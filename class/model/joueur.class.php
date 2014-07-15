@@ -141,7 +141,10 @@ class Joueur
 
     function deleteJoueur($id)
     {
-        return $this->db->sqlExecute("delete from joueurs where id = " . intval($id));
+        $req =  "delete ".
+                "from joueurs ".
+                "where id = " . intval($id);
+        return $this->db->sqlExecute($req);
 
     }
 }
