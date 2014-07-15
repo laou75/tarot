@@ -27,7 +27,7 @@ if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
 if	(isset($warn) && strlen($warn)>0)
 	echo $form->makeMsgWarning($warn);
-echo $form->makeTexte("Du", strftime ("%x", $form->getValeur("date")));
+echo $form->makeTexte("Du", strftime ("%d/%m/%Y", $form->getValeur("date")));
 echo $form->makeTexte("Prise par", $this->getJoueur($form->getValeur("id_preneur")));
 if	(strlen($form->getValeur("id_second"))>0)
 	echo $form->makeTexte("Appelé", $this->getJoueur($form->getValeur("id_second")));

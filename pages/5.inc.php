@@ -24,8 +24,8 @@ if (isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
 if (isset($warn) && strlen($warn)>0)
 	echo $form->makeMsgWarning($warn);
-echo $form->makeTexte("Commencé le", strftime ("%x", $form->getValeur("datedeb")));
-echo $form->makeTexte("Terminé le", strftime ("%x", $form->getValeur("datefin")));
+echo $form->makeTexte("Commencé le", strftime ("%d/%m/%Y", $form->getValeur("datedeb")));
+echo $form->makeTexte("Terminé le", strftime ("%d/%m/%Y", $form->getValeur("datefin")));
 echo $form->makeTexte("Commentaire", $form->getValeur("commentaires"));
 echo $form->makeButton("Supprimer");
 echo $form->closeForm();

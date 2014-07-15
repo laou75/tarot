@@ -1,4 +1,7 @@
 <?php
+setlocale(LC_ALL, 'fr_FR');
+setlocale(LC_TIME, "fr");
+
 $GLOBALS["Config"]["DATABASE"]["DBSERVER"]		=	"localhost";
 $GLOBALS["Config"]["DATABASE"]["DBUSER"]		=	"usertarot";
 $GLOBALS["Config"]["DATABASE"]["DBPASSWORD"]	=	"passtarot";
@@ -15,8 +18,6 @@ $GLOBALS["Config"]["PATH"]["PORTRAIT"]		=	realpath($GLOBALS["Config"]["PATH"]["I
 $GLOBALS["Config"]["PATH"]["PAGE"]			=	realpath(".")."/pages/";
 
 $GLOBALS["Config"]["SITE"]["DEBUG"]			=	TRUE;
-
-setlocale (LC_TIME, "fr");
 
 spl_autoload_register(function ($class) {
     if (file_exists(PATH_ROOT.'/class/' . strtolower($class) . '.class.php'))

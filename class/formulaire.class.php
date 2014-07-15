@@ -186,7 +186,7 @@ class Formulaire
 	function makeRadioEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db, $options="")
 	{
         $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
-		return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options);
+        return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options);
 	}
 	
 	// La requete est de type SELECT xx as ID, yyy as LIBELLE from zzz
@@ -339,7 +339,7 @@ class Formulaire
 					"</tr>\n".
 					"<tr>\n".
 					"	<td colspan=2 align='center'>\n";
-			while (list ($val) = each ($value))
+			while (list ($k, $val) = each ($value))
 			{
 				$ret.="		<input type=\"submit\" value=\"".$val."\"".$options.">\n";
 			}
@@ -376,7 +376,7 @@ class Formulaire
                 $type = substr($type, 5, strlen($type));		// virer 'enum(' au d�but
                 $type = substr($type, 0, strlen($type)-1);		// virer ')' � la fin
                 $aTmp = explode(",", $type );
-                while (list ($val) = each ($aTmp))
+                while (list ($k, $val) = each ($aTmp))
                 {
                     $za = substr($val, 1, strlen($val)-2);
                     $aValuesLabels[$za] = $za;

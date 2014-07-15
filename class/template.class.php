@@ -17,7 +17,7 @@ class Template
 	 */	
 	function __construct($db)
 	{
-		setlocale(LC_TIME, "fr");
+//		setlocale(LC_TIME, "fr");
 
 		$this->modeMini = strpos($_SERVER["HTTP_USER_AGENT"], "Palm");
 		$this->zoomMini = 2;	// divis� par 2	
