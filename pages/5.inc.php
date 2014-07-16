@@ -13,11 +13,10 @@ else
 {
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
     $tournois = new Tournoi($this->db);
-    $row = $tournois->getArrayTournoiById($form->getValeur('id'));
+    $row = $tournois->getArrayTournoiById($_GET["id_tournoi"]);
 	$form->setValeurs($row);
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
 }
-
 echo $form->openForm("Supprimer un tournoi", "", "multipart/form-data");
 echo $form->makeHidden("id_tournoi", "id_tournoi", $form->getValeur("id_tournoi"));
 if (isset($err) && strlen($err)>0)

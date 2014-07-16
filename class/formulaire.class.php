@@ -395,7 +395,7 @@ class Formulaire
      * ------------------------------------------------
      */
  	
-	function textToTime($time=null)
+	static function textToTime($time=null)
 	{
 		if	(!isset($time))
 		{
@@ -409,20 +409,25 @@ class Formulaire
 
 		return mktime ( $h, $mn, $s, $m, $j, $a); 
 	}
-	
-	function timeToTextDate($time=null)
+
+    static function textToDate($date)
+    {
+        return mktime ( 0, 0, 0, substr($date, 3, 2), substr($date, 0, 2), substr($date, 6, 4));
+    }
+
+    static function timeToTextDate($time=null)
 	{
 		if	(!isset($time)) $time=time();
 		return strftime("%d", $time)."/".strftime("%m", $time)."/".strftime("%Y", $time);
 	}
 
-	function timeToTextDatetime($time=null)
+    static function timeToTextDatetime($time=null)
 	{
 		if	(!isset($time)) $time=time();
 		return strftime("%d", $time)."/".strftime("%m", $time)."/".strftime("%Y", $time)." ".strftime("%H", $time).":".strftime("%M", $time).":".strftime("%S", $time);
 	}
 
-	function timeToTextTime($time=null)
+    static function timeToTextTime($time=null)
 	{
 		if	(!isset($time)) $time=time();
 		return strftime("%H", $time).":".strftime("%M", $time).":".strftime("%S", $time);

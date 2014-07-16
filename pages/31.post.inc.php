@@ -1,8 +1,8 @@
 <?php
-setlocale(LC_TIME, "fr");
-
 $form = new Formulaire();
+
 $form->setValeurs($_POST);
+
 $err="";
 if	(strlen($form->getValeur("datedeb"))==0)
 	$err .= "Le champ 'Date de début' est obligatoire !<br>";
@@ -13,9 +13,7 @@ if	($err=="")
 	$d = substr($form->getValeur("datedeb"), 0, 2);
 	$m = substr($form->getValeur("datedeb"), 3, 2);
 	$y = substr($form->getValeur("datedeb"), 6, 4);
-
 	$form->setValeur("datedeb", mktime ( 0, 0, 0, $m, $d, $y));
-
 	$this->db->sqlInsert("sessions", $form->getValeurs());
 
 	//	Traiter les joueurs
