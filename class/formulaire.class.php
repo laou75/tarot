@@ -183,12 +183,14 @@ class Formulaire
 				"</tr>\n";
 	}
 
+
 	function makeRadioEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db, $options="")
 	{
         $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
         return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options);
 	}
-	
+
+
 	// La requete est de type SELECT xx as ID, yyy as LIBELLE from zzz
 	// $value contient soit juste une valeur, soit un tableau de valeurs.
 	function makeCheckbox($name, $id, $label="", $value=NULL, $requete="", $options="")
@@ -229,6 +231,7 @@ class Formulaire
 					"</tr>\n";
 	}
 
+
 	function makeComboMultiple($name, $id, $label="", $values, $aTableau, $options="")
 	{
 		$option="";
@@ -244,6 +247,7 @@ class Formulaire
 				"	<td".$this->widthData."><select name='".$name."' id='".$id."' multiple size=5".$options.">".$option."</select></td>\n".
 				"</tr>\n";
 	}
+
 
 	function makeCombo($name, $id, $label="", $value="", $aTableau, $options="")
 	{
@@ -264,6 +268,7 @@ class Formulaire
 				"</tr>\n";
 	}
 
+
 	// La requete est de type SELECT xx as ID, yyy as LIBELLE from zzz
 	function makeComboSQL($name, $id, $label="", $value="", $requete="", $db)
 	{
@@ -277,12 +282,14 @@ class Formulaire
 		return	$this->makeCombo($name, $id, $label, $value, $aTableau);
 	}
 
+
 	function makeComboEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db)
 	{
         $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
 		return	$this->makeCombo($name, $id, $label, $value, $aValuesLabels);
 	}
-	
+
+
 	function makeTextarea($name, $id, $label="", $value="", $options="")
 	{
 		return	"<tr id='tr".$id."'>\n".
@@ -291,11 +298,13 @@ class Formulaire
 				"</tr>\n";
 	}
 
+
 	function makeTexteRiche($name, $id, $value="", $options="")
 	{
         return	$this->makeTextarea($name, $id, "Description", $value, $options);
 	}
-	
+
+
 	function makeTexte($label, $texte)
 	{
 		return	"<tr>".
@@ -304,69 +313,56 @@ class Formulaire
 				"</tr>\n";
 	}
 
+
 	function makeNote($texte)
 	{
 		return	"<tr><td colspan=2><span class='note'>".nl2br($texte)."</span></td></tr>\n";
 	}
+
 
 	function makeNoteObligatoire()
 	{
 		return	"<tr><td colspan=2 align='right'><span class='note'>Les champs suivis de (*) sont obligatoires.</span></td></tr>\n";
 	}
 
+
 	function makeMsgError($texte)
 	{
 		return "<tr><td colspan=2><span style=\"color:#ff0000;\"><b>ERREUR</b> : $texte</span></td></tr>\n";
 	}
+
 
 	function makeMsgWarning($texte)
 	{
 		return	"<tr><td colspan=2><span style=\"color:#D2691E;\">$texte</span></td></tr>\n";
 	}
 
+
 	function makeMsgInfo($texte)
 	{
 		return	"<tr><td colspan=2><span style=\"color:#008000;\">$texte</span></td></tr>\n";
 	}
 
+
 	function makeButton($value, $options=' class="btn btn-success"')
 	{
-		
-		if (is_array($value))
-		{
-			$ret =	"<tr>\n".
-					"	<td colspan=2>&nbsp;</td>\n".
-					"</tr>\n".
-					"<tr>\n".
-					"	<td colspan=2 align='center'>\n";
-			while (list ($k, $val) = each ($value))
-			{
-				$ret.="		<input type=\"submit\" value=\"".$val."\"".$options.">\n";
-			}
-			return	$ret.
-					"	</td>\n".
-					"</tr>\n";
-			
-		}
-		else
-			return	"<tr>\n".
-					"	<td colspan=2>&nbsp;</td>\n".
-					"</tr>\n".
-					"<tr>\n".
-					"	<td colspan=2 width='100%' align='center'>\n".
-					"		<input type=\"submit\" value=\"".$value."\"".$options.">\n".
-					"	</td>\n".
-					"</tr>\n";
+        return	"<tr>\n".
+                "	<td colspan=2>&nbsp;</td>\n".
+                "</tr>\n".
+                "<tr>\n".
+                "	<td colspan=2 width='100%' align='center'>\n".
+                "		<input type=\"submit\" value=\"".$value."\"".$options.">\n".
+                "	</td>\n".
+                "</tr>\n";
 	}
+
 
     private function getListeValeursEnum($table, $colonne, $addLigneVide, $db)
     {
         $aValuesLabels = array();
         if	($addLigneVide==TRUE)
             $aValuesLabels[NULL]="";
-
         $resInfos='';
-
         $db->sqlOpenCur($resInfos, "SHOW FULL COLUMNS FROM $table");
         while ($rowInfos=$db->sqlFetchCur($resInfos))
         {
@@ -376,7 +372,7 @@ class Formulaire
                 $type = substr($type, 5, strlen($type));		// virer 'enum(' au d�but
                 $type = substr($type, 0, strlen($type)-1);		// virer ')' � la fin
                 $aTmp = explode(",", $type );
-                while (list ($k, $val) = each ($aTmp))
+                foreach($aTmp as $val)
                 {
                     $za = substr($val, 1, strlen($val)-2);
                     $aValuesLabels[$za] = $za;
@@ -403,10 +399,8 @@ class Formulaire
 			$time=strftime("%d", $t)."/".strftime("%m", $t)."/".strftime("%Y", $t);
 		}
 		$date=explode(" ", $time);
-
 		list($j,$m,$a) = explode("/",$date[0]);
 		list($h,$mn,$s) = explode(":",$date[1]);
-
 		return mktime ( $h, $mn, $s, $m, $j, $a); 
 	}
 
