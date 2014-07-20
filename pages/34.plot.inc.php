@@ -13,8 +13,6 @@ $aTabJ = $joueurs->getJoueursBySession($id_tournoi, $id_session);
 //	R�cup�ration des parties
 $aTabPar = $parties->getPartiesBySession($id_tournoi, $id_session);
 
-$listeJoueurs='';
-$totalCumulJoueur=0;
 foreach($aTabJ as $idJ => $det)
 {
 	// Some data
@@ -32,7 +30,6 @@ foreach($aTabJ as $idJ => $det)
         if ($truc<0)
         {
             $cumulJoueur = $cumulJoueur + $truc;
-            $totalCumulJoueur = $truc;
         }
 		$old	=	$old + $truc;
 		$ydata[]=	$old;
@@ -41,8 +38,8 @@ foreach($aTabJ as $idJ => $det)
             'cumul' => $cumulJoueur,
             'data'  => $ydata
         );
-        $listeJoueurs .= '\'' . $det->nickname . '\', ';
 	}
+}
 ?>
 <script type="text/javascript">
     $(function () {
@@ -83,8 +80,6 @@ foreach($aTabJ as $idJ => $det)
             series: [{
 <?php
 $tmp='';
-$tmp2='';
-$tmp3='';
 foreach($series as $k => $v)
 {
     $tmp .= 'name: \'' . $v['name'] . '\', '.PHP_EOL.'data: [';
@@ -94,19 +89,11 @@ foreach($series as $k => $v)
     }
     $tmp = substr($tmp, 0, strlen($tmp)-2).']';
     $tmp .= PHP_EOL.'}, {';
-    $tmp2 .= 'name: \'' . $v['name'] . '\', '.PHP_EOL.'data: ['.$v['cumul'].']';
-    $tmp2 .= PHP_EOL.'}, {';
-    $tmp3 .= '[\'' . $v['name'] . '\', ' . $v['cumul']/$totalCumulJoueur*100 .'],'.PHP_EOL;
 }
 $tmp = substr($tmp, 0, strlen($tmp)-4);
-$tmp2 = substr($tmp2, 0, strlen($tmp2)-4);
-$tmp3 = substr($tmp3, 0, strlen($tmp3)-2);
 echo $tmp;
 ?>
-}]
-});
-
+            }]
+        });
     });
 </script>
-<?php
-}

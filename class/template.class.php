@@ -461,4 +461,5 @@ class Template
 				"</table>\n";
 		return $ret;
 	}
+
 }
