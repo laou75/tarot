@@ -59,7 +59,7 @@ class Partie
         $req =  "select * ".
                 "from parties ".
                 "order by date desc ".
-                ( (false!==$limit) ? ' limit '.$GLOBALS["Config"]["SITE"]["MAXBYLIST"].' ' : ' ');
+                ( (false!==$limit) ? ' limit 10 ' : ' ');
         $this->db->sqlOpenCur($res, $req);
         while ($row=$this->db->sqlFetchCur($res)) {
             $liste[] = $row;

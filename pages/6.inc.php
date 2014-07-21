@@ -70,7 +70,6 @@ foreach($aTabSess as $idS => $detS)
 			$cumul[$idJ]=$truc;
 		$data[]=sprintf("%01.1f", $cumul[$idJ]);
 	}
-//	echo $this->ligneListe(	$data , null, "align='right'");
 }
 echo $this->ligneListe(	$cumul, null, "align='right'");
 echo $this->closeListe();
