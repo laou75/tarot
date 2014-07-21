@@ -16,8 +16,14 @@ $GLOBALS["Config"]["PATH"]["ROOT"]			=	realpath("./");
 $GLOBALS["Config"]["PATH"]["IMG"]			=	realpath($GLOBALS["Config"]["PATH"]["ROOT"].'/img/').'/';
 $GLOBALS["Config"]["PATH"]["PORTRAIT"]		=	realpath($GLOBALS["Config"]["PATH"]["IMG"].'portraits/').'/';
 $GLOBALS["Config"]["PATH"]["PAGE"]			=	realpath(".")."/pages/";
+$GLOBALS["Config"]["PATH"]["JS"]			=	realpath(".")."/js/";
 
 $GLOBALS["Config"]["SITE"]["DEBUG"]			=	TRUE;
+
+$GLOBALS["Config"]["SITE"]["TITRE"]			=	'Tarot';
+$GLOBALS["Config"]["SITE"]["PAGEDEFAULT"]   =   1;
+$GLOBALS["Config"]["SITE"]["PAGELOGIN"]     =   999;
+$GLOBALS["Config"]["SITE"]["MAXBYLIST"]     =   10;
 
 spl_autoload_register(function ($class) {
     if (file_exists(PATH_ROOT.'/class/' . strtolower($class) . '.class.php'))

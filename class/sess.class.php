@@ -24,4 +24,9 @@ class Sess
 		unset($this);
 	}
 
+    static function isConnected()
+    {
+        return isset($_SESSION['sessionTarot']);
+    }
+
 }

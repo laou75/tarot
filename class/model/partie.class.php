@@ -51,4 +51,24 @@ class Partie
         $this->db->sqlSelectArray($row, $req);
         return $row;
     }
+
+    function getAll($limit=false)
+    {
+        $liste = array();
+        $res=null;
+        $req =  "select * ".
+                "from parties ".
+                "order by date desc ".
+                ( (false!==$limit) ? ' limit '.$GLOBALS["Config"]["SITE"]["MAXBYLIST"].' ' : ' ');
+        $this->db->sqlOpenCur($res, $req);
+        while ($row=$this->db->sqlFetchCur($res)) {
+            $liste[] = $row;
+        }
+        return $liste;
+    }
+
+    function getLast()
+    {
+        return $this->getAll(true);
+    }
 }

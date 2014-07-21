@@ -1,48 +1,35 @@
 <?php
 class Template
 {
-	var $titre;
-	var	$pageDefaut;
+    var $titre;
+    var $titrePage;
+    var	$pageDefaut;
 	var	$id;
 	var	$cheminMenu;
 	var $db;
 	var $rowPage;
-	var $modeMini;
-	var $zoomMini;
-	var $cellspacingMini;
-	var $nameCSS;
 
 	/*
 	 * 
 	 */	
 	function __construct($db)
 	{
-		$this->modeMini = strpos($_SERVER["HTTP_USER_AGENT"], "Palm");
-		$this->zoomMini = 2;	// divis� par 2	
-		$this->cellSpacing=$this->modeMini?12:20;	
-		
-		$this->titre="Tarot";
-		$this->pageDefaut=1;
+		$this->titre=$GLOBALS["Config"]["SITE"]["TITRE"];
+		$this->pageDefaut=$GLOBALS["Config"]["SITE"]["PAGEDEFAULT"];
 		$this->db=$db;
 
 		if	(!array_key_exists("id", $_GET))
 			$this->id = $this->pageDefaut;		
 		else
-			$this->id = $_GET["id"];		
+			$this->id = $_GET["id"];
 		$this->rowPage = $this->getInfosMenu($this->id);
-		$this->titre =
-                (isset($this->rowPage->description))
-                ?   $this->rowPage->description
-                :   (
-                        (isset($this->rowPage->label))
-                        ?   $this->rowPage->label
-                        :   '');
-		
-		$logo = $this->modeMini
-                ?   ''
-                :   (isset($this->rowPage->logo))
-                    ?   $this->makeImg("logos/".$this->rowPage->logo, 'logo', ' align="left"')
-                    :   '';
+        $this->titrePage =  (isset($this->rowPage->description)
+                            ?   $this->rowPage->description
+                            :   ((isset($this->rowPage->label))
+                                ?   $this->rowPage->label
+                                :   '')
+                            );
+        $this->titre = isset($this->titrePage) ? $this->titre . ' - ' . $this->titrePage : $this->titre;
 
 		//	Traiter les donn�es post�es
 		if (count($_POST)>0)
@@ -51,21 +38,25 @@ class Template
         ob_start();
 ?>
 <!DOCTYPE html>
-    <html lang="fr">
+        <html lang="fr" xmlns="http://www.w3.org/1999/html">
 	<head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title><?php echo $this->titre;?></title>
         <!-- Bootstrap -->
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
         <style type="text/css">
-            .lead{margin-top: 55px;}
             input.red,  select.red, {background-color: #ffb79c;}
             label.red{color: #ff115c;}
         </style>
         <link rel="shortcut icon" href="/favicon.ico" />
         <script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
+<?php
+        if($this->id==11 || $this->id==12)
+        {
+?>
         <script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/calcul.js'></script>
 <?php
+        }
 		$libCtxt="";
 		if	(isset($_GET["id_tournoi"]))
 			$libCtxt .= ", tournoi n°".$_GET["id_tournoi"];
@@ -99,6 +90,10 @@ class Template
 
                 </div>
                 <div class="navbar-collapse collapse">
+<?php
+        if (Sess::isConnected())
+        {
+?>
                     <ul class="nav navbar-nav">
 <?php
         $this->getChemin($this->id);
@@ -106,7 +101,8 @@ class Template
 ?>
                     </ul>
 <?php
-        if (!isset($_SESSION['sessionTarot'])) {
+        }
+        if (!Sess::isConnected()) {
 ?>
                     <form role="form" class="navbar-form navbar-right" action="/identification.php" method="post">
                         <div class="form-group">
@@ -132,9 +128,27 @@ class Template
         <div class="container-fluid" style="margin-top: 55px;">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3><?php echo $this->titre.$libCtxt;?></h3>
+                    <h3><?php echo $this->titrePage.$libCtxt;?></h3>
                 </div>
                 <div class="panel-body">
+<?php
+$id_tournoi=isset($_GET["id_tournoi"]) ? $_GET["id_tournoi"] : null;
+$id_session=isset($_GET["id_session"]) ? $_GET["id_session"] : null;
+echo '<ol class="breadcrumb">';
+echo '<li>'.$this->makeLinkFromId(1, 'Accueil').'</li>';if (isset($id_tournoi) || isset($id_session) || isset($id_partie))
+{
+
+    if (isset($id_tournoi))
+    {
+        echo '<li>'.$this->makeLinkFromId(30, 'Tournoi '.$id_tournoi, 'id_tournoi='.$id_tournoi).'</li>';
+    }
+    if (isset($id_session))
+    {
+        echo '<li>'.$this->makeLinkFromId(10, 'Session '.$id_session, 'id_tournoi='.$id_tournoi.'&amp;id_session='.$id_session).'</li>';
+    }
+}
+echo '</ol>';
+?>
 <?php
         if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php"))
             include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php");
@@ -148,9 +162,14 @@ class Template
         <script src="js/jquery-1.11.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/highcharts.js"></script>
+        <script src="js/highcharts-3d.js"></script>
+        <script src="js/modules/exporting.js"></script>
 <?php
-        if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php"))
-            include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php");
+if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php"))
+    include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php");
+
+if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
+    include($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js");
 ?>
 	</body>
 </html>
@@ -213,6 +232,30 @@ class Template
 		return $ret;
 	}
 
+    /*
+     *
+     */
+    function makeLinkFromId($id, $label, $param=null, $title="", $css="", $options="")
+    {
+        $url = $this->getUrlFromId($id, $param);
+        if (isset($title) && strlen($title)>0) $title=" title=\"$title\"";
+        if (isset($css) && strlen($css)>0) $css=" class=\"$css\"";
+        if (substr(strtolower($url), 0, 5) == "http:") {
+            $ret = "<a href=\"".$url."\"$title$css$options>$label</a>";
+        } else {
+            $ret = '<a href="'.$GLOBALS["Config"]["URL"]["ROOT"].$url.'"'.$title.$css.$options.'>'.$label.'</a>';
+        }
+        return $ret;
+    }
+
+    /*
+     *
+     */
+    function getUrlFromId($id, $param=null)
+    {
+        return (isset($param)) ? 'index.php?id='.$id.'&amp;' . $param : 'index.php?id='.$id;;
+    }
+
 	/*
 	 * 
 	 */
@@ -220,8 +263,7 @@ class Template
 	{
 		$row=$this->getInfosMenu($id);
 
-		$label= ($this->modeMini) ? '' : $row->label;
-
+		$label= $row->label;
 		$desc = (isset($row->description)) ? $row->description : $row->label;
 
 		if	($id==(int)$id)
@@ -284,7 +326,7 @@ class Template
             $alt=" alt=\"$alt\"";
         else
             $alt=" alt=\"\"";
-        return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" border=0$alt$options>";
+        return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" border=0$alt$options/>";
 	}
 
 	/*
@@ -296,7 +338,7 @@ class Template
 			$alt=" alt=\"$alt\"";
 		else
 			$alt=" alt=\"\"";
-		return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" $alt$options>";
+		return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" $alt$options/>";
 	}
 
 	/*
@@ -308,7 +350,7 @@ class Template
             $alt=" alt=\"$alt\"";
         else
             $alt=" alt=\"\"";
-        return "<img src=\"".$GLOBALS["Config"]["URL"]["PORTRAIT"].$img."\" border=0$alt$options>";
+        return "<img src=\"".$GLOBALS["Config"]["URL"]["PORTRAIT"].$img."\" border=0$alt$options/>";
 	}
 
 	/*
@@ -319,7 +361,7 @@ class Template
         $joueurs = new Joueur($this->db);
         $row = $joueurs->getJoueurById($id);
         if (isset($row->portrait) && strlen($row->portrait)>0)
-            $portrait="<br>".$this->makePortrait("mini/".$row->portrait, $row->prenom." ".$row->nom);
+            $portrait="<br/>".$this->makePortrait("mini/".$row->portrait, $row->prenom." ".$row->nom);
         else
             $portrait="";
 		return $row->prenom . ' ' . $row->nom . $portrait;
@@ -384,14 +426,14 @@ class Template
 		if (isset($actions))
 		{
 			$ret.=	"		<td style='vertical-align: middle;text-align:center;'>";
-			foreach($actions as $id => $detail)
+			foreach($actions as  $detail)
 			{
 				$ret.=$detail." ";
 			}
 			$ret.=	"</td>\n";
 		}
 		$options=isset($options)?" ".$options:"";
-		foreach($colonnes as $id => $detail)
+		foreach($colonnes as $detail)
 		{
 			if (strlen($detail)==0) $detail="&nbsp;";
 			$ret.=	"		<td class='liste'".$options.">".$detail."</td>\n";
@@ -414,18 +456,6 @@ class Template
 	function lienPortrait($image="", $label, $labelLong=null)
 	{
         return $label;
-	}
-
-	/*
-	 * 
-	 */
-	function lienPopup($label, $html)
-	{
-		$tmp =  str_replace("'", "#QUOT#", $html);
-		$tmp =  str_replace('"', "#DBLQUOT#", $tmp);
-		$tmp =  str_replace("\n", "", $tmp);
-		$ret =	"<a href=\"#\" onMouseOver=\"openPopup('".$tmp."');\" onMouseOut=\"closePopup();\">".$label."</a>";
-		return $ret;
 	}
 
 	/*

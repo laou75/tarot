@@ -17,6 +17,7 @@ foreach($aTab as $idJoueur => $row)
 	$nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
 	$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
 }
+
 $aTabSess = $session->getSessionByTournoi($id_tournoi);
 ?>
 <div class="row">
@@ -69,8 +70,9 @@ foreach($aTabSess as $idS => $detS)
 			$cumul[$idJ]=$truc;
 		$data[]=sprintf("%01.1f", $cumul[$idJ]);
 	}
-	echo $this->ligneListe(	$data , null, "align='right'");
+//	echo $this->ligneListe(	$data , null, "align='right'");
 }
+echo $this->ligneListe(	$cumul, null, "align='right'");
 echo $this->closeListe();
 ?>
     </div>

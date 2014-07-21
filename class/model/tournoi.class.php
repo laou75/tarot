@@ -8,13 +8,14 @@ class Tournoi
         $this->db = $db;
     }
 
-    function getTournois()
+    function getTournois($limit=false)
     {
         $liste = array();
         $res=null;
         $req =  "select * ".
                 "from tournois ".
-                "order by datedeb desc";
+                "order by datedeb desc ".
+                ( (false!==$limit) ? ' limit '.$GLOBALS["Config"]["SITE"]["MAXBYLIST"].' ' : ' ');
         $this->db->sqlOpenCur($res, $req);
         while ($row=$this->db->sqlFetchCur($res)) {
             $liste[] = $row;
@@ -30,5 +31,10 @@ class Tournoi
                 "where id = " . intval($id_tournoi);
         $this->db->sqlSelectArray($row, $req);
         return $row;
+    }
+
+    function getLast()
+    {
+        return $this->getTournois(true);
     }
 }

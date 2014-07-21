@@ -32,10 +32,10 @@ class Db
     function sqlError($parms="")
     {
         $err='';
-        $err.="<div class=\"error\"><u>Erreur SQL</u> (".$this->sqlErrno().")<br><i>".mysql_error()."</i><br>";
+        $err.="<div class=\"error\"><u>Erreur SQL</u> (" . $this->sqlErrno() . ")<br><i>" . mysql_error() . "</i><br>";
         if ($parms)
             $err.="<i>".$parms."</i>";
-        $err.="</div>";
+        $err .= "</div>";
         header('Location: error.php?err=' . base64_encode($err));
     }
 

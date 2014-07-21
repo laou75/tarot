@@ -1,4 +1,3 @@
-//var der=0;
 var nbErreur=0;
 
 function controleFormulaire()
@@ -43,8 +42,6 @@ function controleFormulaire()
 		alert ("Renseigner l'annonce !");
 		return false;
 	}
-
-//	alert ("points : "+d.points.value);
 
 	//	Controler le score effectu?
 	if (!d.points.value || d.points.value=="")
@@ -162,9 +159,9 @@ function calculePoints()
 	Son gain est de 43-41=2 points; (25 + 2 + 10 pour le Petit au Bout) x 2 pour la Garde = 74 points; 
 	r?sultat -74 points pour les 3 D?fenseurs et 74 x 3 = 222 points pour le Preneur.
 	*/
-	var nbBouts=0;
-    var ptFait=0;
-	var ptContrat=0;
+	var nbBouts;
+    var ptFait;
+	var ptContrat;
 	var ptChelem=0;
 	var ptPrime=0;
 	var ANN;
@@ -177,7 +174,7 @@ function calculePoints()
 
     nbErreur=0;
 
-    id_preneur = $( "#id_preneur option:selected" ).text();
+    id_preneur = $("#id_preneur option:selected").text();
     testeRadio(id_preneur, "id_preneur");
 
     ANN = $('input[type=radio][name=annonce]:checked').attr('value');
@@ -229,27 +226,26 @@ function calculePoints()
 	else if (typePoignee=="double") ptPrime+=30;
 	else if (typePoignee=="triple") ptPrime+=40;
 
-/*
-Le Chelem consiste ? remporter les 18 lev?es de la donne?
+    /*
+    Le Chelem consiste ? remporter les 18 lev?es de la donne?
 
-Le Chelem peut ?tre demand? en plus du contrat; une prime suppl?mentaire non multipliable est ajout?e au r?sultat du contrat:
-? Chelem annonc? et r?alis?: prime de 400 points.
-? Chelem non annonc? mais r?alis?: prime de 200 points.
-? Chelem annonc? mais non r?alis?: amende de 200 points.
+    Le Chelem peut ?tre demand? en plus du contrat; une prime suppl?mentaire non multipliable est ajout?e au r?sultat du contrat:
+    ? Chelem annonc? et r?alis?: prime de 400 points.
+    ? Chelem non annonc? mais r?alis?: prime de 200 points.
+    ? Chelem annonc? mais non r?alis?: amende de 200 points.
 
-L?annonce peut ?tre faite apr?s l?Ecart; l?annonceur d?un Chelem b?n?ficie alors de l?entame. 
-Si le joueur tentant le Chelem poss?de l?Excuse, celle-ci peut ?tre jou?e en carte ma?tresse au dernier pli si tous les autres plis ont ?t? acquis; 
-dans ce cas, le Petit sera consid?r? comme ?tant au bout ? l?avant dernier pli.
-*/
-		
-	//d.total.value = ptContrat + ptChelem + ptPrime;
-    $("#total").val( ptContrat + ptChelem + ptPrime );
+    L?annonce peut ?tre faite apr?s l?Ecart; l?annonceur d?un Chelem b?n?ficie alors de l?entame.
+    Si le joueur tentant le Chelem poss?de l?Excuse, celle-ci peut ?tre jou?e en carte ma?tresse au dernier pli si tous les autres plis ont ?t? acquis;
+    dans ce cas, le Petit sera consid?r? comme ?tant au bout ? l?avant dernier pli.
+    */
+    $("#total").val(ptContrat + ptChelem + ptPrime);
+    return $("#total").val();
 }
 
 function change_chelem()
 {
 	d = document.forms[0];
-//	alert(d.chelem.value);
+
 	if	(d.chelem[0].checked)
 	{
 		document.getElementById("trchelem_annonce").style.display="none";
@@ -257,13 +253,11 @@ function change_chelem()
 		{
 			d.chelem_annonce[i].checked=false;
 		}
-		//d.chelem_annonce.value=0;
 		document.getElementById("trchelem_reussi").style.display="none";
 		for (var i = 0; i < d.chelem_reussi.length; i++) 
 		{
 			d.chelem_reussi[i].checked=false;
 		}
-//		d.chelem_reussi.value=0;
 	}
 	else
 	{

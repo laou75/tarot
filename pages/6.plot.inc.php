@@ -33,7 +33,6 @@ foreach($aTabJoueurs as $idJ => $det)
         }
         $categories .= '\''.$idS.'\', ';
     }
-    // ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     $series[$idJ] = array(  'name'  => $det->nickname,
                             'cumul' => $cumulJoueur,
                             'data'  => $ydata
@@ -115,10 +114,21 @@ if (strlen($listeJoueurs)>0)
 
         $('#container2').highcharts({
             chart: {
-                type: 'column'
+                type: 'column',
+                options3d: {
+                    enabled: true,
+                    alpha: 10,
+                    beta: 25,
+                    depth: 70
+                }
             },
             title: {
                 text: 'Cumul des pertes'
+            },
+            yAxis: {
+                title: {
+                    text: 'Points'
+                }
             },
             xAxis: {
                 categories: [<?php echo $listeJoueurs;?>]
@@ -135,9 +145,12 @@ echo $tmp2;
 
         $('#container3').highcharts({
             chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: 1,//null,
-                plotShadow: false
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 45,
+                    beta: 0
+                }
             },
             title: {
                 text: 'Répartition des pertes'
@@ -149,12 +162,10 @@ echo $tmp2;
                 pie: {
                     allowPointSelect: true,
                     cursor: 'pointer',
+                    depth: 35,
                     dataLabels: {
                         enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                        }
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                     }
                 }
             },
@@ -162,9 +173,9 @@ echo $tmp2;
                 type: 'pie',
                 name: 'Cumul des pertes',
                 data: [
-<?php
-echo $tmp3;
-?>
+                    <?php
+                    echo $tmp3;
+                    ?>
                 ]
             }]
         });

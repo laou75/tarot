@@ -31,32 +31,20 @@ $cumul=array();
 foreach	($tabParties as $k => $row)
 {
 	$petitaubout=($row->petitaubout==1) ? "oui" : "non";
-	$contratreussi=($row->annonce_reussie==1) ? $this->makeImg("reussie.gif") : $this->makeImg("ratee.gif");
-	$lContrat="<table cellpadding=0 cellspacing=0 border=0><tr valign='top'><td>".$row->annonce."&nbsp;</td><td>".$contratreussi."</td></tr></table>";
-	$htmlContrat=   "<table>".
-                    "	<tr valign=\"top\">".
-                    "		<td class='resume-partie'>Contrat</td>".
-                    "		<td class='resume-partie'>".$lContrat."</td>".
-                    "	</tr>".
-                    "	<tr>".
-                    "		<td class='resume-partie'>Bouts</td>".
-                    "		<td class='resume-partie'>".$row->nombre_bouts."</td>".
-                    "	</tr>".
-                    "	<tr>".
-                    "		<td class='resume-partie'>Petit au bout</td>".
-                    "		<td class='resume-partie'>".$petitaubout."</td>".
-                    "	</tr>";
-	if	($row->poignee!="aucune")
-		$htmlContrat.=	"	<tr>".
-                        "		<td class='resume-partie'>Poign�e</td>".
-                        "		<td class='resume-partie'>".$row->poignee."</td>".
-                        "	</tr>";
-	$htmlContrat.=	"	<tr>".
-                    "		<td class='resume-partie'>Points</td>".
-                    "		<td class='resume-partie'>".$row->points."</td>".
-                    "	</tr>".
-                    "</table>";
-	$htmlContrat=$this->openCadre().$htmlContrat.$this->closeCadre();
+
+    $contratreussi =    ($row->annonce_reussie==1)
+                        ? '<span class=\'glyphicon glyphicon-thumbs-up btn btn-sm btn-success\'></span>'
+                        : '<span class=\'glyphicon glyphicon-thumbs-down btn btn-sm btn-danger\'></span>';
+    $idPartieJoueur='info_'.$id_tournoi.'_'.$id_session.'_'.$row->id;
+
+    $htmlContrat=   '<div>'.$row->annonce.' '.$contratreussi.' </div>'.
+                    '<div>Bouts : '.$row->nombre_bouts.'</div>'.
+                    '<div>Petit au bout : '.$petitaubout.'</div>'.
+                    (($row->poignee!="aucune") ? '<div>Poignée : '.$row->poignee.'</div>' : '').
+                    '<div>Points : '.$row->points.'</div>';
+
+    $hrefContrat = "<a href=\"#\" id=\"".$idPartieJoueur."\" data-placement=\"left\" data-container=\"body\" data-toggle=\"popover\" data-content=\"".$htmlContrat."\">" .
+        $row->annonce ."</a>";
 
 	//	R�cup�rer la liste des joueurs de la partie
     $tabJoueurs = $joueur->getJoueursByPartie($id_tournoi, $id_session, $row->id);
@@ -100,7 +88,7 @@ foreach	($tabParties as $k => $row)
 						"</tr></table>";
 	}
 
-	$data[]=$this->lienPopup($lContrat,$htmlContrat);
+    $data[]= $hrefContrat;
 	if ($row->commentaires)
 		$data[]=$row->commentaires;
 

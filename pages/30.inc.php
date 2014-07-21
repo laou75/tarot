@@ -25,19 +25,19 @@ foreach($aTabSession as $kS => $row)
 	$joueurs="<table>";
 	while	($row2=$this->db->sqlFetchCur($res2))
 	{
-		$portrait=strlen($row2->portrait)>0?$row2->portrait:"inconnu.gif";
+		$portrait = strlen($row2->portrait)>0 ? $row2->portrait : 'inconnu.gif';
+        $idPartieJoueur = 'info_'.$row2->id_session.'_'.$row2->id_joueur;
 		$joueurs .= "<tr valign='middle'>".
-					"	<td rowspan=2>".sprintf("%01d", $row2->position)."</td>".
-					"	<td rowspan=2>".$this->lienPortrait($portrait, $row2->prenom." ".$row2->nom)."</td>".
-					"	<td>".
+                    "<td rowspan=2>" . $row2->prenom." ".$row2->nom . "</td>".
+					"<td>".
 					$this->makeLink("remonte_joueur.php?id_tournoi=".$row2->id_tournoi."&amp;id_session=".$row2->id_session."&amp;id_joueur=".$row2->id_joueur, 
 									$this->makeImg("haut.gif", "Monter")).
-					"	</td>".
+					"</td>".
 					"</tr>".
 					"<tr>".
-					"	<td>".
+					"<td>".
 					$this->makeLink("descend_joueur.php?id_tournoi=".$row2->id_tournoi."&amp;id_session=".$row2->id_session."&amp;id_joueur=".$row2->id_joueur, $this->makeImg("bas.gif", "Descendre")).
-					"	</td>".
+					"</td>".
 					"</tr>";
 	}
 	$joueurs.="</table>";
@@ -55,3 +55,4 @@ foreach($aTabSession as $kS => $row)
 							);
 }
 echo $this->closeListe();
+?>
