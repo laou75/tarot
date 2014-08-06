@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4 text-center">
 <?php
-echo $this->makeIllustration("tarot.png", '', 'class="img-responsive"');
+echo $this->makeIllustration('tarot.png', '', 'class="img-responsive"');
 ?>
     </div>
     <div class="col-md-8">
@@ -9,7 +9,7 @@ echo $this->makeIllustration("tarot.png", '', 'class="img-responsive"');
             <div class="col-md-4">
                 <h4>Derniers tournois</h4>
 <?php
-echo $this->openListe(array("Commencé le"));
+echo $this->openListe(array('Commencé le'));
 $tournois = new Tournoi($this->db);
 $listeTournois = $tournois->getLast();
 foreach($listeTournois as $row)
@@ -20,7 +20,8 @@ foreach($listeTournois as $row)
                     6,
                     strftime("%d", $row->datedeb) . '/' . strftime("%m", $row->datedeb) . '/' . strftime("%Y", $row->datedeb),
                     'id_tournoi='.$row->id
-                ),
+                ) . ($row->commentaires ? '<br/>'.substr($row->commentaires, 0, 128) : '')
+            ,
             )
         );
 }
@@ -41,7 +42,7 @@ foreach($listeSessions as $row)
                 34,
                 strftime("%d", $row->datedeb) . '/' . strftime("%m", $row->datedeb) . '/' . strftime("%Y", $row->datedeb),
                 'id_tournoi='.$row->id_tournoi.'&amp;id_session='.$row->id
-            ),
+            ) . ($row->commentaires ? '<br/>'.substr($row->commentaires, 0, 128) : ''),
         )
     );
 }
@@ -62,7 +63,7 @@ foreach($listeParties as $row)
                 10,
                 strftime("%d", $row->date) . '/' . strftime("%m", $row->date) . '/' . strftime("%Y", $row->date),
                 'id_tournoi='.$row->id_tournoi.'&amp;id_session='.$row->id_session
-            ),
+            ) . ($row->commentaires ? '<br/>'.substr($row->commentaires, 0, 128) : ''),
         )
     );
 }

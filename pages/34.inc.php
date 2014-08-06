@@ -7,7 +7,6 @@ $id_tournoi=$_GET["id_tournoi"];
 
 echo $this->drawBarreBouton(
     null,
-    //$this->makeLinkBoutonRetour(30, 'id_tournoi='.$id_tournoi));
     $this->makeLinkBoutonRetour(10, 'id_tournoi='.$id_tournoi.'&id_session='.$id_session));
 
 //	Récupération des joueurs
@@ -19,27 +18,10 @@ else
     foreach($tabJoueurs as $k => $row)
     {
 		$aTabJ[$row->id_joueur] = $row;
-		$nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
-		$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
+        $popJoueur = " data-placement=\"bottom\" data-container=\"body\" data-toggle=\"popover\" data-content='".$this->getPortrait($row->portrait)."'";
+        $entete[] = '<span id="joueur_'.$row->ID.'" '.$popJoueur.'>'.$this->getNickname($row).'</span>';
 	}
     $aTabPar = $parties->getPartiesBySession($id_tournoi, $id_session);
-    /*
-	$req0 =	"select id ".
-			"from	parties ".
-            "where	id_tournoi=" . intval($id_tournoi) . " ".
-            "and	id_session=" . intval($id_session) . " ".
-			"order by id asc";
-	$db->sqlOpenCur($res0, $req0);
-	if ($this->db->sqlCountCur($res0)<1)
-		echo("Pas de parties!");
-	else
-	{
-		while	($row0=$db->sqlFetchCur($res0))
-		{
-			$aTabPar[$row0->id] = $row0;
-		}
-		$db->sqlFreeResult($res0);
-    */
     if (count($aTabPar)<1)
         echo("Pas de parties!");
     else

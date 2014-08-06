@@ -3,22 +3,18 @@ echo $this->drawBarreBouton(
 	array($this->makeLinkBouton(21)),
 	$this->makeLinkBoutonRetour(1)
 	);
-echo $this->openListe(array("Portrait", "Prénom", "Nom"), true);
+echo $this->openListe(array("Joueur"), true);
 $res=null;
 $req = "select * from joueurs order by nom asc, prenom asc";
 $this->db->sqlOpenCur($res, $req);
 $nb = $this->db->sqlCountCur($res);
-$i=0;
 while	($row=$this->db->sqlFetchCur($res))
 {
-	$portrait=strlen($row->portrait)>0 ? $row->portrait : "inconnu.gif";
-	$image=$this->makePortrait("mini/".$portrait);
+    //$image = strlen($row->portrait)>0 ? $this->makePortrait("mini/".$row->portrait) : '<span class="glyphicon glyphicon-user" style="font-size: 600%;"></span>';
+    $image = $this->getPortrait($row->portrait);
 	echo $this->ligneListe(
-							array(	"<center>".$image."</center>", 
-									$row->prenom,
-									$row->nom
-									),
-							array(	$this->makeLinkBouton(22, "id_joueur=".$row->id),	// modifier 
+        array(	'<div class="row"><div class="col-md-2 text-center">'.$image.'</div><div class="col-md-10">'.$row->prenom.' '.$row->nom.'</div></div>'),
+        array(	$this->makeLinkBouton(22, "id_joueur=".$row->id),	// modifier
 									$this->makeLinkBouton(23, "id_joueur=".$row->id)	// supprimer
 									)
 							);

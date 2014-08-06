@@ -4,33 +4,32 @@ $joueur = new Joueur($db);
 
 $aJPar = array();
 
-$id_tournoi = $_GET["id_tournoi"];
-$id_session = $_GET["id_session"];
+$id_tournoi = $_GET['id_tournoi'];
+$id_session = $_GET['id_session'];
 
 echo $this->drawBarreBouton(	
 	array(
-		$this->makeLinkBouton(11, "id_tournoi=".$id_tournoi."&amp;id_session=".$id_session), 
-		$this->makeLinkBouton(34, "id_tournoi=".$id_tournoi."&amp;id_session=".$id_session)),
-		$this->makeLinkBoutonRetour(30, "id_tournoi=".$id_tournoi)
+		$this->makeLinkBouton(11, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
+		$this->makeLinkBouton(34, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session)),
+		$this->makeLinkBoutonRetour(30, 'id_tournoi=' . $id_tournoi)
 		);
 
 //	R�cup�rer la liste des joueurs de la session
 $tabJoueursSession = $joueur->getJoueursBySession($id_tournoi, $id_session);
 foreach($tabJoueursSession as $k => $row) {
     $aJSess[$row->ID] = $row;
-    $nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom, 0, 1).".";
-    $entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
+    $popJoueur = " data-placement=\"bottom\" data-container=\"body\" data-toggle=\"popover\" data-content='".$this->getPortrait($row->portrait)."'";
+    $entete[] = '<span id="joueur_'.$row->ID.'" '.$popJoueur.'>'.$this->getNickname($row).'</span>';
 }
 
-$entete[] = "Contrat";
+$entete[] = 'Contrat';
 
 echo $this->openListe($entete, true);
 $tabParties = $partie->getPartiesBySession($id_tournoi, $id_session);
 $cumul=array();
-
 foreach	($tabParties as $k => $row)
 {
-	$petitaubout=($row->petitaubout==1) ? "oui" : "non";
+	$petitaubout=($row->petitaubout==1) ? 'oui' : 'non';
 
     $contratreussi =    ($row->annonce_reussie==1)
                         ? '<span class=\'glyphicon glyphicon-thumbs-up btn btn-sm btn-success\'></span>'
@@ -60,35 +59,30 @@ foreach	($tabParties as $k => $row)
 
 	$data=array();
 	foreach	($aJSess as $idJ => $detJ) {
-		$infos="";
+        $class='';
 		switch ($aJPar[$idJ]->type) {
-			case "preneur":
-				$class="liste-joueur-preneur";
+			case 'preneur':
+                $class = $aJPar[$idJ]->points >0 ? 'bg-success' : 'bg-danger';
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
-			case "called":
-				$class="liste-joueur-appele";
+			case 'called':
+                $class = $aJPar[$idJ]->points >0 ? 'bg-info' : 'bg-warning';
+                $pts = sprintf("%+d", $aJPar[$idJ]->points);
+				break;
+			case 'defense':
+				$class='';
 				$pts = sprintf("%+d", $aJPar[$idJ]->points);
 				break;
-			case "defense":
-				$class="liste-joueur-defense";
-				$pts = sprintf("%+d", $aJPar[$idJ]->points);
-				break;
-			case "mort":
+			case 'mort':
 			default:
-				$class="liste-joueur-mort";
-				$pts = "-";
+				$class='';
+				$pts = '---';
 				break;
 		}
-		if ($aJPar[$idJ]->type=="mort")
-			$data[]=	"<table width='100%'><tr><td class='".$class."' align='right'>&nbsp;</td></tr></table>";
-		else
-			$data[]=	"<table width='100%'><tr>".
-						"<td class='".$class."' align='right'>".$pts."</td>".
-						"</tr></table>";
+        $data[] =	'<div class="text-right ' . $class . '">' . $pts . '</div>';
 	}
 
-    $data[]= $hrefContrat;
+    $data[] = $hrefContrat;
 	if ($row->commentaires)
 		$data[]=$row->commentaires;
 
@@ -106,9 +100,10 @@ if (count($tabParties)>0)
 {
 	$data=array();
 	foreach	($aJSess as $idJ => $detJ) {
-		$data[]="<table width='100%'><tr><td class='resume-partie' align='right' width='60%'>".sprintf("%+d", $cumul[$idJ])."</td></tr></table>";
+        $data[]='<div class="text-right"><strong>'.sprintf("%+d", $cumul[$idJ]).'</strong></div>';
 	}
-	$data[]="";
-	echo $this->ligneListe($data,array());
+	$data[]='';
+
+	echo $this->ligneListe($data, array('<strong>Cumul</strong>'), null, 'info');
 }
 echo $this->closeListe();

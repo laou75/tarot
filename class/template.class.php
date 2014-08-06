@@ -48,8 +48,7 @@ class Template
             input.red,  select.red, {background-color: #ffb79c;}
             label.red{color: #ff115c;}
         </style>
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/main.js'></script>
+        <link rel="shortcut icon" href="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>favicon.ico" />
 <?php
         if($this->id==11 || $this->id==12)
         {
@@ -86,7 +85,7 @@ class Template
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a href="/" class="navbar-brand">Tarot</a>
+                    <a href="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>" class="navbar-brand">Tarot</a>
 
                 </div>
                 <div class="navbar-collapse collapse">
@@ -104,7 +103,7 @@ class Template
         }
         if (!Sess::isConnected()) {
 ?>
-                    <form role="form" class="navbar-form navbar-right" action="/identification.php" method="post">
+                    <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>identification.php" method="post">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Email" name="identifiant" id="identifiant">
                         </div>
@@ -116,8 +115,8 @@ class Template
 <?php
         } else {
 ?>
-                    <form role="form" class="navbar-form navbar-right" action="/logout.php" method="post">
-                        <button class="btn btn-warning" type="submit">Déconnexion</button>
+                    <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>logout.php" method="post">
+                        <button class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-off"></span> Déconnexion</button>
                     </form>
 <?php
         }
@@ -125,10 +124,10 @@ class Template
                 </div><!--/.navbar-collapse -->
             </div>
         </div>
-        <div class="container-fluid" style="margin-top: 55px;">
+        <div class="container" style="margin-top: 55px;">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3><?php echo $this->titrePage.$libCtxt;?></h3>
+                    <h3><?php echo ($this->titrePage ? $this->titrePage : 'Tarot').$libCtxt;?></h3>
                 </div>
                 <div class="panel-body">
 <?php
@@ -174,7 +173,7 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
 	</body>
 </html>
 <?php
-	    ob_end_flush();
+	    //ob_end_flush();
 	} // end __construct()
 
 	/*
@@ -253,7 +252,7 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
      */
     function getUrlFromId($id, $param=null)
     {
-        return (isset($param)) ? 'index.php?id='.$id.'&amp;' . $param : 'index.php?id='.$id;;
+        return (isset($param)) ? 'index.php?id='.$id.'&amp;' . $param : 'index.php?id='.$id;
     }
 
 	/*
@@ -350,7 +349,7 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
             $alt=" alt=\"$alt\"";
         else
             $alt=" alt=\"\"";
-        return "<img src=\"".$GLOBALS["Config"]["URL"]["PORTRAIT"].$img."\" border=0$alt$options/>";
+        return "<img src=\"".$GLOBALS["Config"]["URL"]["PORTRAIT"].$img."\" border=0$alt$options class=\"img-responsive\"/>";
 	}
 
 	/*
@@ -420,25 +419,28 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
 	/*
 	 * 
 	 */
-	function ligneListe($colonnes, $actions=null, $options=null)
+	function ligneListe($colonnes, $actions=null, $options=null, $class='')
 	{
-		$ret="<tr>\n";
+        $class = (!empty($class)) ? ' class="'.$class.'"' : '';
+		$ret = '<tr'.$class.'>'.PHP_EOL;
 		if (isset($actions))
 		{
-			$ret.=	"		<td style='vertical-align: middle;text-align:center;'>";
+//            $ret.=	'		<td style="vertical-align: middle;text-align:center;">';
+            $ret .=	'		<td>';
 			foreach($actions as  $detail)
 			{
-				$ret.=$detail." ";
+				$ret .= $detail.' ';
 			}
-			$ret.=	"</td>\n";
+			$ret .=	'</td>'.PHP_EOL;
 		}
-		$options=isset($options)?" ".$options:"";
+		$options = isset($options) ? ' '.$options : '';
 		foreach($colonnes as $detail)
 		{
-			if (strlen($detail)==0) $detail="&nbsp;";
-			$ret.=	"		<td class='liste'".$options.">".$detail."</td>\n";
+			if (strlen($detail)==0)
+                    $detail='&nbsp;';
+			$ret .=	'<td class="liste"'.$options.'>'.$detail.'</td>'.PHP_EOL;
 		}
-		return $ret."</tr>";
+		return $ret.'</tr>'.PHP_EOL;
 	}
 
 	/*
@@ -450,13 +452,29 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
 		return $ret;
 	}
 
-	/*
-	 * 
-	 */
-	function lienPortrait($image="", $label, $labelLong=null)
-	{
+    /*
+     *
+     */
+    function getNickname($row)
+    {
+        return isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
+    }
+
+    /*
+     *
+     */
+    function getPortrait($image='')
+    {
+        return strlen($image)>0 ? $this->makePortrait("mini/".$image) : '<span class="glyphicon glyphicon-user" style="font-size: 600%;"></span>';
+    }
+
+    /*
+     *
+     */
+    function lienPortrait($image="", $label, $labelLong=null)
+    {
         return $label;
-	}
+    }
 
 	/*
 	 * 

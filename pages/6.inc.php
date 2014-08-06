@@ -14,8 +14,8 @@ $entete = array();
 $aTab = $joueur->getJoueursByTournoi($id_tournoi);
 foreach($aTab as $idJoueur => $row)
 {
-	$nick=isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
-	$entete[] = $this->lienPortrait($row->portrait, $nick, $row->prenom." ".$row->nom);
+    $popJoueur = " data-placement=\"bottom\" data-container=\"body\" data-toggle=\"popover\" data-content='".$this->getPortrait($row->portrait)."'";
+    $entete[] = '<span id="joueur_'.$row->id_joueur.'" '.$popJoueur.'>'.$this->getNickname($row).'</span>';
 }
 
 $aTabSess = $session->getSessionByTournoi($id_tournoi);
@@ -24,7 +24,7 @@ $aTabSess = $session->getSessionByTournoi($id_tournoi);
     <h4>Statistiques</h4>
 	<div class="col-md-6">
 <?php
-echo $this->openListe($entete);
+echo $this->openListe($entete, true);
 foreach($aTabSess as $idS => $detS)
 {
 	$data=array();
@@ -36,7 +36,13 @@ foreach($aTabSess as $idS => $detS)
 		else
 			$data[]="---";
 	}
-	echo $this->ligneListe(	$data , null, "align='right'");
+	echo $this->ligneListe(	$data ,
+                            array(
+                                $this->makeLinkFromId(  30,
+                                                        '<span class="glyphicon glyphicon-eye-open"></span>', 'id_tournoi='.$id_tournoi.'&amp;id_session='.$idS,
+                                                        'Voir session '.$idS)
+                            ),
+                            "align='right'");
 }
 echo $this->closeListe();
 ?>

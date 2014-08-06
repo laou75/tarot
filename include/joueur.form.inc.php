@@ -21,11 +21,11 @@ if ($err=="")
             $ext = strtolower(substr($fichier, -3));
             if ($ext == "jpg" || $ext == "gif" || $ext == "png")
             {
-                include("class/tools.class.php");
-                tools::genereVignette(	$fichier,
-                    $GLOBALS["Config"]["PATH"]["PORTRAIT"],
-                    $GLOBALS["Config"]["PATH"]["PORTRAIT"]."mini/",
-                    "100");
+                //include("class/tools.class.php");
+                Tools::genereVignette(	$fichier,
+                                        $GLOBALS["Config"]["PATH"]["PORTRAIT"],
+                                        $GLOBALS["Config"]["PATH"]["PORTRAIT"]."mini/",
+                                        "100");
             }
         }
     }

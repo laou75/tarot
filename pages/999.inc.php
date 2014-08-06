@@ -1,9 +1,10 @@
-<div class="col-md-8 text-center">
+<div class="row">
+    <div class="col-md-4 text-center">
 <?php
 echo $this->makeIllustration("tarot.png", '', 'class="img-responsive"');
 ?>
-</div>
-<div class="col-md-4">
+    </div>
+    <div class="col-md-8">
 <?php
 $form = new Formulaire();
 
@@ -24,4 +25,5 @@ echo $form->makeNoteObligatoire();
 echo $form->makeButton("Se connecter");
 echo $form->closeForm();
 ?>
+    </div>
 </div>

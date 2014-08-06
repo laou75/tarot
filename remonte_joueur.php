@@ -30,4 +30,5 @@ if	($db->sqlSelect($row2, $req) == 1)
 			"and	id_joueur=".$row->id_joueur;
 	$db->sqlExecute($req);
 }
+//exit($_SERVER["HTTP_REFERER"]);
 header("Location: ".$_SERVER["HTTP_REFERER"]);

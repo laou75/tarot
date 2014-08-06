@@ -6,7 +6,7 @@ class Tools
 	 * @param $Source		: Chemin absolu du r�pertoire de l'image originale 
 	 * @param $Destination: Chemin absolu du r�pertoire de l'image r�duite 
 	 * @param $ratio		: Largeur de l'image r�duite.
-     * @return void
+     * @return string
 	 */
 	static function genereVignette($Image , $Source , $Destination , $ratio)
 	{
@@ -18,8 +18,8 @@ class Tools
 			$src=imagecreatefrompng($Source.$Image); 
 		else 
 		{
-			return "($Image) : Format d'image non supporté. Utilisez des *.gif, des *.png, des *.jpg ou des *.bmp";
-		} 
+            return "($Image) : Format d'image non supporté. Utilisez des *.gif, des *.png, des *.jpg ou des *.bmp";
+		}
 		$size = getimagesize($Source.$Image); 
 		if ($ratio<$size[1])
 			$im=imagecreatetruecolor(round( $size[0] * ($ratio/$size[1]) ), $ratio);
@@ -30,8 +30,12 @@ class Tools
 		if ($ratio<$size[1])
 			imagecopyresized($im, $src, 0, 0, 0, 0, round( $size[0] * ($ratio/$size[1]) ), $ratio, $size[0], $size[1]); 
 		else
-			imagecopyresized($im, $src, 0, 0, 0, 0, $size[0], $size[1] , $size[0], $size[1]); 
-		imagejpeg($im, $Destination.$Image);
+			imagecopyresized($im, $src, 0, 0, 0, 0, $size[0], $size[1] , $size[0], $size[1]);
+        if(file_exists($Destination.$Image) && is_file($Destination.$Image))
+            unlink($Destination.$Image);
+		if(false===imagejpeg($im, $Destination.$Image, 100))
+            exit('erreur');
+
         return '';
 	}
 	
