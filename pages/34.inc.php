@@ -31,6 +31,7 @@ else
     <h4>Statistiques</h4>
     <div class="col-md-6">
 <?php
+        $entete[] = '<span class="glyphicon glyphicon-comment"></span>';
 		echo $this->openListe($entete);
 		$cumul=array();
 		foreach($aTabPar as $idP => $detP)
@@ -56,6 +57,17 @@ else
 
 				$data[]=sprintf("%01.1f", $cumul[$idJ]);
 			}
+            if(!empty($detP->commentaires))
+            {
+                $popP = " data-placement=\"bottom\" data-container=\"body\" data-toggle=\"popover\" data-content='" . htmlspecialchars($detP->commentaires, ENT_QUOTES) . "'";
+                $data[] = '<span class="glyphicon glyphicon-comment text-primary"  id="partie_' . $idP . '"  ' . $popP . '"></span>';
+            }
+            else
+            {
+                $data[] = '<span class="glyphicon glyphicon-comment text-muted"></span>';
+            }
+
+
 			echo $this->ligneListe(	$data , null, "align='right'");
 		}
 		echo $this->closeListe();

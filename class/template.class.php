@@ -77,7 +77,7 @@ class Template
         }
 ?>
         <div role="navigation" class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="navbar-header">
                     <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
                         <span class="sr-only">Toggle navigation</span>
@@ -124,7 +124,7 @@ class Template
                 </div><!--/.navbar-collapse -->
             </div>
         </div>
-        <div class="container" style="margin-top: 55px;">
+        <div class="container-fluid" style="margin-top: 55px;">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3><?php echo ($this->titrePage ? $this->titrePage : 'Tarot').$libCtxt;?></h3>
