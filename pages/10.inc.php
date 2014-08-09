@@ -1,5 +1,6 @@
 <?php
 $partie = new Partie($db);
+$session = new Session($db);
 $joueur = new Joueur($db);
 
 $aJPar = array();
@@ -9,10 +10,51 @@ $id_session = $_GET['id_session'];
 
 echo $this->drawBarreBouton(	
 	array(
-		$this->makeLinkBouton(11, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
-		$this->makeLinkBouton(34, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session)),
+        $this->makeLinkBouton(32, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
+        $this->makeLinkBouton(33, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
+        $this->makeLinkBouton(35, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
+        $this->makeLinkBouton(34, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
+        '&nbsp;&nbsp;&nbsp;',
+        $this->makeLinkBouton(11, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session)),
 		$this->makeLinkBoutonRetour(30, 'id_tournoi=' . $id_tournoi)
 		);
+
+$podium = $session->getPodium($id_tournoi, $id_session);
+if(count($podium)>0)
+{
+    echo '<div class="row"><h4>Classement</h4>';
+    foreach($podium as $infoJ)
+    {
+        if ($infoJ->classement >3)
+            break;
+        $classJ = 'label-default';
+        switch($infoJ->classement)
+        {
+            case 1:
+                $classJ = 'label-success';
+                break;
+            case 2:
+                $classJ = 'label-info';
+                break;
+            case 3:
+                $classJ = 'label-warning';
+                break;
+        }
+        echo '<div class="col-md-4">
+             <div class="panel panel-default">
+                <div class="panel-heading">' . $infoJ->prenom . ' ' . $infoJ->nom . ' <span class="label ' . $classJ . '">' . $this->getLibClassement($infoJ->classement) . '</span></div>
+                <div class="panel-body">'.
+                    $this->getPortrait($infoJ->portrait, 'Portrait de ' . $infoJ->prenom . ' ' . $infoJ->nom, ' class="img-circle" align="left"').
+                    ' <span class="badge">' . $infoJ->cumul . '</span>' .
+                '</div></div>
+            </div>';
+    }
+    echo '</div>';
+}
+
+echo '<div class="row"><h4>Commentaires</h4>';
+$row = $session->getSessionById($id_tournoi, $id_session);
+echo '<div class="panel panel-default"><div class="panel-body">'.(!empty($row['commentaires']) ? nl2br($row['commentaires']) : 'Pas de commentaires').'</div></div></div>';
 
 //	R�cup�rer la liste des joueurs de la session
 $tabJoueursSession = $joueur->getJoueursBySession($id_tournoi, $id_session);
@@ -23,8 +65,9 @@ foreach($tabJoueursSession as $k => $row) {
 }
 
 $entete[] = 'Contrat';
+$entete[] = 'Commentaire';
 
-echo $this->openListe($entete, true);
+echo '<div class="row"><h4>Liste des parties</h4>'.$this->openListe($entete, true);
 $tabParties = $partie->getPartiesBySession($id_tournoi, $id_session);
 $cumul=array();
 foreach	($tabParties as $k => $row)
@@ -84,7 +127,7 @@ foreach	($tabParties as $k => $row)
 
     $data[] = $hrefContrat;
 	if ($row->commentaires)
-		$data[]=$row->commentaires;
+		$data[]=nl2br($row->commentaires);
 
 	echo $this->ligneListe(
 		$data,
@@ -106,4 +149,4 @@ if (count($tabParties)>0)
 
 	echo $this->ligneListe($data, array('<strong>Cumul</strong>'), null, 'info');
 }
-echo $this->closeListe();
+echo $this->closeListe().'</div>';

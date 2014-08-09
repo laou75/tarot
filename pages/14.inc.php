@@ -29,10 +29,6 @@ echo $form->makeHidden("id_partie", "id_partie", $id);
 echo $form->makeHidden("date", "date", time());
 if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
-
-echo $form->openFieldset("Commentaires");
-echo $form->makeTexteRiche("commentaires", "commentaires", $form->getValeur("commentaires"));
-echo $form->closeFieldset();
-
+echo $form->makeTexteRiche("commentaires", "commentaires", "Commentaires", $form->getValeur("commentaires"));
 echo $form->makeButton("Enregistrer");
 echo $form->closeForm();

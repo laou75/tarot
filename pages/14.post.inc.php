@@ -7,4 +7,4 @@ $this->db->sqlUpdate(  "parties",
                                 "id_tournoi"=>intval($form->getValeur("id_tournoi")),
                                 "id_session"=>intval($form->getValeur("id_session"))),
                         array(  "commentaires"=>$form->getValeur("commentaires")));
-Header("Location: ".$form->getValeur("from"));
+header("Location: ".$form->getValeur("from"));

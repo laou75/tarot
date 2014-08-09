@@ -19,9 +19,9 @@ echo $form->openForm("Modifier un tournoi", "", "multipart/form-data");
 if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
 echo $form->makeHidden("id", "id", $form->getValeur("id"));
-echo $form->makeInput("datedeb", "datedeb", "Date de début (*)", strftime ("%d/%m/%Y", $form->getValeur("datedeb")));
-echo $form->makeInput("datefin", "datefin", "Date de fin", strftime ("%d/%m/%Y", $form->getValeur("datefin")));
-echo $form->makeTexteRiche("commentaires", "commentaires", $form->getValeur("commentaires"));
+echo $form->makeInputDate("datedeb", "datedeb", "Date de début (*)", strftime ("%d/%m/%Y", $form->getValeur("datedeb")), '', 'date début');
+echo $form->makeInputDate("datefin", "datefin", "Date de fin", (!empty($form->getValeur("datefin")) ? strftime ("%d/%m/%Y", $form->getValeur("datefin")) : ''), '', 'date fin');
+echo $form->makeTexteRiche("commentaires", "commentaires", "Commentaires", $form->getValeur("commentaires"));
 echo $form->makeNoteObligatoire();
 echo $form->makeButton("Enregistrer");
 echo $form->closeForm();

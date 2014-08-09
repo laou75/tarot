@@ -150,11 +150,17 @@ class Joueur
     function checkMDP($login, $password)
     {
         $row = null;
-        $req =  "select nickname, mdp ".
+        $req =  "select id, nom, prenom, nickname, mdp ".
                 "from joueurs ".
                 "where nickname = '" . $this->db->sqlEscStr($login). "'";
         $this->db->sqlSelect($row, $req);
-        return (strtolower($row->mdp) == strtolower($password));
-
+        //return (strtolower($row->mdp) == strtolower($password));
+        if (isset($row) && strtolower($row->mdp) == strtolower($password))
+        {
+            return $row;
+        }
+        else{
+            return false;
+        }
     }
 }

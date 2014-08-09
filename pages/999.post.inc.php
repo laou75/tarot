@@ -16,14 +16,15 @@ if ($err=="")
 		$password = $_POST["password"];
 
         $joueurs = new Joueur($this->db);
-        if (!$joueurs->checkMDP($login, $password))
+        if (!$data = $joueurs->checkMDP($login, $password))
 			$err .= "Identification incorrecte !";
 		else
 		{
 			//	Creation de la session
 			$sess = new Sess();
-			$sess->sessionConnect($login, "admin");
-			$sessionTarot = $sess;
+            //$sess->sessionConnect($login, "admin");
+            $sess->sessionConnect($data);
+            $sessionTarot = $sess;
             $_SESSION["sessionTarot"] = $sess;
             header("Location: index.php");
 		}

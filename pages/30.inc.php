@@ -1,12 +1,55 @@
 <?php
 $id_tournoi = $_GET['id_tournoi'];
 
-echo $this->drawBarreBouton(    array(  $this->makeLinkBouton(31, 'id_tournoi=' . $id_tournoi),
-                                        $this->makeLinkBouton(6, 'id_tournoi=' . $id_tournoi)),
+echo $this->drawBarreBouton(    array(  $this->makeLinkBouton(4, 'id_tournoi=' . $id_tournoi),
+                                        $this->makeLinkBouton(5, 'id_tournoi=' . $id_tournoi),
+                                        $this->makeLinkBouton(7, 'id_tournoi=' . $id_tournoi),
+                                        $this->makeLinkBouton(6, 'id_tournoi=' . $id_tournoi),
+                                        '&nbsp;&nbsp;&nbsp;',
+                                        $this->makeLinkBouton(31, 'id_tournoi=' . $id_tournoi)),
                                 $this->makeLinkBoutonRetour(2));
 
-echo $this->openListe(array('Date', 'Joueurs', 'Commentaires'), true);
 
+$tournoi = new Tournoi($db);
+
+$podium = $tournoi->getPodium($id_tournoi);
+if(count($podium)>0)
+{
+    echo '<div class="row"><h4>Classement</h4>';
+    foreach($podium as $infoJ)
+    {
+        if ($infoJ->classement>3)
+            break;
+        $classJ = 'label-default';
+        switch($infoJ->classement)
+        {
+            case 1:
+                $classJ = 'label-success';
+                break;
+            case 2:
+                $classJ = 'label-info';
+                break;
+            case 3:
+                $classJ = 'label-warning';
+                break;
+        }
+        echo '<div class="col-md-4">
+             <div class="panel panel-default">
+                <div class="panel-heading">' . $infoJ->prenom . ' ' . $infoJ->nom . ' <span class="label ' . $classJ . '">' . $this->getLibClassement($infoJ->classement) . '</span></div>
+                <div class="panel-body">'.
+            $this->getPortrait($infoJ->portrait, 'Portrait de ' . $infoJ->prenom . ' ' . $infoJ->nom, ' class="img-circle" align="left"').
+            ' <span class="badge">' . $infoJ->cumul . '</span>' .
+            '</div></div>
+        </div>';
+    }
+    echo '</div>';
+}
+
+echo '<div class="row"><h4>Commentaires</h4>';
+$row = $tournoi->getTournoiById($id_tournoi);
+echo '<div class="panel panel-default"><div class="panel-body">'.(!empty($row['commentaires']) ? nl2br($row['commentaires']) : 'Pas de commentaires').'</div></div></div>';
+
+echo '<div class="row"><h4>Liste des sessions</h4>'.$this->openListe(array('Commencée le', 'Finie le', 'Joueurs', 'Commentaires'), true);
 $sessions = new Session($this->db);
 $aTabSession = $sessions->getSessionByTournoi($id_tournoi);
 foreach($aTabSession as $kS => $row)
@@ -38,14 +81,16 @@ foreach($aTabSession as $kS => $row)
 	$joueurs .= '</div>';
 	$this->db->sqlFreeResult($res2);
 	echo $this->ligneListe( array(	strftime("%d", $row->datedeb) . '/' . strftime("%m", $row->datedeb) . '/' . strftime("%Y", $row->datedeb),
+                                    (!empty($row->datefin))  ? strftime("%d", $row->datefin)."/".strftime("%m", $row->datefin)."/".strftime("%Y", $row->datefin) : "en cours",
 									$joueurs,
-									$row->commentaires
+									nl2br($row->commentaires)
 									),
 							array(	$this->makeLinkBouton(10, 'id_session='.$row->id.'&amp;id_tournoi='.$id_tournoi),	// Parties
 									$this->makeLinkBouton(32, 'id_session='.$row->id.'&amp;id_tournoi='.$id_tournoi),	// modifier
 									$this->makeLinkBouton(33, 'id_session='.$row->id.'&amp;id_tournoi='.$id_tournoi),	// supprimer
-									$this->makeLinkBouton(34, 'id_session='.$row->id.'&amp;id_tournoi='.$id_tournoi)	// Stats
+                                    $this->makeLinkBouton(34, 'id_session='.$row->id.'&amp;id_tournoi='.$id_tournoi),
+									$this->makeLinkBouton(35, 'id_session='.$row->id.'&amp;id_tournoi='.$id_tournoi)	// Stats
 									)
 							);
 }
-echo $this->closeListe();
+echo $this->closeListe().'</div>';

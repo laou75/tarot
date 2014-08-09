@@ -294,8 +294,6 @@ class Db
 
         $req .= $cols." ".$values;
 
-        echo($req);
-
         $this->sqlExecute($req);
     }
 	
@@ -343,6 +341,7 @@ class Db
 			}
 		}
 		$req .= $where;
+        //exit($req);
 		$this->sqlExecute($req);
 	}
 	

@@ -19,6 +19,7 @@ if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
 echo $form->makeInput("nom", "nom", "Nom (*)", $form->getValeur("nom"));
 echo $form->makeInput("prenom", "prenom", "Prénom (*)", $form->getValeur("prenom"));
+echo $form->makeInput("nickname", "nickname", "Surnom ", $form->getValeur("nickname"));
 echo $form->makeFileInput("portrait", "portrait", "Portrait", $form->getValeur("portrait"));
 echo $form->makeNoteObligatoire();
 echo $form->makeButton("Enregistrer");

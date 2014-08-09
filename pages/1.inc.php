@@ -17,7 +17,7 @@ foreach($listeTournois as $row)
     echo $this->ligneListe(
             array(
                 $this->makeLinkFromId(
-                    6,
+                    30,
                     strftime("%d", $row->datedeb) . '/' . strftime("%m", $row->datedeb) . '/' . strftime("%Y", $row->datedeb),
                     'id_tournoi='.$row->id
                 ) . ($row->commentaires ? '<br/>'.substr($row->commentaires, 0, 128) : '')
@@ -39,7 +39,7 @@ foreach($listeSessions as $row)
     echo $this->ligneListe(
         array(
             $this->makeLinkFromId(
-                34,
+                10,
                 strftime("%d", $row->datedeb) . '/' . strftime("%m", $row->datedeb) . '/' . strftime("%Y", $row->datedeb),
                 'id_tournoi='.$row->id_tournoi.'&amp;id_session='.$row->id
             ) . ($row->commentaires ? '<br/>'.substr($row->commentaires, 0, 128) : ''),

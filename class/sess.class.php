@@ -2,24 +2,38 @@
 class Sess
 {
 
-	var	$logId;
+	var	$id;
 	var	$numSession;
 	var	$role;
+    var $nom;
+    var $prenom;
+    var $nickname;
 
     function __construct()
     {
     }
+/*
+    function sessionConnect($logId, $role)
+    {
+        $this->logId=	$logId;
+        $this->role	=	$role;
+    }
+*/
+    function sessionConnect($data)
+    {
+        $this->id       =	$data->id;
+        $this->nom	    =	$data->nom;
+        $this->prenom	=	$data->prenom;
+        $this->nickname =	$data->nickname;
+    }
 
-	function sessionConnect($logId, $role)
+
+    function sessionDisconnect()
 	{
-		$this->logId=	$logId;
-		$this->role	=	$role;
-	}
-	
-	function sessionDisconnect()
-	{
-		unset($this->logId);
-		unset($this->role);
+		unset($this->id);
+        unset($this->nom);
+        unset($this->prenom);
+        unset($this->nickname);
 		unset($_SESSION);
 		unset($this);
 	}
@@ -27,6 +41,16 @@ class Sess
     static function isConnected()
     {
         return isset($_SESSION['sessionTarot']);
+    }
+
+    static function getPrenom()
+    {
+        return $_SESSION['sessionTarot']->prenom;
+    }
+
+    static function getNom()
+    {
+        return $_SESSION['sessionTarot']->nom;
     }
 
 }

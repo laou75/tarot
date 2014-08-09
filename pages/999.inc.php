@@ -19,8 +19,8 @@ else
 echo $form->openForm("Se connecter", "", "multipart/form-data");
 if	(isset($err) && strlen($err)>0)
 	echo $form->makeMsgError($err);
-echo $form->makeInput("identifiant", "identifiant", "Identifiant (*)", $form->getValeur("identifiant"));
-echo $form->makePassword("password", "password", "Mot de passe (*)" );
+echo $form->makeInput("identifiant", "identifiant", "Identifiant (*)", $form->getValeur("identifiant"), '', 'text', 'login', 'Saisir votre identifiant');
+echo $form->makePassword("password", "password", "Mot de passe (*)", '', '', 'password', 'Saisir votre mot de passe');
 echo $form->makeNoteObligatoire();
 echo $form->makeButton("Se connecter");
 echo $form->closeForm();

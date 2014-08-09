@@ -29,11 +29,11 @@ foreach($aTabJoueurs as $idJ => $det)
         if ($truc<0)
         {
             $cumulJoueur = $cumulJoueur + $truc;
-            $totalCumulJoueur = $truc;
+            $totalCumulJoueur = $totalCumulJoueur + $truc;
         }
         $categories .= '\''.$idS.'\', ';
     }
-    $series[$idJ] = array(  'name'  => $det->nickname,
+    $series[$idJ] = array(  'name'  => $this->getNickname($det), //$det->nickname,
                             'cumul' => $cumulJoueur,
                             'data'  => $ydata
                         );
@@ -87,26 +87,26 @@ if (strlen($listeJoueurs)>0)
             },
             series: [{
 <?php
-    $tmp='';
-    $tmp2='';
-    $tmp3='';
-    foreach($series as $k => $v)
+$tmp='';
+$tmp2='';
+$tmp3='';
+foreach($series as $k => $v)
+{
+    $tmp .= 'name: \'' . $v['name'] . '\', '.PHP_EOL.'data: [';
+    foreach($v['data'] as $k2 => $v2)
     {
-        $tmp .= 'name: \'' . $v['name'] . '\', '.PHP_EOL.'data: [';
-        foreach($v['data'] as $k2 => $v2)
-        {
-            $tmp .= $v2.', ';
-        }
-        $tmp = substr($tmp, 0, strlen($tmp)-2).']';
-        $tmp .= PHP_EOL.'}, {';
-        $tmp2 .= 'name: \'' . $v['name'] . '\', '.PHP_EOL.'data: ['.$v['cumul'].']';
-        $tmp2 .= PHP_EOL.'}, {';
-        $tmp3 .= '[\'' . $v['name'] . '\', ' . $v['cumul']/$totalCumulJoueur*100 .'],'.PHP_EOL;
+        $tmp .= $v2.', ';
     }
-    $tmp = substr($tmp, 0, strlen($tmp)-4);
-    $tmp2 = substr($tmp2, 0, strlen($tmp2)-4);
-    $tmp3 = substr($tmp3, 0, strlen($tmp3)-2);
-    echo $tmp;
+    $tmp = substr($tmp, 0, strlen($tmp)-2).']';
+    $tmp .= PHP_EOL.'}, {';
+    $tmp2 .= 'name: \'' . $v['name'] . '\', '.PHP_EOL.'data: ['.$v['cumul'].']';
+    $tmp2 .= PHP_EOL.'}, {';
+    $tmp3 .= '[\'' . $v['name'] . '\', ' . abs($v['cumul']/$totalCumulJoueur*100) .'],'.PHP_EOL;
+}
+$tmp = substr($tmp, 0, strlen($tmp)-4);
+$tmp2 = substr($tmp2, 0, strlen($tmp2)-4);
+$tmp3 = substr($tmp3, 0, strlen($tmp3)-2);
+echo $tmp;
 ?>
             }]
         });
@@ -173,9 +173,9 @@ echo $tmp2;
                 type: 'pie',
                 name: 'Cumul des pertes',
                 data: [
-                    <?php
-                    echo $tmp3;
-                    ?>
+<?php
+echo $tmp3;
+?>
                 ]
             }]
         });

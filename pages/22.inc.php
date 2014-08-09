@@ -23,6 +23,7 @@ if	(isset($err) && strlen($err)>0)
 echo $form->makeHidden("id", "id", $form->getValeur("id"));
 echo $form->makeInput("nom", "nom", "Nom (*)", $form->getValeur("nom"));
 echo $form->makeInput("prenom", "prenom", "Prénom (*)", $form->getValeur("prenom"));
+echo $form->makeInput("nickname", "nickname", "Surnom ", $form->getValeur("nickname"));
 $image=(strlen($form->getValeur("portrait"))>0) ? $this->makePortrait("mini/".$form->getValeur("portrait")) : "";
 echo $form->makeFileInput(	"portrait", 
 							"portrait", 

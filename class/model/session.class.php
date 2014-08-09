@@ -39,6 +39,18 @@ class Session
     }
 
 
+    function getSessionById($id_tournoi, $id_session)
+    {
+        $row = null;
+        $req =	"select * ".
+                "from sessions ".
+                "where id_tournoi = " . intval($id_tournoi)." ".
+                "and id = " . intval($id_session);
+        $this->db->sqlSelectArray($row, $req);
+        return $row;
+    }
+
+
     function getArraySessionById($id_tournoi, $id_session)
     {
         $row = null;
@@ -68,5 +80,39 @@ class Session
     function getLast()
     {
         return $this->getAll(true);
+    }
+
+    function getPodium($id_tournoi, $id_session)
+    {
+        $liste = array();
+        $res=null;
+        $req =  "SELECT sum(points) as cumul, id_joueur, nom, prenom, portrait, 0 as classement " .
+                "FROM   r_parties_joueurs " .
+                "join   joueurs on (id = id_joueur) " .
+                "WHERE  id_tournoi = " . intval($id_tournoi) . " " .
+                "and    id_session = " . intval($id_session) . " " .
+                "group by id_joueur, nom, prenom, portrait ".
+                "order by sum(points) desc";
+
+        $this->db->sqlOpenCur($res, $req);
+        $classement=0;
+        $cumulPrec=-10000;
+        $pas=1;
+        while ($row=$this->db->sqlFetchCur($res))
+        {
+            if ($classement == 0 || $cumulPrec > intval($row->cumul))
+            {
+                $classement = $classement + $pas;
+                $pas=1;
+            }
+            elseif($cumulPrec == intval($row->cumul))
+            {
+                $pas++;
+            }
+            $row->classement = $classement;
+            $liste[] = $row;
+            $cumulPrec = intval($row->cumul);
+        }
+        return $liste;
     }
 }

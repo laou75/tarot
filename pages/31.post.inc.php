@@ -14,7 +14,16 @@ if	($err=="")
 	$m = substr($form->getValeur("datedeb"), 3, 2);
 	$y = substr($form->getValeur("datedeb"), 6, 4);
 	$form->setValeur("datedeb", mktime ( 0, 0, 0, $m, $d, $y));
-	$this->db->sqlInsert("sessions", $form->getValeurs());
+    //$form->setValeur("datefin", $form->textToDate($form->getValeur("datefin")));
+    if(!empty($form->getValeur("datefin")))
+    {
+        $d = substr($form->getValeur("datefin"), 0, 2);
+        $m = substr($form->getValeur("datefin"), 3, 2);
+        $y = substr($form->getValeur("datefin"), 6, 4);
+        $form->setValeur("datefin", mktime ( 0, 0, 0, $m, $d, $y));
+    }
+
+    $this->db->sqlInsert("sessions", $form->getValeurs());
 
 	//	Traiter les joueurs
 	$id_session = $this->db->sqlLastInsert("sessions", "id");

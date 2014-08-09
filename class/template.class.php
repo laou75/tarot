@@ -3,11 +3,9 @@ class Template
 {
     var $titre;
     var $titrePage;
-    var	$pageDefaut;
 	var	$id;
 	var	$cheminMenu;
 	var $db;
-	var $rowPage;
 
 	/*
 	 * 
@@ -15,21 +13,20 @@ class Template
 	function __construct($db)
 	{
 		$this->titre=$GLOBALS["Config"]["SITE"]["TITRE"];
-		$this->pageDefaut=$GLOBALS["Config"]["SITE"]["PAGEDEFAULT"];
 		$this->db=$db;
 
 		if	(!array_key_exists("id", $_GET))
-			$this->id = $this->pageDefaut;		
+			$this->id = $GLOBALS["Config"]["SITE"]["PAGEDEFAULT"];		
 		else
 			$this->id = $_GET["id"];
-		$this->rowPage = $this->getInfosMenu($this->id);
-        $this->titrePage =  (isset($this->rowPage->description)
-                            ?   $this->rowPage->description
-                            :   ((isset($this->rowPage->label))
-                                ?   $this->rowPage->label
+		$rowPage = $this->getInfosMenu($this->id);
+        $this->titrePage =  (isset($rowPage->description)
+                            ?   $rowPage->description
+                            :   ((isset($rowPage->label))
+                                ?   $rowPage->label
                                 :   '')
                             );
-        $this->titre = isset($this->titrePage) ? $this->titre . ' - ' . $this->titrePage : $this->titre;
+        $this->titre = !empty($this->titrePage) ? $this->titre . ' - ' . $this->titrePage : $this->titre;
 
 		//	Traiter les donn�es post�es
 		if (count($_POST)>0)
@@ -44,18 +41,17 @@ class Template
         <title><?php echo $this->titre;?></title>
         <!-- Bootstrap -->
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+        <!-- Richtext Edit-->
+        <link rel="stylesheet" type="text/css" href="css/prettify.css"/>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-wysihtml5.css"/>
+        <!-- Datepicker-->
+        <link id="bsdp-css" type="text/css" href="css/datepicker3.css" rel="stylesheet"/>
         <style type="text/css">
             input.red,  select.red, {background-color: #ffb79c;}
             label.red{color: #ff115c;}
         </style>
         <link rel="shortcut icon" href="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>favicon.ico" />
 <?php
-        if($this->id==11 || $this->id==12)
-        {
-?>
-        <script type='text/javascript' src='<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>js/calcul.js'></script>
-<?php
-        }
 		$libCtxt="";
 		if	(isset($_GET["id_tournoi"]))
 			$libCtxt .= ", tournoi n°".$_GET["id_tournoi"];
@@ -65,16 +61,7 @@ class Template
 			$libCtxt .= ", partie n°".$_GET["id_partie"];
 ?>
 	</head>
-<?php
-        if($this->id==11 || $this->id==12) {
-?>
-	<body onload="calculePoints()">
-<?php
-        } else {
-?>
     <body>
-<?php
-        }
 ?>
         <div role="navigation" class="navbar navbar-inverse navbar-fixed-top">
             <div class="container-fluid">
@@ -86,21 +73,9 @@ class Template
                         <span class="icon-bar"></span>
                     </button>
                     <a href="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>" class="navbar-brand">Tarot</a>
-
                 </div>
                 <div class="navbar-collapse collapse">
 <?php
-        if (Sess::isConnected())
-        {
-?>
-                    <ul class="nav navbar-nav">
-<?php
-        $this->getChemin($this->id);
-        echo $this->drawMenu();
-?>
-                    </ul>
-<?php
-        }
         if (!Sess::isConnected()) {
 ?>
                     <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>identification.php" method="post">
@@ -113,9 +88,18 @@ class Template
                         <button class="btn btn-success" type="submit">Connexion</button>
                     </form>
 <?php
-        } else {
+        } 
+        else 
+        {
 ?>
+                    <ul class="nav navbar-nav">
+                        <?php
+                        $this->getChemin($this->id);
+                        echo $this->drawMenu();
+                        ?>
+                    </ul>
                     <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>logout.php" method="post">
+                        <span class="text-muted"><?php echo Sess::getPrenom() . ' ' . Sess::getNom();?></span>
                         <button class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-off"></span> Déconnexion</button>
                     </form>
 <?php
@@ -125,50 +109,75 @@ class Template
             </div>
         </div>
         <div class="container-fluid" style="margin-top: 55px;">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3><?php echo ($this->titrePage ? $this->titrePage : 'Tarot').$libCtxt;?></h3>
-                </div>
-                <div class="panel-body">
+            <div class=page-header">
+                <h3><?php echo ($this->titrePage ? $this->titrePage : 'Tarot').$libCtxt;?></h3>
+            </div>
+            <div class="container-fluid">
 <?php
-$id_tournoi=isset($_GET["id_tournoi"]) ? $_GET["id_tournoi"] : null;
-$id_session=isset($_GET["id_session"]) ? $_GET["id_session"] : null;
-echo '<ol class="breadcrumb">';
-echo '<li>'.$this->makeLinkFromId(1, 'Accueil').'</li>';if (isset($id_tournoi) || isset($id_session) || isset($id_partie))
-{
-
-    if (isset($id_tournoi))
-    {
-        echo '<li>'.$this->makeLinkFromId(30, 'Tournoi '.$id_tournoi, 'id_tournoi='.$id_tournoi).'</li>';
-    }
-    if (isset($id_session))
-    {
-        echo '<li>'.$this->makeLinkFromId(10, 'Session '.$id_session, 'id_tournoi='.$id_tournoi.'&amp;id_session='.$id_session).'</li>';
-    }
-}
-echo '</ol>';
-?>
-<?php
+        $id_tournoi=isset($_GET["id_tournoi"]) ? $_GET["id_tournoi"] : null;
+        $id_session=isset($_GET["id_session"]) ? $_GET["id_session"] : null;
+        echo '<ol class="breadcrumb">';
+        echo '<li>'.$this->makeLinkFromId(1, 'Accueil').'</li>';
+        if (isset($id_tournoi) || isset($id_session) || isset($id_partie))
+        {
+            if (isset($id_tournoi))
+            {
+                echo '<li>'.$this->makeLinkFromId(30, 'Tournoi '.$id_tournoi, 'id_tournoi='.$id_tournoi).'</li>';
+            }
+            if (isset($id_session))
+            {
+                echo '<li>'.$this->makeLinkFromId(10, 'Session '.$id_session, 'id_tournoi='.$id_tournoi.'&amp;id_session='.$id_session).'</li>';
+            }
+        }
+        echo '</ol>';
         if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php"))
             include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php");
         else
             echo $GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php";
 ?>
-                </div>
             </div>
         </div>
-		<div id="pop-up" class="pop-portrait" style="display:none;"></div>
+        <!--JQuery-->
         <script src="js/jquery-1.11.1.min.js"></script>
+        <!--Bootstrap-->
         <script src="js/bootstrap.min.js"></script>
+        <!--Highcharts-->
         <script src="js/highcharts.js"></script>
         <script src="js/highcharts-3d.js"></script>
         <script src="js/modules/exporting.js"></script>
-<?php
-if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php"))
-    include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php");
+        <!--Richtext Edit-->
+        <script src="js/wysihtml5-0.3.0.js"></script>
+        <script src="js/prettify.js"></script>
+        <script src="js/bootstrap-wysihtml5.js"></script>
+        <!--datepicker-->
+        <script src="js/bootstrap-datepicker.js"></script>
 
-if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
-    include($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js");
+<script type="text/javascript">
+    $(function () {
+        $('#commentaires').wysihtml5({
+            "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
+            "emphasis": true, //Italics, bold, etc. Default true
+            "lists": true, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
+            "html": false, //Button which allows you to edit the generated HTML. Default false
+            "link": true, //Button to insert a link. Default true
+            "image": true, //Button to insert an image. Default true,
+            "color": false, //Button to change color of font
+            "size": 'sm' //Button size like sm, xs etc.
+        });
+        $('.datepicker').datepicker({
+            format: "dd/mm/yyyy",
+            language: "fr",
+            autoclose: true,
+            todayHighlight: true
+        });
+    });
+</script>
+<?php
+        if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php"))
+            include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php");
+        
+        if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
+            include($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js");
 ?>
 	</body>
 </html>
@@ -176,6 +185,7 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
 	    //ob_end_flush();
 	} // end __construct()
 
+    
 	/*
 	 * 
 	 */
@@ -325,7 +335,7 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
             $alt=" alt=\"$alt\"";
         else
             $alt=" alt=\"\"";
-        return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" border=0$alt$options/>";
+        return "<img src=\"".$GLOBALS["Config"]["URL"]["IMG"].$img."\" $alt$options/>";
 	}
 
 	/*
@@ -463,9 +473,24 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
     /*
      *
      */
-    function getPortrait($image='')
+    function getPortrait($image='', $alt='', $option='')
     {
-        return strlen($image)>0 ? $this->makePortrait("mini/".$image) : '<span class="glyphicon glyphicon-user" style="font-size: 600%;"></span>';
+        return strlen($image)>0 ? $this->makePortrait("mini/".$image, $alt, $option) : '<span class="glyphicon glyphicon-user" style="font-size: 600%;"></span>';
+    }
+
+    /*
+     *
+     */
+    function getMaxiPortrait($image='', $alt='', $option='')
+    {
+
+        if (isset($alt) && strlen($alt)>0)
+            $alt=" alt=\"$alt\"";
+        else
+            $alt=" alt=\"\"";
+        return "<img height=\"300px\" src=\"" . $GLOBALS["Config"]["URL"]["PORTRAIT"] . "mini/".$image . "\" $alt/>";
+
+        //return strlen($image)>0 ? $this->makePortrait($image, $alt, $option) : '<span class="glyphicon glyphicon-user" style="font-size: 600%;"></span>';
     }
 
     /*
@@ -510,4 +535,42 @@ if	(file_exists($GLOBALS["Config"]["PATH"]["JS"].$this->id.".js"))
 		return $ret;
 	}
 
+    function getLibClassement($rang)
+    {
+        return ($rang==1) ? $rang.'<sup>er</sup>' : $rang.'<sup>eme</sup>';
+    }
+
+    function drawCarousel($data)
+    {
+        echo '<div><div id="carousel-example-generic" class="carousel slide" data-ride="carousel"><ol class="carousel-indicators">';
+        // indicators
+        $tmp = ' class="active"';
+        foreach($data as $k => $v)
+        {
+            echo '<li data-target="#carousel-example-generic" data-slide-to="'.$k.'"'.$tmp.'></li>';
+            $tmp = '';
+        }
+        echo '</ol>';
+
+        //Wrapper for slides
+        echo '<div class="carousel-inner">';
+        $tmp = ' active';
+        foreach($data as $k => $v)
+        {
+            echo    '<div class="item'.$tmp.'">' . $v['contenu'] .
+                    '<div class="carousel-caption">' . $v['caption'] . '</div>' .
+                    '</div>';
+            $tmp = '';
+        }
+        echo '</div>';
+
+        //Controls
+        echo    '<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">' .
+                '<span class="glyphicon glyphicon-chevron-left"></span>' .
+                '</a>' .
+                '<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">' .
+                '<span class="glyphicon glyphicon-chevron-right"></span>' .
+                '</a>' .
+                '</div></div>';
+    }
 }

@@ -36,63 +36,59 @@ class Formulaire
 			return '';
 	}
 
-	function openForm($titre="", $action=null, $enctype="application/x-www-form-urlencoded", $width=null)
+    function openForm($titre="", $action=null, $enctype="application/x-www-form-urlencoded")
+    {
+        if (!isset($action) || strlen($action)<1)
+            $action = (array_key_exists('REQUEST_URI', $_SERVER)) ? 'action="' . $_SERVER['REQUEST_URI'] . '"' : 'action="' . $_SERVER['PHP_SELF'] . '"';
+        else
+            $action = 'action="' . $action . '"';
+
+        if	(count($_POST)>0 && array_key_exists('from', $_POST))
+            $from = $this->makeHidden('from', 'from', $_POST['from']);
+        else
+            $from = (array_key_exists('HTTP_REFERER', $_SERVER)) ? $this->makeHidden('from', 'from', $_SERVER['HTTP_REFERER']) : '';
+
+        return sprintf( '<form %s method="post" enctype="%s" class="form-horizontal" role="form">%s'.PHP_EOL,
+                        $action, $enctype, $from);
+    }
+
+    function closeForm()
+    {
+        return	'</form>'.PHP_EOL;
+    }
+
+    function makeHidden($name, $id, $value="")
+    {
+        return	'<input type="hidden" name="'.$name.'" id="'.$id.'" value="'.$value.'"/>'.PHP_EOL;
+    }
+
+    function makeLabel($id, $label='')
+    {
+        return  (!empty($label))
+                ? sprintf('<label for="%s" class="col-sm-3 control-label">%s</label>', $id, $label)
+                : '';
+    }
+
+    function makeInput($name, $id, $label='', $value='', $options='', $type='text', $placeholder='', $helpText='')
+    {
+        $helpText = !empty($helpText) ? '<span class="help-block">'.$helpText.'</span>' : '';
+        $classInput = ($type=='file') ? '' : 'form-control';
+        return sprintf('<div class="form-group">'.PHP_EOL.
+                       '    %s'.PHP_EOL.
+                       '    <div class="col-sm-9">'.PHP_EOL.
+                       '        <input type="%s" class="%s" id="%s" name="%s" placeholder="%s" value="%s" %s/>'.PHP_EOL.
+                       '        %s'.PHP_EOL.
+                       '    </div>'.PHP_EOL.
+                       '</div>',
+                       $this->makeLabel($id, $label), $type, $classInput, $id, $name, $placeholder, $value, $options, $helpText);
+    }
+
+	function makeMulti($name, $id, $label='', $champs, $helpText='')
 	{
-		$width=(isset($width))?" width='$width'":" width='75%'";
-
-		if (!isset($action) || strlen($action)<1)
-			$action = (array_key_exists("REQUEST_URI", $_SERVER))?"action=\"".$_SERVER["REQUEST_URI"]."\"":"action=\"".$_SERVER["PHP_SELF"]."\"";
-		else
-			$action = "action=\"".$action."\"";
-
-		if	(count($_POST)>0 && array_key_exists("from", $_POST))
-			$from = $_POST["from"];
-		else
-			$from = (array_key_exists("HTTP_REFERER", $_SERVER))?$this->makeHidden("from", "from", $_SERVER["HTTP_REFERER"]):"";
-		return	"<center>\n".
-				"	<table".$width." border=0>\n".
-				"		<tr>\n".
-				"			<td width='100%'>\n".
-				"				<form ".$action." method=\"post\" enctype=\"".$enctype."\">\n".
-				"					<fieldset>\n".
-				"						<legend>".$titre."</legend>\n".
-				"						<table width='100%' border=0>\n".
-				"							<tr>\n".
-				"								<td".$this->widthLabel.">&nbsp;</td>\n".
-				"								<td".$this->widthData.">&nbsp;</td>\n".
-				"							</tr>\n".
-				$from;
-	}
-
-	function closeForm()
-	{
-		return	"						</table>\n".
-				"					</fieldset>\n".
-				"				</form>\n".
-				"			</td>\n".
-				"		</tr>\n".
-				"	</table>\n".
-				"</center>\n";
-	}
-
-	function makeHidden($name, $id, $value="")
-	{
-		return	"<input type='hidden' name='$name' id='$id' value='$value'>\n";
-	}
-
-	function makeInput($name, $id, $label="", $value="", $options="")
-	{
-		return	"<tr id='tr".$id."'>\n".
-				"	<td".$this->widthLabel."><label for='$id'><nobr>$label</nobr></label></td>\n".
-				"	<td".$this->widthData."><input type='text' name='$name' id='$id' value='$value'$options></td>\n".
-				"</tr>\n";
-	}
-
-	function makeMulti($name, $id, $label="", $champs)
-	{
-		$ret=	"<tr id='tr".$id."'>\n".
-				"	<td".$this->widthLabel."><label for='$id'><nobr>$label</nobr></label></td>\n".
-				"	<td".$this->widthData.">";
+        $ret=   sprintf('<div class="form-group">'.PHP_EOL.
+                        '   %s'.PHP_EOL.
+                        '   <div class="col-sm-9">'.PHP_EOL,
+                        $this->makeLabel($id, $label));
 
 		foreach($champs as $k => $det)
 		{
@@ -113,9 +109,9 @@ class Formulaire
 					foreach($det["values"] as $key => $libelle)
 					{
 						if	($value==$key)
-							$option.="\t<option value=\"".$key."\" selected>".$libelle."\n";
+							$option.="\t<option value=\"".$key."\" selected/>".$libelle."\n";
 						else
-							$option.="\t<option value=\"".$key."\">".$libelle."\n";
+							$option.="\t<option value=\"".$key."\"/>".$libelle."\n";
 					}
 					$ret .= "<select name='".$name."' id='".$id."'".$options.">\n".$option."</select>\n";
 					break;
@@ -126,74 +122,85 @@ class Formulaire
 					break;
 			}
 		}
-		$ret.=	"	</td>\n".
-				"</tr>\n";
+
+        $ret.=  sprintf('       %s'.PHP_EOL.
+                        '   </div>'.PHP_EOL.
+                        '</div>',
+                        $helpText);
+
 		return $ret;
 	}
 
-	function makePassword($name, $id, $label="", $value="", $options="")
-	{
-		return	"<tr id='tr".$id."'>\n".
-				"	<td".$this->widthLabel."><label for='$id'>$label</label></td>\n".
-				"	<td".$this->widthData."><input type='password' name='$name' id='$id' value='$value'$options></td>\n".
-				"</tr>\n";
-	}
+    function makeInputDate($name, $id, $label='', $value='', $options='', $placeholder='', $helpText='')
+    {
+        $helpText = !empty($helpText) ? '<span class="help-block">'.$helpText.'</span>' : '';
 
-	function makeFileInput($name, $id, $label="", $value="", $image=null, $options="")
+
+        return sprintf('<div class="form-group">'.PHP_EOL.
+            '    %s'.PHP_EOL.
+            '    <div class="col-sm-9">'.PHP_EOL.
+            '        <input type="text" class="datepicker" id="%s" name="%s" placeholder="%s" size="8" value="%s" %s/><span class="glyphicon glyphicon-calendar"></span>'.PHP_EOL.
+            '        %s'.PHP_EOL.
+            '    </div>'.PHP_EOL.
+            '</div>',
+            $this->makeLabel($id, $label), $id, $name, $placeholder, $value, $options, $helpText);
+    }
+
+    function makePassword($name, $id, $label='', $value='', $options='', $placeholder='', $helpText='')
+    {
+        return $this->makeInput($name, $id, $label, $value, $options, 'password', $placeholder, $helpText);
+    }
+
+	function makeFileInput($name, $id, $label='', $value='', $image=null, $options='', $placeholder='')
 	{
-        $image = (isset($image)) ? '<br>' . $image : "";
-        $value = (isset($value)) ? ' value="' . $value . '"' : '';
-        return	"<tr id='tr".$id."'>\n".
-				"	<td".$this->widthLabel."><label for='$id'>$label</label></td>\n".
-				"	<td".$this->widthData."><input type='file' name='$name' id='$id' $options>".$image."</td>\n".
-				"</tr>\n";
+        return $this->makeInput($name, $id, $label, $value, $options, 'file', $placeholder, $image);
 	}
 
 	// D�but d'un Fieldset
 	function openFieldset($label)
 	{
-		return	"<tr>\n".
-				"	<td colspan=2>\n".
-				"		<fieldset>\n".
-				"			<legend>$label</legend>\n".
-				"			<table cellspacing=0 cellpadding=0 border=0 width='100%'>\n";
+		return	'<fieldset>'.PHP_EOL.
+				'   <legend>'.$label.'</legend>'.PHP_EOL;
 	}
 
 	// Fin d'un Fieldset
 	function closeFieldset()
 	{
-		return	"			</table>\n".
-				"		</fieldset>\n".
-				"	</td>\n".
-				"</tr>\n";
+		return	'</fieldset>'.PHP_EOL;
 	}
 
 
-	function makeRadio($name, $id, $label="", $value=NULL, $valeurs, $options="")
+	function makeRadio($name, $id, $label='', $value=NULL, $valeurs, $options='', $placeholder='', $helpText='')
 	{
 		$lstRadio="";
+        $classInput = 'form-control';
 		while (list ($valeur, $libelle) = each ($valeurs)) 
 		{
 			$check = (isset($value) && $valeur==$value)?" checked":"";
-			$lstRadio .= "<input type='radio' name='".$name."' id='".$id."' value='".$valeur."'".$options.$check.">".$libelle."&nbsp;";
+			$lstRadio .= "<input type='radio' name='".$name."' id='".$id."' value='".$valeur."'".$options.$check."/>".$libelle."&nbsp;";
 		}
-		return	"<tr id='tr".$id."'>".
-				"	<td".$this->widthLabel."><label for='".$id."'>".$label."</label></td>\n".
-				"	<td".$this->widthData.">".$lstRadio."</td>\n".
-				"</tr>\n";
+
+        return sprintf('<div class="form-group">'.PHP_EOL.
+            '    %s'.PHP_EOL.
+            '    <div class="col-sm-9">'.PHP_EOL.
+            '        %s'.PHP_EOL.
+            '        %s'.PHP_EOL.
+            '    </div>'.PHP_EOL.
+            '</div>',
+            $this->makeLabel($id, $label), $lstRadio, $helpText);
 	}
 
 
-	function makeRadioEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db, $options="")
+	function makeRadioEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db, $options='', $placeholder='', $helpText='')
 	{
         $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
-        return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options);
+        return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options, $placeholder, $helpText);
 	}
 
 
 	// La requete est de type SELECT xx as ID, yyy as LIBELLE from zzz
 	// $value contient soit juste une valeur, soit un tableau de valeurs.
-	function makeCheckbox($name, $id, $label="", $value=NULL, $requete="", $options="")
+	function makeCheckbox($name, $id, $label='', $value=NULL, $requete='', $options='')
 	{
 		$res=null;
 		if (strlen($requete)>1)
@@ -214,7 +221,7 @@ class Formulaire
 				{
 					if ($row->ID == $value ) $check = " checked";
 				}
- 				$lstCheck.="<input type='checkbox' name='$name$i' id='$id$i' value='$row->ID'$check$options><label for='$id$i'>$row->LIBELLE</label><br>\n";
+ 				$lstCheck.="<input type='checkbox' name='$name$i' id='$id$i' value='$row->ID'$check$options/><label for='$id$i'>$row->LIBELLE</label><br>\n";
 
 			}
 			sqlCloseCur($res);
@@ -227,12 +234,12 @@ class Formulaire
 		else
 			return	"<tr id='tr".$id."'>\n".
 					"	<td><label for='$id'>$label</label></td>\n".
-					"	<td><input type='checkbox' name='$name' id='$id' value='$value'$options></td>\n".
+					"	<td><input type='checkbox' name='$name' id='$id' value='$value'$options/></td>\n".
 					"</tr>\n";
 	}
 
 
-	function makeComboMultiple($name, $id, $label="", $values, $aTableau, $options="")
+	function makeComboMultiple($name, $id, $label='', $values, $aTableau, $options='', $placeholder='', $helpText='')
 	{
 		$option="";
 		foreach($aTableau as $key => $libelle)
@@ -242,35 +249,49 @@ class Formulaire
 			else
 				$option.="\t<option value=\"".$key."\">".$libelle."\n";
 		}
-		return	"<tr id='tr".$id."'>\n".
-				"	<td".$this->widthLabel."><label for='".$id."'>".$label."</label></td>\n".
-				"	<td".$this->widthData."><select name='".$name."' id='".$id."' multiple size=5".$options.">".$option."</select></td>\n".
-				"</tr>\n";
+
+        $classInput = '';//'form-control';
+
+        return sprintf('<div class="form-group">'.PHP_EOL.
+            '    %s'.PHP_EOL.
+            '    <div class="col-sm-9">'.PHP_EOL.
+            '        <select class="%s" name="%s" id="%s" multiple size="%s" placeholder="%s"%s/>%s</select>'.PHP_EOL.
+            '        %s'.PHP_EOL.
+            '    </div>'.PHP_EOL.
+            '</div>',
+            $this->makeLabel($id, $label), $classInput, $name, $id, count($aTableau), $placeholder, $options, $option, $helpText);
 	}
 
 
-	function makeCombo($name, $id, $label="", $value="", $aTableau, $options="")
+	function makeCombo($name, $id, $label='', $value='', $aTableau, $options='', $placeholder='', $helpText='')
 	{
 		if	($value=="")
-			$option="\n\t<option value=\"\" selected>---\n";
+			$option="\n\t<option value=\"\" selected/>---\n";
 		else
-			$option="\n\t<option value=\"\">---\n";
+			$option="\n\t<option value=\"\"/>---\n";
 		foreach($aTableau as $key => $libelle)
 		{
 			if	($value==$key)
-				$option.="\t<option value=\"".$key."\" selected>".$libelle."\n";
+				$option.="\t<option value=\"".$key."\" selected/>".$libelle."\n";
 			else
-				$option.="\t<option value=\"".$key."\">".$libelle."\n";
+				$option.="\t<option value=\"".$key."\"/>".$libelle."\n";
 		}
-		return	"<tr id='tr".$id."'>\n".
-				"	<td".$this->widthLabel."><label for='".$id."'>$label</label></td>\n".
-				"	<td".$this->widthData."><select name='".$name."' id='".$id."'".$options.">$option</select></td>\n".
-				"</tr>\n";
+
+        $helpText = !empty($helpText) ? '<span class="help-block">'.$helpText.'</span>' : '';
+        $classInput = '';//'form-control';
+        return sprintf( '<div class="form-group">'.PHP_EOL.
+                        '     %s'.PHP_EOL.
+                        '     <div class="col-sm-9">'.PHP_EOL.
+                        '         <select class="%s" id="%s" name="%s" placeholder="%s" value=""%s" %s>%s</select>'.PHP_EOL.
+                        '        %s'.PHP_EOL.
+                        '     </div>'.PHP_EOL.
+                        '   </div>',
+                        $this->makeLabel($id, $label), $classInput, $id, $name, $placeholder, $value, $options, $option, $helpText);
 	}
 
 
 	// La requete est de type SELECT xx as ID, yyy as LIBELLE from zzz
-	function makeComboSQL($name, $id, $label="", $value="", $requete="", $db)
+	function makeComboSQL($name, $id, $label='', $value='', $requete='', $db)
 	{
 		$res=null;
 		$db->sqlOpenCur($res, $requete);
@@ -290,70 +311,74 @@ class Formulaire
 	}
 
 
-	function makeTextarea($name, $id, $label="", $value="", $options="")
+	function makeTextarea($name, $id, $label='', $value='', $options='', $placeholder='', $helpText='')
 	{
-		return	"<tr id='tr".$id."'>\n".
-				"	<td".$this->widthLabel."><label for='".$id."'><nobr>".$label."</nobr></label></td>\n".
-				"	<td".$this->widthData."><textarea name='".$name."' id='".$id."'".$options.">".$value."</textarea></td>\n".
-				"</tr>\n";
+        $classInput = '';//'form-control';
+
+        return sprintf('<div class="form-group">'.PHP_EOL.
+            '    %s'.PHP_EOL.
+            '    <div class="col-sm-9">'.PHP_EOL.
+            '        <textarea class="%s" name="%s" id="%s" placeholder="%s"%s>%s</textarea>'.PHP_EOL.
+            '        %s'.PHP_EOL.
+            '    </div>'.PHP_EOL.
+            '</div>',
+            $this->makeLabel($id, $label), $classInput, $name, $id, $placeholder, $options, $value, $helpText);
 	}
 
 
-	function makeTexteRiche($name, $id, $value="", $options="")
+	function makeTexteRiche($name, $id, $label="", $value="", $options=" class=\"textarea\" rows=\"15\" cols=\"50\"")
 	{
-        return	$this->makeTextarea($name, $id, "Description", $value, $options);
+        return	$this->makeTextarea($name, $id, $label, $value, $options);
 	}
 
 
-	function makeTexte($label, $texte)
+	function makeTexte($label='', $texte='')
 	{
-		return	"<tr>".
-				"	<td".$this->widthLabel."><label>$label</label>&nbsp;</td>".
-				"	<td class='fauxinput'".$this->widthData.">".nl2br($texte)."&nbsp;</td>".
-				"</tr>\n";
+        return sprintf('<div class="form-group">'.PHP_EOL.
+                       '    %s'.PHP_EOL.
+                       '    <div class="col-sm-9"><div class="well">%s</div></div>'.PHP_EOL.
+                       '</div>',
+                        $this->makeLabel(0, $label), nl2br($texte));
 	}
 
 
 	function makeNote($texte)
 	{
-		return	"<tr><td colspan=2><span class='note'>".nl2br($texte)."</span></td></tr>\n";
+        return sprintf('<div class="form-group">'.PHP_EOL.
+                       '    <div class="col-sm-3"></div>'.PHP_EOL.
+                       '    <div class="col-sm-9"><span class="help-block">%s</span></div>'.PHP_EOL.
+                       '</div>',
+                       $texte);
 	}
 
+    function makeMsgError($texte)
+    {
+        return $this->makeNote('<span class="text-danger"><strong>ERREUR</strong> :<br/>'.$texte.'</span>');
+    }
+
+    function makeMsgWarning($texte)
+    {
+        return $this->makeNote('<span class="text-warning">'.$texte.'</span>');
+    }
+
+    function makeMsgInfo($texte)
+    {
+        return $this->makeNote('<span class="text-info">'.$texte.'</span>');
+    }
 
 	function makeNoteObligatoire()
 	{
-		return	"<tr><td colspan=2 align='right'><span class='note'>Les champs suivis de (*) sont obligatoires.</span></td></tr>\n";
-	}
-
-
-	function makeMsgError($texte)
-	{
-		return "<tr><td colspan=2><span style=\"color:#ff0000;\"><b>ERREUR</b> : $texte</span></td></tr>\n";
-	}
-
-
-	function makeMsgWarning($texte)
-	{
-		return	"<tr><td colspan=2><span style=\"color:#D2691E;\">$texte</span></td></tr>\n";
-	}
-
-
-	function makeMsgInfo($texte)
-	{
-		return	"<tr><td colspan=2><span style=\"color:#008000;\">$texte</span></td></tr>\n";
+        return $this->makeMsgWarning('Les champs suivis de (*) sont obligatoires.');
 	}
 
 
 	function makeButton($value, $options=' class="btn btn-success"')
 	{
-        return	"<tr>\n".
-                "	<td colspan=2>&nbsp;</td>\n".
-                "</tr>\n".
-                "<tr>\n".
-                "	<td colspan=2 width='100%' align='center'>\n".
-                "		<input type=\"submit\" value=\"".$value."\"".$options.">\n".
-                "	</td>\n".
-                "</tr>\n";
+        return sprintf( '<div class="form-group">'.PHP_EOL.
+                        '   <div class="col-sm-3"></div>'.PHP_EOL.
+                        '   <div class="col-sm-9"><input type="submit" value="%s"%s/></div>'.PHP_EOL.
+                        '</div>',
+                        $value, $options);
 	}
 
 
