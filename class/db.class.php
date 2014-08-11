@@ -36,6 +36,7 @@ class Db
         if ($parms)
             $err.="<i>".$parms."</i>";
         $err .= "</div>";
+        //exit($err);
         header('Location: error.php?err=' . base64_encode($err));
     }
 
@@ -65,7 +66,7 @@ class Db
         /* check connection */
         if ($this->_db->connect_errno) {
             $err = sprintf("Connect failed: %s\n", $this->_db->connect_error);
-            header('Location: error.php?err=' . base64_encode($err));
+            $this->sqlError($err);
         }
         if (!$this->_db->set_charset("utf8")) {
             printf("Erreur lors du chargement du jeu de caractères utf8 : %s\n", $this->_db->error);
@@ -304,7 +305,7 @@ class Db
 	{	
 		//	Init
 		$resInfos=null;
-		$req = "Update $table SET ";
+		$req = 'update '.$table.' SET ';
 		$i=0;
 		$where="";
 	
@@ -322,7 +323,7 @@ class Db
 				elseif (get_magic_quotes_gpc())
 					$req .= " ".$rowInfos->Field." = '".$valeurs[$rowInfos->Field]."', ";
 				else
-					$req .= " ".$rowInfos->Field." = '".addslashes ($valeurs[$rowInfos->Field])."', ";
+                    $req .= " ".$rowInfos->Field." = '".mysqli_real_escape_string($this->_db, $valeurs[$rowInfos->Field])."', ";
 			}
 		}
 		// on vire le dernier ', ' de la req

@@ -172,9 +172,8 @@ class Formulaire
 
 	function makeRadio($name, $id, $label='', $value=NULL, $valeurs, $options='', $placeholder='', $helpText='')
 	{
-		$lstRadio="";
-        $classInput = 'form-control';
-		while (list ($valeur, $libelle) = each ($valeurs)) 
+		$lstRadio='';
+		while (list ($valeur, $libelle) = each ($valeurs))
 		{
 			$check = (isset($value) && $valeur==$value)?" checked":"";
 			$lstRadio .= "<input type='radio' name='".$name."' id='".$id."' value='".$valeur."'".$options.$check."/>".$libelle."&nbsp;";

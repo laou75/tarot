@@ -12,7 +12,7 @@ echo $this->drawBarreBouton(
 	array(
         $this->makeLinkBouton(32, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
         $this->makeLinkBouton(33, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
-        $this->makeLinkBouton(35, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
+        '<a class="btn btn-default btn-sm" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?id_session='.$id_session.'&amp;id_tournoi='.$id_tournoi.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>',
         $this->makeLinkBouton(34, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
         '&nbsp;&nbsp;&nbsp;',
         $this->makeLinkBouton(11, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session)),
@@ -54,7 +54,7 @@ if(count($podium)>0)
 
 echo '<div class="row"><h4>Commentaires</h4>';
 $row = $session->getSessionById($id_tournoi, $id_session);
-echo '<div class="panel panel-default"><div class="panel-body">'.(!empty($row['commentaires']) ? nl2br($row['commentaires']) : 'Pas de commentaires').'</div></div></div>';
+echo '<div class="panel panel-default"><div class="panel-body" id="comment_'.$id_tournoi.'_'.$id_session.'">' . (!empty($row['commentaires']) ? nl2br($row['commentaires']) : 'Pas de commentaires') . '</div></div></div>';
 
 //	R�cup�rer la liste des joueurs de la session
 $tabJoueursSession = $joueur->getJoueursBySession($id_tournoi, $id_session);
@@ -127,18 +127,19 @@ foreach	($tabParties as $k => $row)
 
     $data[] = $hrefContrat;
 	if ($row->commentaires)
-		$data[]=nl2br($row->commentaires);
+		$data[]='<div id="comment_'.$id_tournoi.'_'.$id_session.'_'.$row->id.'">'.nl2br($row->commentaires).'</div>';
 
-	echo $this->ligneListe(
-		$data,
-		array(	
-				$this->makeLinkBouton(12, "id_partie=".$row->id."&amp;id_session=".$id_session."&amp;id_tournoi=".$id_tournoi),	// modifier 
-				$this->makeLinkBouton(13, "id_partie=".$row->id."&amp;id_session=".$id_session."&amp;id_tournoi=".$id_tournoi),	// supprimer
-				$this->makeLinkBouton(14, "id_partie=".$row->id."&amp;id_session=".$id_session."&amp;id_tournoi=".$id_tournoi)	// commentaire 
-				)
-		);
+        $params = 'id_partie='.$row->id.'&amp;id_session='.$id_session.'&amp;id_tournoi='.$id_tournoi;
+
+        echo $this->ligneListe(
+            $data,
+            array(
+                    $this->makeLinkBouton(12, $params),	// modifier
+                    $this->makeLinkBouton(13, $params),	// supprimer
+                    '<a class="btn btn-default btn-sm" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?'.$params.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>',
+                    )
+            );
 }
-
 if (count($tabParties)>0)
 {
 	$data=array();
@@ -146,7 +147,13 @@ if (count($tabParties)>0)
         $data[]='<div class="text-right"><strong>'.sprintf("%+d", $cumul[$idJ]).'</strong></div>';
 	}
 	$data[]='';
-
 	echo $this->ligneListe($data, array('<strong>Cumul</strong>'), null, 'info');
 }
 echo $this->closeListe().'</div>';
+?>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>

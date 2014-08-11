@@ -80,10 +80,10 @@ class Template
 ?>
                     <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>identification.php" method="post">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Email" name="identifiant" id="identifiant">
+                            <input type="text" class="form-control" placeholder="login" name="identifiant" id="identifiant">
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+                            <input type="password" class="form-control" placeholder="password" name="password" id="password">
                         </div>
                         <button class="btn btn-success" type="submit">Connexion</button>
                     </form>
