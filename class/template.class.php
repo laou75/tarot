@@ -389,7 +389,7 @@ class Template
 	 */
 	function drawBarreBouton($colonnes=null, $retour=null)
 	{
-        $ret = '<div class="row"><div class="col-md-8">';
+        $ret = '<div class="row"><div class="col-sm-10">';
         if (isset($colonnes))
         {
             foreach($colonnes as $id => $detail)
@@ -398,7 +398,7 @@ class Template
             }
         }
         $ret .= '</div>';
-        $ret .= '<div class="col-md-4 text-right">';
+        $ret .= '<div class="col-sm-2 text-right">';
         if (isset($retour))
         {
             $ret.=	$retour."\n";

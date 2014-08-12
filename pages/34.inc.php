@@ -29,7 +29,7 @@ else
 ?>
 <div class="row">
     <h4>Statistiques</h4>
-    <div class="col-md-6">
+    <div class="col-sm-6">
 <?php
         $entete[] = '<span class="glyphicon glyphicon-comment"></span>';
 		echo $this->openListe($entete);
@@ -73,7 +73,7 @@ else
 		echo $this->closeListe();
 ?>
     </div>
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <div id="container1" style="width:100%; height:400px;"></div>
     </div>
 </div>

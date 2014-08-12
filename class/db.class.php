@@ -36,7 +36,7 @@ class Db
         if ($parms)
             $err.="<i>".$parms."</i>";
         $err .= "</div>";
-        //exit($err);
+        exit($err);
         header('Location: error.php?err=' . base64_encode($err));
     }
 

@@ -8,6 +8,44 @@ class Joueur
         $this->db = $db;
     }
 
+    function getAll()
+    {
+        $res = null;
+        $aTableau = array();
+        $req =	"select * from joueurs order by nom asc, prenom asc";
+        $this->db->sqlOpenCur($res, $req);
+        while	($row=$this->db->sqlFetchCur($res))
+        {
+            $aTableau[$row->id] = $row;
+        }
+        $this->db->sqlCloseCur($res);
+        return $aTableau;
+    }
+
+    function getNbTournoisById($id)
+    {
+        $row = null;
+        $req =	'SELECT count(distinct id_tournoi ) AS combien FROM r_sessions_joueurs where id_joueur = ' . intval($id);
+        $this->db->sqlSelect($row, $req);
+        return $row->combien;
+    }
+
+    function getNbSessionsById($id)
+    {
+        $row = null;
+        $req =	'SELECT count(distinct id_session) as combien FROM r_sessions_joueurs where id_joueur = ' . intval($id);
+        $this->db->sqlSelect($row, $req);
+        return $row->combien;
+    }
+
+    function getNbPartiesById($id)
+    {
+        $row = null;
+        $req =	'SELECT count(id_partie) as combien FROM r_parties_joueurs where id_joueur = ' . intval($id);
+        $this->db->sqlSelect($row, $req);
+        return $row->combien;
+    }
+
     function getJoueursByTournoi($id_tournoi)
     {
         $res = null;

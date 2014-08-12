@@ -147,7 +147,7 @@ echo $tmp2;
             chart: {
                 type: 'pie',
                 options3d: {
-                    enabled: true,
+                    enabled: false,
                     alpha: 45,
                     beta: 0
                 }

@@ -22,7 +22,7 @@ $aTabSess = $session->getSessionByTournoi($id_tournoi);
 ?>
 <div class="row">
     <h4>Statistiques</h4>
-	<div class="col-md-6">
+	<div class="col-sm-6">
 <?php
 echo $this->openListe($entete, true);
 foreach($aTabSess as $idS => $detS)
@@ -47,14 +47,14 @@ foreach($aTabSess as $idS => $detS)
 echo $this->closeListe();
 ?>
     </div>
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <div id="container1" style="width:100%; height:400px;"></div>
     </div>
 </div>
 
 <div class="row">
     <h4>Cumul des pertes</h4>
-    <div class="col-md-6">
+    <div class="col-sm-6">
 <?php
 echo $this->openListe($entete);
 $cumul=array();
@@ -81,14 +81,14 @@ echo $this->ligneListe(	$cumul, null, "align='right'");
 echo $this->closeListe();
 ?>
     </div>
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <div id="container2" style="width:100%; height:400px;"></div>
     </div>
 </div>
 
 <div class="row">
     <h4>Répartition des pertes</h4>
-    <div class="col-md-12">
+    <div class="col-sm-12">
         <div id="container3" style="width:100%; height:400px;"></div>
     </div>
 </div>

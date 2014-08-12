@@ -1,12 +1,12 @@
 <div class="row">
-    <div class="col-md-4 text-center">
+    <div class="col-sm-4 text-center">
 <?php
 echo $this->makeIllustration('tarot.png', '', 'class="img-responsive"');
 ?>
     </div>
-    <div class="col-md-8">
+    <div class="col-sm-8">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <h4>Derniers tournois</h4>
 <?php
 echo $this->openListe(array('Commencé le'));
@@ -28,7 +28,7 @@ foreach($listeTournois as $row)
 echo $this->closeListe();
 ?>
             </div>
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <h4>Dernières sessions</h4>
 <?php
 echo $this->openListe(array("Commencé le"));
@@ -49,7 +49,7 @@ foreach($listeSessions as $row)
 echo $this->closeListe();
 ?>
             </div>
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <h4>Dernières parties</h4>
 <?php
 echo $this->openListe(array("Commencé le"));

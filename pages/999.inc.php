@@ -1,10 +1,10 @@
 <div class="row">
-    <div class="col-md-4 text-center">
+    <div class="col-sm-4 text-center">
 <?php
 echo $this->makeIllustration("tarot.png", '', 'class="img-responsive"');
 ?>
     </div>
-    <div class="col-md-8">
+    <div class="col-sm-8">
 <?php
 $form = new Formulaire();
 
