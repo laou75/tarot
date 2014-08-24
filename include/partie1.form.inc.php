@@ -1,18 +1,5 @@
 <?php
 $form->setValeurs($_POST);
-/*
-$err="";
-
-if	(strlen($form->getValeur("id_preneur"))==0)
-    $err .= "Sélectionner le preneur<br>";
-if	(strlen($form->getValeur("annonce"))==0)
-    $err .= "Sélectionner l'annonce<br>";
-if	(strlen($form->getValeur("points"))==0)
-    $err .= "Renseigner les points<br>";
-
-if	($err!="")
-    return;
-*/
 
 $err='';
 if (empty($form->getValeur("id_preneur")))

@@ -12,13 +12,7 @@ class Sess
     function __construct()
     {
     }
-/*
-    function sessionConnect($logId, $role)
-    {
-        $this->logId=	$logId;
-        $this->role	=	$role;
-    }
-*/
+
     function sessionConnect($data)
     {
         $this->id       =	$data->id;

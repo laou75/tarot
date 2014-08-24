@@ -249,7 +249,7 @@ class Formulaire
 				$option.="\t<option value=\"".$key."\">".$libelle."\n";
 		}
 
-        $classInput = '';//'form-control';
+        $classInput = '';
 
         return sprintf('<div class="form-group">'.PHP_EOL.
             '    %s'.PHP_EOL.

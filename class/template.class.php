@@ -31,8 +31,6 @@ class Template
 		//	Traiter les donn�es post�es
 		if (count($_POST)>0)
 			include("pages/".$this->id.".post.inc.php");
-
-        ob_start();
 ?>
 <!DOCTYPE html>
         <html lang="fr" xmlns="http://www.w3.org/1999/html">
@@ -182,7 +180,6 @@ class Template
 	</body>
 </html>
 <?php
-	    //ob_end_flush();
 	} // end __construct()
 
     
@@ -435,7 +432,6 @@ class Template
 		$ret = '<tr'.$class.'>'.PHP_EOL;
 		if (isset($actions))
 		{
-//            $ret.=	'		<td style="vertical-align: middle;text-align:center;">';
             $ret .=	'		<td>';
 			foreach($actions as  $detail)
 			{
@@ -489,8 +485,6 @@ class Template
         else
             $alt=" alt=\"\"";
         return "<img height=\"300px\" src=\"" . $GLOBALS["Config"]["URL"]["PORTRAIT"] . "mini/".$image . "\" $alt/>";
-
-        //return strlen($image)>0 ? $this->makePortrait($image, $alt, $option) : '<span class="glyphicon glyphicon-user" style="font-size: 600%;"></span>';
     }
 
     /*

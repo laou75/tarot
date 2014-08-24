@@ -40,7 +40,6 @@ class Tournoi
                 "from tournois ".
                 "where id = " . intval($id_tournoi);
         $this->db->sqlSelectArray($row, $req);
-        //echo '$req : '.$req.'<br>'.print_r($row);
         return $row;
     }
 
@@ -54,18 +53,13 @@ class Tournoi
         $liste = array();
         $res=null;
         $req =  "SELECT sum(points) as cumul, id_joueur, nom, prenom, portrait, 0 as classement " .
-            "FROM   r_parties_joueurs " .
-            "join   joueurs on (id = id_joueur) " .
-            "WHERE  id_tournoi = " . intval($id_tournoi) . " " .
-            "group by id_joueur, nom, prenom, portrait ".
-            "order by sum(points) desc";
+                "FROM   r_parties_joueurs " .
+                "join   joueurs on (id = id_joueur) " .
+                "WHERE  id_tournoi = " . intval($id_tournoi) . " " .
+                "group by id_joueur, nom, prenom, portrait ".
+                "order by sum(points) desc";
 
         $this->db->sqlOpenCur($res, $req);
-        /*
-        while ($row=$this->db->sqlFetchCur($res)) {
-            $liste[] = $row;
-        }
-        */
         $classement=0;
         $cumulPrec=-10000;
         $pas=1;
@@ -85,4 +79,5 @@ class Tournoi
             $cumulPrec = intval($row->cumul);
         }
         return $liste;
-    }}
+    }
+}

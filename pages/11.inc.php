@@ -32,8 +32,6 @@ $defense = $form->getValeur("defense");
 while($i<count($aTableau)) {
 	if	(count($_POST)>0)
     {
-        //print_r($defense);
-//        $champs[] = array("name"=>"def".$i, "type"=>"combo", "values"=>$aTableau, "value"=>$form->getValeur("def".$i), "options"=>" onChange=\"checkSelectJoueur('def".$i."')\"");
         $champs[] = array("name"=>"def".$i, "type"=>"combo", "values"=>$aTableau, "value"=>$defense[$i-1], "options"=>" onChange=\"checkSelectJoueur('def".$i."')\"");
     }
 	else

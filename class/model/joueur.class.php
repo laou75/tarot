@@ -25,7 +25,8 @@ class Joueur
     function getNbTournoisById($id)
     {
         $row = null;
-        $req =	'SELECT count(distinct id_tournoi ) AS combien FROM r_sessions_joueurs where id_joueur = ' . intval($id);
+        $req =	'SELECT count(distinct id_tournoi ) AS combien FROM r_sessions_joueurs where id_joueur = ' .
+                intval($id);
         $this->db->sqlSelect($row, $req);
         return $row->combien;
     }
@@ -33,7 +34,8 @@ class Joueur
     function getNbSessionsById($id)
     {
         $row = null;
-        $req =	'SELECT count(distinct id_session) as combien FROM r_sessions_joueurs where id_joueur = ' . intval($id);
+        $req =	'SELECT count(distinct id_session) as combien FROM r_sessions_joueurs where id_joueur = ' .
+                intval($id);
         $this->db->sqlSelect($row, $req);
         return $row->combien;
     }
@@ -41,7 +43,8 @@ class Joueur
     function getNbPartiesById($id)
     {
         $row = null;
-        $req =	'SELECT count(id_partie) as combien FROM r_parties_joueurs where id_joueur = ' . intval($id);
+        $req =	'SELECT count(id_partie) as combien FROM r_parties_joueurs where id_joueur = ' .
+                intval($id);
         $this->db->sqlSelect($row, $req);
         return $row->combien;
     }
@@ -192,7 +195,6 @@ class Joueur
                 "from joueurs ".
                 "where nickname = '" . $this->db->sqlEscStr($login). "'";
         $this->db->sqlSelect($row, $req);
-        //return (strtolower($row->mdp) == strtolower($password));
         if (isset($row) && strtolower($row->mdp) == strtolower($password))
         {
             return $row;

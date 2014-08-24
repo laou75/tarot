@@ -36,7 +36,6 @@ class Db
         if ($parms)
             $err.="<i>".$parms."</i>";
         $err .= "</div>";
-        exit($err);
         header('Location: error.php?err=' . base64_encode($err));
     }
 
@@ -83,9 +82,9 @@ class Db
     }
 
 
-        /*
-         * Libérer un RES
-         */
+    /*
+     * Libérer un RES
+     */
 	function sqlFreeResult($res)
 	{
         if (isset($res))
@@ -305,7 +304,9 @@ class Db
 	{	
 		//	Init
 		$resInfos=null;
-		$req = 'update '.$table.' SET ';
+		$req =  'update '.
+                $table.
+                ' SET ';
 		$i=0;
 		$where="";
 	
@@ -342,7 +343,6 @@ class Db
 			}
 		}
 		$req .= $where;
-        //exit($req);
 		$this->sqlExecute($req);
 	}
 	
@@ -382,7 +382,6 @@ class Db
 				"FROM	$table ".
 				"WHERE	$key = LAST_INSERT_ID()";
 		$this->sqlSelectArray($row, $req);
-	
 		return $row[$key];
 	}
 }

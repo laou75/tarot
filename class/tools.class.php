@@ -34,7 +34,7 @@ class Tools
         if(file_exists($Destination.$Image) && is_file($Destination.$Image))
             unlink($Destination.$Image);
 		if(false===imagejpeg($im, $Destination.$Image, 100))
-            exit('erreur');
+            return('erreur');
 
         return '';
 	}
