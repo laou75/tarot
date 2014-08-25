@@ -460,7 +460,7 @@ class Template
     /*
      *
      */
-    function getNickname($row)
+    function getNickname(mysqli_fetch_object $row)
     {
         return isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
     }
@@ -476,7 +476,7 @@ class Template
     /*
      *
      */
-    function getMaxiPortrait($image='', $alt='', $option='')
+    function getMaxiPortrait($image='', $alt='')
     {
 
         if (isset($alt) && strlen($alt)>0)

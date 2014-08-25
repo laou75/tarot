@@ -75,7 +75,7 @@ elseif(!empty($id_tournoi))
             type: "GET",
             url: 'ajax/ajaxSaveComment.php?<?php echo $param;?>&commentaires=' + encodeURI($('#commentaires').val()),
             success: function(msg) {
-                $("#<?php echo $idComment;?>").html(nl2br($('#commentaires').val()));
+                $("<?php echo '#'.$idComment;?>").html(nl2br($('#commentaires').val()));
             },
             error: function(msg) {
                 alert( "Erreur: " + msg );

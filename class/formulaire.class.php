@@ -48,7 +48,8 @@ class Formulaire
         else
             $from = (array_key_exists('HTTP_REFERER', $_SERVER)) ? $this->makeHidden('from', 'from', $_SERVER['HTTP_REFERER']) : '';
 
-        return sprintf( '<form %s method="post" enctype="%s" class="form-horizontal" role="form">%s'.PHP_EOL,
+        return sprintf( '<!--'.$titre.'-->'.PHP_EOL.
+                        '<form %s method="post" enctype="%s" class="form-horizontal" role="form">%s'.PHP_EOL,
                         $action, $enctype, $from);
     }
 
@@ -170,7 +171,7 @@ class Formulaire
 	}
 
 
-	function makeRadio($name, $id, $label='', $value=NULL, $valeurs, $options='', $placeholder='', $helpText='')
+	function makeRadio($name, $id, $label='', $value=NULL, $valeurs, $options='', $helpText='')
 	{
 		$lstRadio='';
 		while (list ($valeur, $libelle) = each ($valeurs))
@@ -190,10 +191,10 @@ class Formulaire
 	}
 
 
-	function makeRadioEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db, $options='', $placeholder='', $helpText='')
+	function makeRadioEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db, $options='', $helpText='')
 	{
         $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
-        return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options, $placeholder, $helpText);
+        return	$this->makeRadio($name, $id, $label, $value, $aValuesLabels, $options, $helpText);
 	}
 
 
@@ -277,7 +278,7 @@ class Formulaire
 		}
 
         $helpText = !empty($helpText) ? '<span class="help-block">'.$helpText.'</span>' : '';
-        $classInput = '';//'form-control';
+        $classInput = '';
         return sprintf( '<div class="form-group">'.PHP_EOL.
                         '     %s'.PHP_EOL.
                         '     <div class="col-sm-9">'.PHP_EOL.
@@ -290,7 +291,7 @@ class Formulaire
 
 
 	// La requete est de type SELECT xx as ID, yyy as LIBELLE from zzz
-	function makeComboSQL($name, $id, $label='', $value='', $requete='', $db)
+	function makeComboSQL($name, $id, $label='', $value='', $requete='', mysqli_connect $db)
 	{
 		$res=null;
 		$db->sqlOpenCur($res, $requete);
@@ -303,7 +304,7 @@ class Formulaire
 	}
 
 
-	function makeComboEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, $db)
+	function makeComboEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, mysqli_connect $db)
 	{
         $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
 		return	$this->makeCombo($name, $id, $label, $value, $aValuesLabels);
@@ -325,7 +326,7 @@ class Formulaire
 	}
 
 
-	function makeTexteRiche($name, $id, $label="", $value="", $options=" class=\"textarea\" rows=\"15\" cols=\"50\"")
+	function makeTexteRiche($name, $id, $label="", $value="", $options=' class="textarea" rows="15" cols="50"')
 	{
         return	$this->makeTextarea($name, $id, $label, $value, $options);
 	}
@@ -381,7 +382,7 @@ class Formulaire
 	}
 
 
-    private function getListeValeursEnum($table, $colonne, $addLigneVide, $db)
+    private function getListeValeursEnum($table, $colonne, $addLigneVide, mysqli_connect $db)
     {
         $aValuesLabels = array();
         if	($addLigneVide==TRUE)
