@@ -313,7 +313,7 @@ class Formulaire
 
 	function makeTextarea($name, $id, $label='', $value='', $options='', $placeholder='', $helpText='')
 	{
-        $classInput = '';//'form-control';
+        $classInput = '';
 
         return sprintf('<div class="form-group">'.PHP_EOL.
             '    %s'.PHP_EOL.
