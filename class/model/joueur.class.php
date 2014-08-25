@@ -25,8 +25,8 @@ class Joueur
     function getNbTournoisById($id)
     {
         $row = null;
-        $req =	'SELECT count(distinct id_tournoi ) AS combien FROM r_sessions_joueurs where id_joueur = ' .
-                intval($id);
+        $id = intval($id);
+        $req =	"SELECT count(distinct id_tournoi ) AS combien FROM r_sessions_joueurs where id_joueur = $id";
         $this->db->sqlSelect($row, $req);
         return $row->combien;
     }
