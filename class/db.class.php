@@ -189,7 +189,7 @@ class Db
 	/*
 	 * Compte le nb d'occurence trouvée lors d'une requête
 	 */
-	function sqlCountCur(&$res)
+	function sqlCountCur(mysqli_result &$res)
 	{	if (isset($res))
 		    return $res->num_rows;
         else
@@ -200,7 +200,7 @@ class Db
 	/*
 	 * Exécute un Fetch
 	 */
-	function sqlFetchCur($res)
+	function sqlFetchCur(mysqli_result $res)
 	{
 		if (!isset($res) || $this->sqlCountCur($res)<1)
             return NULL;
@@ -211,7 +211,7 @@ class Db
 	/*
 	 * Exécute un Fetch dans un tableau
 	 */
-	function sqlFetchArray($res)
+	function sqlFetchArray(mysqli_result $res)
 	{
 		if (!isset($res) || $this->sqlCountCur($res)<1)
             return NULL;
@@ -222,7 +222,7 @@ class Db
 	/*
 	 * Fin d'un Fetch
 	 */
-	function sqlCloseCur($res)
+	function sqlCloseCur(mysqli_result $res)
 	{	
 		if (!isset($res) || $this->sqlCountCur($res)<1)
             return NULL;
@@ -304,9 +304,7 @@ class Db
 	{	
 		//	Init
 		$resInfos=null;
-		$req =  'update '.
-                mysqli_real_escape_string($table).
-                ' SET ';
+		$req =  "update $table SET ";
 		$i=0;
 		$where="";
 	
