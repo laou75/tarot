@@ -305,7 +305,7 @@ class Db
 		//	Init
 		$resInfos=null;
 		$req =  'update '.
-                $table.
+                mysqli_real_escape_string($table).
                 ' SET ';
 		$i=0;
 		$where="";
