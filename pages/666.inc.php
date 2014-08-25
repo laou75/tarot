@@ -227,5 +227,4 @@
 <span class="glyphicon glyphicon-tree-conifer"></span>
 <span class="glyphicon glyphicon-tree-deciduous"></span>
 
-
 </div>

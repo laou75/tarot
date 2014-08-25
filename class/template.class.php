@@ -146,7 +146,6 @@ class Template
         <!--Richtext Edit-->
         <script src="js/wysihtml5-0.3.0.js"></script>
         <script src="js/prettify.js"></script>
-        <script src="js/bootstrap-wysihtml5.js"></script>
         <!--datepicker-->
         <script src="js/bootstrap-datepicker.js"></script>
 

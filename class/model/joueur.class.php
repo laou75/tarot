@@ -34,8 +34,8 @@ class Joueur
     function getNbSessionsById($id)
     {
         $row = null;
-        $req =	'SELECT count(distinct id_session) as combien FROM r_sessions_joueurs where id_joueur = ' .
-                intval($id);
+        $id = intval($id);
+        $req =	"SELECT count(distinct id_session) as combien FROM r_sessions_joueurs where id_joueur = $id";
         $this->db->sqlSelect($row, $req);
         return $row->combien;
     }
@@ -43,8 +43,8 @@ class Joueur
     function getNbPartiesById($id)
     {
         $row = null;
-        $req =	'SELECT count(id_partie) as combien FROM r_parties_joueurs where id_joueur = ' .
-                intval($id);
+        $id = intval($id);
+        $req =	"SELECT count(id_partie) as combien FROM r_parties_joueurs where id_joueur = $id";
         $this->db->sqlSelect($row, $req);
         return $row->combien;
     }
