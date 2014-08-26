@@ -291,7 +291,7 @@ class Formulaire
 
 
 	// La requete est de type SELECT xx as ID, yyy as LIBELLE from zzz
-	function makeComboSQL($name, $id, $label='', $value='', $requete='', mysqli_connect $db)
+	function makeComboSQL($name, $id, $label='', $value='', $requete='', Db $db)
 	{
 		$res=null;
 		$db->sqlOpenCur($res, $requete);
@@ -304,7 +304,7 @@ class Formulaire
 	}
 
 
-	function makeComboEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, mysqli_connect $db)
+	function makeComboEnum($name, $id, $label, $value, $table, $colonne, $addLigneVide, Db $db)
 	{
         $aValuesLabels = $this->getListeValeursEnum($table, $colonne, $addLigneVide, $db);
 		return	$this->makeCombo($name, $id, $label, $value, $aValuesLabels);
@@ -382,7 +382,7 @@ class Formulaire
 	}
 
 
-    private function getListeValeursEnum($table, $colonne, $addLigneVide, mysqli_connect $db)
+    private function getListeValeursEnum($table, $colonne, $addLigneVide, Db $db)
     {
         $aValuesLabels = array();
         if	($addLigneVide==TRUE)

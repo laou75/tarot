@@ -39,9 +39,6 @@ class Template
         <title><?php echo $this->titre;?></title>
         <!-- Bootstrap -->
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-        <!-- Richtext Edit-->
-        <link rel="stylesheet" type="text/css" href="css/prettify.css"/>
-        <link rel="stylesheet" type="text/css" href="css/bootstrap-wysihtml5.css"/>
         <!-- Datepicker-->
         <link id="bsdp-css" type="text/css" href="css/datepicker3.css" rel="stylesheet"/>
         <style type="text/css">
@@ -143,24 +140,11 @@ class Template
         <script src="js/highcharts.js"></script>
         <script src="js/highcharts-3d.js"></script>
         <script src="js/modules/exporting.js"></script>
-        <!--Richtext Edit-->
-        <script src="js/wysihtml5-0.3.0.js"></script>
-        <script src="js/prettify.js"></script>
         <!--datepicker-->
         <script src="js/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript">
     $(function () {
-        $('#commentaires').wysihtml5({
-            "font-styles": true, //Font styling, e.g. h1, h2, etc. Default true
-            "emphasis": true, //Italics, bold, etc. Default true
-            "lists": true, //(Un)ordered lists, e.g. Bullets, Numbers. Default true
-            "html": false, //Button which allows you to edit the generated HTML. Default false
-            "link": true, //Button to insert a link. Default true
-            "image": true, //Button to insert an image. Default true,
-            "color": false, //Button to change color of font
-            "size": 'sm' //Button size like sm, xs etc.
-        });
         $('.datepicker').datepicker({
             format: "dd/mm/yyyy",
             language: "fr",
@@ -460,7 +444,7 @@ class Template
     /*
      *
      */
-    function getNickname(mysqli_fetch_object $row)
+    function getNickname(stdClass $row)
     {
         return isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
     }
