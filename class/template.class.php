@@ -71,13 +71,18 @@ class Template
                 </div>
                 <div class="navbar-collapse collapse">
 <?php
-        if (!Sess::isConnected()) {
+        if (!Sess::isConnected())
+        {
 ?>
                     <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>identification.php" method="post">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="login" name="identifiant" id="identifiant">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" class="form-control" placeholder="login" name="identifiant" id="identifiant">
+                            </div>
                         </div>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                             <input type="password" class="form-control" placeholder="password" name="password" id="password">
                         </div>
                         <button class="btn btn-success" type="submit">Connexion</button>
@@ -94,8 +99,10 @@ class Template
                         ?>
                     </ul>
                     <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>logout.php" method="post">
-                        <span class="text-muted"><?php echo Sess::getPrenom() . ' ' . Sess::getNom();?></span>
-                        <button class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-off"></span> Déconnexion</button>
+                        <div class="btn-group open">
+                            <span class="text-muted btn btn-default">admin admin</span>
+                            <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-off"></span></button>
+                        </div>
                     </form>
 <?php
         }
@@ -126,9 +133,13 @@ class Template
         }
         echo '</ol>';
         if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php"))
+        {
             include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php");
+        }
         else
-            echo $GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".inc.php";
+        {
+            echo 'page inconnue !';
+        }
 ?>
             </div>
         </div>
@@ -142,17 +153,17 @@ class Template
         <script src="js/modules/exporting.js"></script>
         <!--datepicker-->
         <script src="js/bootstrap-datepicker.js"></script>
-
-<script type="text/javascript">
-    $(function () {
-        $('.datepicker').datepicker({
-            format: "dd/mm/yyyy",
-            language: "fr",
-            autoclose: true,
-            todayHighlight: true
-        });
-    });
-</script>
+        <script type="text/javascript" src="js/i18n/bootstrap-datepicker.fr.js" charset="UTF-8"></script>
+        <script type="text/javascript">
+            $(function () {
+                $('.datepicker').datepicker({
+                    format: "dd/mm/yyyy",
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true
+                });
+            });
+        </script>
 <?php
         if	(file_exists($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php"))
             include($GLOBALS["Config"]["PATH"]["PAGE"].$this->id.".plot.inc.php");

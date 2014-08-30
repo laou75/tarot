@@ -13,7 +13,7 @@ class Sess
     {
     }
 
-    function sessionConnect(Sess $data)
+    function sessionConnect(stdClass $data)
     {
         $this->id       =	$data->id;
         $this->nom	    =	$data->nom;

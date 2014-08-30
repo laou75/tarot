@@ -76,7 +76,7 @@ class Formulaire
         $classInput = ($type=='file') ? '' : 'form-control';
         return sprintf('<div class="form-group">'.PHP_EOL.
                        '    %s'.PHP_EOL.
-                       '    <div class="col-sm-9">'.PHP_EOL.
+                       '    <div class="input-group col-sm-9">'.PHP_EOL.
                        '        <input type="%s" class="%s" id="%s" name="%s" placeholder="%s" value="%s" %s/>'.PHP_EOL.
                        '        %s'.PHP_EOL.
                        '    </div>'.PHP_EOL.
@@ -88,7 +88,7 @@ class Formulaire
 	{
         $ret=   sprintf('<div class="form-group">'.PHP_EOL.
                         '   %s'.PHP_EOL.
-                        '   <div class="col-sm-9">'.PHP_EOL,
+                        '   <div class="input-group col-sm-9">'.PHP_EOL,
                         $this->makeLabel($id, $label));
 
 		foreach($champs as $k => $det)
@@ -135,8 +135,24 @@ class Formulaire
     function makeInputDate($name, $id, $label='', $value='', $options='', $placeholder='', $helpText='')
     {
         $helpText = !empty($helpText) ? '<span class="help-block">'.$helpText.'</span>' : '';
-
-
+        return sprintf( '<div class="form-group">'.PHP_EOL.
+                        '    %s'.PHP_EOL.
+                        '   <div class="input-group margin-bottom-sm col-lg-2">'.PHP_EOL.
+                        '       <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>'.PHP_EOL.
+                        '       <input type="text" class="form-control datepicker" id="%s" name="%s" placeholder="%s" size="8" value="%s" %s/>'.PHP_EOL.
+                        '       %s'.PHP_EOL.
+                        '    </div>'.PHP_EOL.
+                        '</div>',
+                        $this->makeLabel($id, $label), $id, $name, $placeholder, $value, $options, $helpText);
+/*
+ *
+ *
+                        <div class="form-group">
+                            <div class="input-group margin-bottom-sm">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" class="form-control" placeholder="login" name="identifiant" id="identifiant">
+                            </div>
+                        </div>
         return sprintf('<div class="form-group">'.PHP_EOL.
             '    %s'.PHP_EOL.
             '    <div class="col-sm-9">'.PHP_EOL.
@@ -145,6 +161,7 @@ class Formulaire
             '    </div>'.PHP_EOL.
             '</div>',
             $this->makeLabel($id, $label), $id, $name, $placeholder, $value, $options, $helpText);
+*/
     }
 
     function makePassword($name, $id, $label='', $value='', $options='', $placeholder='', $helpText='')
@@ -182,7 +199,7 @@ class Formulaire
 
         return sprintf('<div class="form-group">'.PHP_EOL.
             '    %s'.PHP_EOL.
-            '    <div class="col-sm-9">'.PHP_EOL.
+            '    <div class="input-group col-sm-9">'.PHP_EOL.
             '        %s'.PHP_EOL.
             '        %s'.PHP_EOL.
             '    </div>'.PHP_EOL.
@@ -254,7 +271,7 @@ class Formulaire
 
         return sprintf('<div class="form-group">'.PHP_EOL.
             '    %s'.PHP_EOL.
-            '    <div class="col-sm-9">'.PHP_EOL.
+            '    <div class="input-group col-sm-9">'.PHP_EOL.
             '        <select class="%s" name="%s" id="%s" multiple size="%s" placeholder="%s"%s/>%s</select>'.PHP_EOL.
             '        %s'.PHP_EOL.
             '    </div>'.PHP_EOL.
@@ -281,7 +298,7 @@ class Formulaire
         $classInput = '';
         return sprintf( '<div class="form-group">'.PHP_EOL.
                         '     %s'.PHP_EOL.
-                        '     <div class="col-sm-9">'.PHP_EOL.
+                        '     <div class="input-group col-sm-9">'.PHP_EOL.
                         '         <select class="%s" id="%s" name="%s" placeholder="%s" value=""%s" %s>%s</select>'.PHP_EOL.
                         '        %s'.PHP_EOL.
                         '     </div>'.PHP_EOL.
@@ -317,7 +334,7 @@ class Formulaire
 
         return sprintf('<div class="form-group">'.PHP_EOL.
             '    %s'.PHP_EOL.
-            '    <div class="col-sm-9">'.PHP_EOL.
+            '    <div class="input-group col-sm-9">'.PHP_EOL.
             '        <textarea class="%s" name="%s" id="%s" placeholder="%s"%s>%s</textarea>'.PHP_EOL.
             '        %s'.PHP_EOL.
             '    </div>'.PHP_EOL.
@@ -336,7 +353,7 @@ class Formulaire
 	{
         return sprintf('<div class="form-group">'.PHP_EOL.
                        '    %s'.PHP_EOL.
-                       '    <div class="col-sm-9"><div class="well">%s</div></div>'.PHP_EOL.
+                       '    <div class="input-group col-sm-9"><div class="well">%s</div></div>'.PHP_EOL.
                        '</div>',
                         $this->makeLabel(0, $label), nl2br($texte));
 	}
@@ -346,7 +363,7 @@ class Formulaire
 	{
         return sprintf('<div class="form-group">'.PHP_EOL.
                        '    <div class="col-sm-3"></div>'.PHP_EOL.
-                       '    <div class="col-sm-9"><span class="help-block">%s</span></div>'.PHP_EOL.
+                       '    <div class="input-group col-sm-9"><span class="help-block">%s</span></div>'.PHP_EOL.
                        '</div>',
                        $texte);
 	}
@@ -376,7 +393,7 @@ class Formulaire
 	{
         return sprintf( '<div class="form-group">'.PHP_EOL.
                         '   <div class="col-sm-3"></div>'.PHP_EOL.
-                        '   <div class="col-sm-9"><input type="submit" value="%s"%s/></div>'.PHP_EOL.
+                        '   <div class="input-group col-sm-9"><input type="submit" value="%s"%s/></div>'.PHP_EOL.
                         '</div>',
                         $value, $options);
 	}
