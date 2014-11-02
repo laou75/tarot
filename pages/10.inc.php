@@ -12,7 +12,7 @@ echo $this->drawBarreBouton(
 	array(
         $this->makeLinkBouton(32, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
         $this->makeLinkBouton(33, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
-        '<a class="btn btn-default btn-sm" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?id_session='.$id_session.'&amp;id_tournoi='.$id_tournoi.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>',
+        '<a class="btn btn-default btn-xs" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?id_session='.$id_session.'&amp;id_tournoi='.$id_tournoi.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>',
         $this->makeLinkBouton(34, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session),
         '&nbsp;&nbsp;&nbsp;',
         $this->makeLinkBouton(11, 'id_tournoi=' . $id_tournoi . '&amp;id_session=' . $id_session)),
@@ -44,7 +44,7 @@ if(count($podium)>0)
              <div class="panel panel-default">
                 <div class="panel-heading">' . $infoJ->prenom . ' ' . $infoJ->nom . ' <span class="label ' . $classJ . '">' . $this->getLibClassement($infoJ->classement) . '</span></div>
                 <div class="panel-body">'.
-                    $this->getPortrait($infoJ->portrait, 'Portrait de ' . $infoJ->prenom . ' ' . $infoJ->nom, ' class="img-circle" align="left"').
+                    $this->getPortrait($infoJ->portrait, 'Portrait de ' . $infoJ->prenom . ' ' . $infoJ->nom, ' class="img-responsive" align="left"').
                     ' <span class="badge">' . $infoJ->cumul . '</span>' .
                 '</div></div>
             </div>';
@@ -136,7 +136,7 @@ foreach	($tabParties as $k => $row)
             array(
                     $this->makeLinkBouton(12, $params),	// modifier
                     $this->makeLinkBouton(13, $params),	// supprimer
-                    '<a class="btn btn-default btn-sm" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?'.$params.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>',
+                    '<a class="btn btn-default  btn-xs" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?'.$params.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>',
                     )
             );
 }

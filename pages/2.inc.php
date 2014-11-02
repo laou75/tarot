@@ -17,7 +17,7 @@ foreach($liste as $k => $row)
 			$this->makeLinkBouton(30, "id_tournoi=".$row->id),	// sessions
 			$this->makeLinkBouton(4, "id_tournoi=".$row->id),	// modifier 
 			$this->makeLinkBouton(5, "id_tournoi=".$row->id),	// supprimer
-            '<a class="btn btn-default btn-sm" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?id_tournoi='.$row->id.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>',
+            '<a class="btn btn-default btn-xs" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?id_tournoi='.$row->id.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>',
             $this->makeLinkBouton(6, "id_tournoi=".$row->id)	// Stats
 			)
 		);

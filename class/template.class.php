@@ -33,12 +33,17 @@ class Template
 			include("pages/".$this->id.".post.inc.php");
 ?>
 <!DOCTYPE html>
-        <html lang="fr" xmlns="http://www.w3.org/1999/html">
+<html lang="fr" xmlns="http://www.w3.org/1999/html">
 	<head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $this->titre;?></title>
         <!-- Bootstrap -->
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+        <!-- Bootstrap
+        <link rel="stylesheet" type="text/css" href="css/custom.css"/> -->
         <!-- Datepicker-->
         <link id="bsdp-css" type="text/css" href="css/datepicker3.css" rel="stylesheet"/>
         <style type="text/css">
@@ -57,9 +62,8 @@ class Template
 ?>
 	</head>
     <body>
-?>
-        <div role="navigation" class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container-fluid">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
                 <div class="navbar-header">
                     <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
                         <span class="sr-only">Toggle navigation</span>
@@ -69,49 +73,50 @@ class Template
                     </button>
                     <a href="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>" class="navbar-brand">Tarot</a>
                 </div>
-                <div class="navbar-collapse collapse">
-<?php
-        if (!Sess::isConnected())
-        {
-?>
-                    <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>identification.php" method="post">
-                        <div class="form-group">
-                            <div class="input-group margin-bottom-sm">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                <input type="text" class="form-control" placeholder="login" name="identifiant" id="identifiant">
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input type="password" class="form-control" placeholder="password" name="password" id="password">
-                        </div>
-                        <button class="btn btn-success" type="submit">Connexion</button>
-                    </form>
-<?php
-        } 
-        else 
-        {
-?>
-                    <ul class="nav navbar-nav">
-                        <?php
-                        $this->getChemin($this->id);
-                        echo $this->drawMenu();
+                <div id="navbar" class="collapse navbar-collapse">
+                    <?php
+                    if (!Sess::isConnected())
+                    {
                         ?>
-                    </ul>
-                    <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>logout.php" method="post">
-                        <div class="btn-group open">
-                            <span class="text-muted btn btn-default">admin admin</span>
-                            <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-off"></span></button>
-                        </div>
-                    </form>
-<?php
-        }
-?>
-                </div><!--/.navbar-collapse -->
+                        <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>identification.php" method="post">
+                            <div class="form-group">
+                                <div class="input-group margin-bottom-sm">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <input type="text" class="form-control" placeholder="login" name="identifiant" id="identifiant">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" class="form-control" placeholder="password" name="password" id="password">
+                            </div>
+                            <button class="btn btn-success" type="submit">Connexion</button>
+                        </form>
+                    <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <ul class="nav navbar-nav">
+                            <?php
+                            $this->getChemin($this->id);
+                            echo $this->drawMenu();
+                            ?>
+                        </ul>
+                        <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>logout.php" method="post">
+                            <div class="btn-group open">
+                                <span class="text-muted btn btn-default">admin admin</span>
+                                <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-off"></span></button>
+                            </div>
+                        </form>
+                    <?php
+                    }
+                    ?>
+                </div><!--/.nav-collapse -->
             </div>
-        </div>
-        <div class="container-fluid" style="margin-top: 55px;">
-            <div class=page-header">
+        </nav>
+
+        <div class="container" style="margin-top: 55px;">
+            <div class="page-header">
                 <h3><?php echo ($this->titrePage ? $this->titrePage : 'Tarot').$libCtxt;?></h3>
             </div>
             <div class="container-fluid">
@@ -274,14 +279,14 @@ class Template
         if (isset($row->glyphs))
         {
             $url = $GLOBALS["Config"]["URL"]["ROOT"].$url;
-            return '<a class="btn btn-default btn-sm" title="'.$desc.'" href="'.$url.'">'.
+            return '<a class="btn btn-default btn-xs" title="'.$desc.'" href="'.$url.'">'.
                    '<span class="'.$row->glyphs.'"></span> '.$label.
                    '</a>';
         }
         else
         {
             $label = (isset($row->icone)) ? $this->makeImg($row->icone)."&nbsp;".$label:$label;
-            return $this->makeLink($url, $label, $desc, "btn btn-default btn-sm", $options);
+            return $this->makeLink($url, $label, $desc, "btn btn-default btn-xs", $options);
         }
     }
 
@@ -302,7 +307,7 @@ class Template
             $desc = "Retour : ".$row->label;
         else
             $desc = 'Retour';
-        return '<a class="btn btn-primary btn-sm" title="'.$desc.'" href="'.$url.'">'.
+        return '<a class="btn btn-primary btn-xs" title="'.$desc.'" href="'.$url.'">'.
                 '<span class="glyphicon glyphicon-share-alt"></span> Retour'.
                 '</a>';
 	}
@@ -380,7 +385,8 @@ class Template
 	 */
 	function drawBarreBouton($colonnes=null, $retour=null)
 	{
-        $ret = '<div class="row"><div class="col-sm-10">';
+//        $ret = '<div class="row"><div class="col-sm-10">';
+        $ret = '<div class="row"><div class="col-xs-8">';
         if (isset($colonnes))
         {
             foreach($colonnes as $id => $detail)
@@ -389,7 +395,8 @@ class Template
             }
         }
         $ret .= '</div>';
-        $ret .= '<div class="col-sm-2 text-right">';
+//        $ret .= '<div class="col-sm-2 text-right">';
+        $ret .= '<div class="col-xs-4 text-right">';
         if (isset($retour))
         {
             $ret.=	$retour."\n";
@@ -457,7 +464,7 @@ class Template
      */
     function getNickname(stdClass $row)
     {
-        return isset($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
+        return !empty($row->nickname) ? $row->nickname : $row->prenom." ".substr($row->nom,0,1).".";
     }
 
     /*
