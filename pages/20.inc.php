@@ -18,9 +18,9 @@ foreach($listeJoueurs as $row)
             '</ul>';
 	echo $this->ligneListe(
         array(	'<div class="row"><div class="col-sm-4">'.$image.'<br/>'.$row->prenom.' '.$row->nom.'</div><div class="col-sm-8">'.$stats.'</div></div>'),
-        array(	$this->makeLinkBouton(22, "id_joueur=".$row->id),	// modifier
-									$this->makeLinkBouton(23, "id_joueur=".$row->id)	// supprimer
-									)
-							);
+        array(	$this->makeListLinkBouton(22, "id_joueur=".$row->id),	// modifier
+                $this->makeListLinkBouton(23, "id_joueur=".$row->id)	// supprimer
+                )
+            );
 }
 echo $this->closeListe();

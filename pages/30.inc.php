@@ -88,11 +88,11 @@ foreach($aTabSession as $kS => $row)
 									$joueurs,
                                     '<div id="comment_'.$id_tournoi.'_'.$row->id.'">'.nl2br($row->commentaires).'</div>'
 									),
-							array(	$this->makeLinkBouton(10, $params),	// Parties
-									$this->makeLinkBouton(32, $params),	// modifier
-									$this->makeLinkBouton(33, $params),	// supprimer
-                                    $this->makeLinkBouton(34, $params),
-                                    '<a class="btn btn-default btn-xs" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?'.$params.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>'
+							array(	$this->makeListLinkBouton(10, $params),	// Parties
+									$this->makeListLinkBouton(32, $params),	// modifier
+									$this->makeListLinkBouton(33, $params),	// supprimer
+                                    $this->makeListLinkBouton(34, $params),
+                                    '<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal" href="ajax/ajaxGetComment.php?'.$params.'"><span class="glyphicon glyphicon-comment"></span> </a>'
                                     )
 							);
 }

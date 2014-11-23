@@ -84,7 +84,35 @@ class Formulaire
                        $this->makeLabel($id, $label), $type, $classInput, $id, $name, $placeholder, $value, $options, $helpText);
     }
 
-	function makeMulti($name, $id, $label='', $champs, $helpText='')
+    function makeInputLogin($name, $id, $label, $placeholder='', $helpText='')
+    {
+        $helpText = !empty($helpText) ? '<span class="help-block">'.$helpText.'</span>' : '';
+        return sprintf( '<div class="form-group">'.PHP_EOL.
+                        '    %s'.PHP_EOL.
+                        '   <div class="input-group margin-bottom-sm">'.PHP_EOL.
+                        '       <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>'.PHP_EOL.
+                        '       <input type="%s" class="%s" id="%s" name="%s" placeholder="%s">'.PHP_EOL.
+                        '        %s'.PHP_EOL.
+                        '   </div>'.PHP_EOL.
+                        '</div>'.PHP_EOL,
+                        $this->makeLabel($id, $label), 'text', 'form-control', $id, $name, $placeholder, $helpText);
+    }
+
+    function makeInputMDP($name, $id, $label, $placeholder='', $helpText='')
+    {
+        $helpText = !empty($helpText) ? '<span class="help-block">'.$helpText.'</span>' : '';
+        return sprintf( '<div class="form-group">'.PHP_EOL.
+                        '    %s'.PHP_EOL.
+                        '    <div class="input-group">'.PHP_EOL.
+                        '       <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>'.PHP_EOL.
+                        '       <input type="%s" class="%s" id="%s" name="%s" placeholder="%s">'.PHP_EOL.
+                        '        %s'.PHP_EOL.
+                        '   </div>'.PHP_EOL.
+                        '</div>'.PHP_EOL,
+                        $this->makeLabel($id, $label), 'password', 'form-control', $id, $name, $placeholder, $helpText);
+    }
+
+    function makeMulti($name, $id, $label='', $champs, $helpText='')
 	{
         $ret=   sprintf('<div class="form-group">'.PHP_EOL.
                         '   %s'.PHP_EOL.

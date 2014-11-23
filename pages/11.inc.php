@@ -9,6 +9,7 @@ else
 	$form->setValeurs(array());
 	$form->setValeur("id_tournoi", $_GET["id_tournoi"]);
 	$form->setValeur("id_session", $_GET["id_session"]);
+    $form->setValeur("poignee", "aucune");
 }
 
 echo $this->drawBarreBouton(

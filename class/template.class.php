@@ -71,31 +71,26 @@ class Template
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a href="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>" class="navbar-brand">Tarot</a>
+                    <a href="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>./" class="navbar-brand">Tarot</a>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
-                    <?php
-                    if (!Sess::isConnected())
-                    {
-                        ?>
+<?php
+        if (!Sess::isConnected())
+        {
+?>
                         <form role="form" class="navbar-form navbar-right" action="<?php echo $GLOBALS["Config"]["URL"]["ROOT"];?>identification.php" method="post">
-                            <div class="form-group">
-                                <div class="input-group margin-bottom-sm">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input type="text" class="form-control" placeholder="login" name="identifiant" id="identifiant">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                <input type="password" class="form-control" placeholder="password" name="password" id="password">
-                            </div>
+    <?php
+            $form = new Formulaire();
+            echo $form->makeInputLogin("identifiant", "identifiant", '', 'login', '');
+            echo $form->makeInputMDP("password", "password", '', 'password', '');
+?>
                             <button class="btn btn-success" type="submit">Connexion</button>
                         </form>
-                    <?php
-                    }
-                    else
-                    {
-                        ?>
+<?php
+        }
+        else
+        {
+?>
                         <ul class="nav navbar-nav">
                             <?php
                             $this->getChemin($this->id);
@@ -108,9 +103,9 @@ class Template
                                 <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-off"></span></button>
                             </div>
                         </form>
-                    <?php
-                    }
-                    ?>
+<?php
+        }
+?>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
@@ -261,27 +256,50 @@ class Template
         return (isset($param)) ? 'index.php?id='.$id.'&amp;' . $param : 'index.php?id='.$id;
     }
 
-	/*
-	 * 
-	 */
-	function makeLinkBouton($id, $parm=null, $options="")
-	{
-		$row=$this->getInfosMenu($id);
+    /*
+     *
+     */
+    function makeListLinkBouton($id, $parm=null, $options="")
+    {
+        $row=$this->getInfosMenu($id);
+        $label= '';
+        $desc = (isset($row->description)) ? $row->description : $row->label;
+        if	($id==(int)$id)
+            $url=(isset($parm)) ? 'index.php?id='.$id.'&amp;' . $parm : 'index.php?id='.$id;
+        else
+            $url=$id;
+        if (isset($row->glyphs))
+        {
+            $url = $GLOBALS["Config"]["URL"]["ROOT"].$url;
+            return  '<a class="btn btn-default btn-sm" title="'.$desc.'" href="'.$url.'">'.
+                    '<span class="'.$row->glyphs.'"></span> '.$label.
+                    '</a>';
+        }
+        else
+        {
+            $label = (isset($row->icone)) ? $this->makeImg($row->icone)."&nbsp;".$label:$label;
+            return $this->makeLink($url, $label, $desc, "btn btn-default btn-sm", $options);
+        }
+    }
 
-		$label= $row->label;
-		$desc = (isset($row->description)) ? $row->description : $row->label;
-
-		if	($id==(int)$id)
-			$url=(isset($parm)) ? 'index.php?id='.$id.'&amp;' . $parm : 'index.php?id='.$id;
-		else
-			$url=$id;
-
+    /*
+     *
+     */
+    function makeLinkBouton($id, $parm=null, $options="")
+    {
+        $row=$this->getInfosMenu($id);
+        $label= $row->label;
+        $desc = (isset($row->description)) ? $row->description : $row->label;
+        if	($id==(int)$id)
+            $url=(isset($parm)) ? 'index.php?id='.$id.'&amp;' . $parm : 'index.php?id='.$id;
+        else
+            $url=$id;
         if (isset($row->glyphs))
         {
             $url = $GLOBALS["Config"]["URL"]["ROOT"].$url;
             return '<a class="btn btn-default btn-xs" title="'.$desc.'" href="'.$url.'">'.
-                   '<span class="'.$row->glyphs.'"></span> '.$label.
-                   '</a>';
+            '<span class="'.$row->glyphs.'"></span> '.$label.
+            '</a>';
         }
         else
         {
@@ -296,7 +314,6 @@ class Template
 	function makeLinkBoutonRetour($id, $parm=null)
 	{
 		$row=$this->getInfosMenu($id);
-
 		if	($id==(int)$id)
 			$url=(isset($parm)) ? "index.php?id=".$id."&amp;".$parm : "index.php?id=".$id;
 		else
@@ -385,7 +402,6 @@ class Template
 	 */
 	function drawBarreBouton($colonnes=null, $retour=null)
 	{
-//        $ret = '<div class="row"><div class="col-sm-10">';
         $ret = '<div class="row"><div class="col-xs-8">';
         if (isset($colonnes))
         {
@@ -394,9 +410,7 @@ class Template
                 $ret.=	$detail." \n";
             }
         }
-        $ret .= '</div>';
-//        $ret .= '<div class="col-sm-2 text-right">';
-        $ret .= '<div class="col-xs-4 text-right">';
+        $ret .= '</div><div class="col-xs-4 text-right">';
         if (isset($retour))
         {
             $ret.=	$retour."\n";
@@ -410,12 +424,10 @@ class Template
 	 */
 	function openListe($colonnes, $action=false, $id='table_id')
 	{
-        $wT = '';
-        $wA = '';
-		$ret=	'<table class="table table-striped table-bordered table-hover table-condensed" ' . $wT . ' id="' . $id . '">' . PHP_EOL.
+		$ret=	'<table class="table table-striped table-bordered table-hover table-condensed" id="' . $id . '">' . PHP_EOL.
 				'	<tr>';
 		if	($action)
-			$ret.=	'		<th' . $wA . '>&nbsp;</th>' . PHP_EOL;
+			$ret.=	'		<th>&nbsp;</th>' . PHP_EOL;
 		foreach($colonnes as $id => $detail)
 		{
 			$ret.=	'		<th>' . $detail . '</th>' . PHP_EOL;
@@ -480,7 +492,6 @@ class Template
      */
     function getMaxiPortrait($image='', $alt='')
     {
-
         if (isset($alt) && strlen($alt)>0)
             $alt=" alt=\"$alt\"";
         else
@@ -546,7 +557,6 @@ class Template
             $tmp = '';
         }
         echo '</ol>';
-
         //Wrapper for slides
         echo '<div class="carousel-inner">';
         $tmp = ' active';
@@ -558,7 +568,6 @@ class Template
             $tmp = '';
         }
         echo '</div>';
-
         //Controls
         echo    '<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">' .
                 '<span class="glyphicon glyphicon-chevron-left"></span>' .
@@ -569,3 +578,4 @@ class Template
                 '</div></div>';
     }
 }
+

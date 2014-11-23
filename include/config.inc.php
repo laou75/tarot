@@ -7,8 +7,6 @@ $GLOBALS["Config"]["DATABASE"]["DBUSER"]		=	"root";
 $GLOBALS["Config"]["DATABASE"]["DBPASSWORD"]	=	"";
 $GLOBALS["Config"]["DATABASE"]["DBNAME"]		=	"tarot";
 
-//$GLOBALS["Config"]["URL"]["ROOT"] 			=	'http://tarot.fr/';
-//$GLOBALS["Config"]["URL"]["ROOT"] 			=	'http://localhost/tarot/';
 $GLOBALS["Config"]["URL"]["ROOT"] 			=	'';$_SERVER['SERVER_NAME'];
 $GLOBALS["Config"]["URL"]["IMG"]			=	$GLOBALS["Config"]["URL"]["ROOT"]."img/";
 $GLOBALS["Config"]["URL"]["LOGO"]			=	$GLOBALS["Config"]["URL"]["IMG"]."logos/";

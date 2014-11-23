@@ -134,9 +134,9 @@ foreach	($tabParties as $k => $row)
         echo $this->ligneListe(
             $data,
             array(
-                    $this->makeLinkBouton(12, $params),	// modifier
-                    $this->makeLinkBouton(13, $params),	// supprimer
-                    '<a class="btn btn-default  btn-xs" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?'.$params.'"><span class="glyphicon glyphicon-comment"></span> Commentaire</a>',
+                    $this->makeListLinkBouton(12, $params),	// modifier
+                    $this->makeListLinkBouton(13, $params),	// supprimer
+                    '<a class="btn btn-default btn-sm" data-toggle="modal"  data-target="#myModal" href="ajax/ajaxGetComment.php?'.$params.'"><span class="glyphicon glyphicon-comment"></span> </a>',
                     )
             );
 }

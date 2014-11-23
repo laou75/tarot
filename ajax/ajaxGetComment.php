@@ -36,7 +36,7 @@ else
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <h4 class="modal-title" id="myModalLabel">'.$titre.'</h4>
         </div>
-        <div class="modal-body"><textarea name="commentaires" id="commentaires" style="width: 90%;" rows="10">'.$data['commentaires'].'</textarea></div>
+        <div class="modal-body"><textarea name="commentaires" id="commentaires" style="width: 100%;" rows="4">'.$data['commentaires'].'</textarea></div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" id="enregistrer">Enregistrer</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
